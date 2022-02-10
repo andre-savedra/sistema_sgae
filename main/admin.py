@@ -1,5 +1,14 @@
 from django.contrib import admin
 from .models import *
+from django.contrib.auth.admin import UserAdmin
+
+
+class detUser(UserAdmin):
+    list_display = ('email','username')
+    model = User
+    # list_display_links = ('id',)
+    # search_fields = ('nome',)
+    # list_per_page = 10
 
 class detCargos(admin.ModelAdmin):
     list_display = ('id','nome', 'nivelAcesso')
@@ -37,3 +46,4 @@ admin.site.register(Ambientes, detAmbientes)
 admin.site.register(Usuarios, detUsuarios)
 admin.site.register(Tarefas, detTarefas)
 admin.site.register(Fotos, detFotos)
+admin.site.register(User, detUser)

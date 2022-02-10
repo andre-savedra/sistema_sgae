@@ -4,6 +4,18 @@
 # import pandas as pd
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
+# from django.db.models import Q
+
+
+# class CustomUserManager(UserManager):
+
+#     def get_by_natural_key(self, username):
+#         return self.get(
+#             # Q(**{self.model.USERNAME_FIELD: username}) |
+#             Q(**{self.model.EMAIL_FIELD: username})
+#         )
+
 
 
 class Cargos(models.Model):
@@ -12,6 +24,19 @@ class Cargos(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+
+class User(AbstractUser):
+    pass
+    # nome = models.CharField(max_length=55)
+    # idUserFK = models.BigIntegerField()
+    # email = models.CharField(max_length=80)
+    fone = models.CharField(max_length=15)
+    ativo = models.BooleanField(default=False)
+    nivelAcessoFK = models.ForeignKey(Cargos, null=True, on_delete=models.CASCADE)
+    # objects = CustomUserManager()
+
 
 
 class Ambientes(models.Model):
