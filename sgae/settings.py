@@ -80,8 +80,8 @@ WSGI_APPLICATION = 'sgae.wsgi.application'
 
 
 DJOSER = {
-    "USER_ID_FIELD": "username",
-    "LOGIN_FIELD": "email",
+    # "USER_ID_FIELD": "username",
+    # "LOGIN_FIELD": "email",
     "SEND_ACTIVATION_EMAIL": True,
     "ACTIVATION_URL": "activate/{uid}/{token}",
     'SERIALIZERS': {
@@ -90,7 +90,7 @@ DJOSER = {
     },
 }
 
-SITE_NAME = "SGAE - Sistema de Gerenciamento de Ambientes de Ensino"
+SITE_NAME = "SGAE-Sistema de Gerenciamento de Ambientes de Ensino - Senai Roberto Mange"
 
 
 
