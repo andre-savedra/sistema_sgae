@@ -16,9 +16,6 @@ class ActivateUser(APIView):
 
         url = "http://localhost:8000/api/v1/users/activation/"
         response = requests.post(url, data = payload)
-        # print("response")
-        # print(response)
-        # print(response.status_code)
 
         if response.status_code == 204:
             return HttpResponseRedirect('http://localhost:3000/success/')            
