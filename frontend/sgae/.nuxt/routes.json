@@ -1,0 +1,23 @@
+[
+  {
+    "name": "error",
+    "path": "/error",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\error\\\\index.vue",
+    "chunkName": "pages/error/index",
+    "_name": "_40f2118a"
+  },
+  {
+    "name": "success",
+    "path": "/success",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\success\\\\index.vue",
+    "chunkName": "pages/success/index",
+    "_name": "_0f951c20"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_1f4bed31"
+  }
+]

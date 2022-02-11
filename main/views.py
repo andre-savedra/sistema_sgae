@@ -8,6 +8,7 @@ from rest_framework.response import Response
 import requests
 from django.http import HttpResponseRedirect
 
+from rest_framework.permissions import IsAuthenticated
 
 class ActivateUser(APIView):
 
@@ -27,6 +28,7 @@ class CargosAPIView(APIView):
     """
     API Cargos
     """
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -64,6 +66,7 @@ class AmbientesAPIView(APIView):
     """
     API Ambientes
     """
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -101,6 +104,8 @@ class UsuariosAPIView(APIView):
     API Usuarios
     """
 
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, pk=''):
         if pk == '':
             usuarios = Usuarios.objects.all()
@@ -137,6 +142,8 @@ class TarefasAPIView(APIView):
     API tarefas
     """
 
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, pk=''):
         if pk == '':
             tarefas = Tarefas.objects.all()
@@ -172,6 +179,8 @@ class FotosAPIView(APIView):
     """
     API Fotos
     """
+
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':

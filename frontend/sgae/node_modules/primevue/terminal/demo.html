@@ -1,0 +1,17 @@
+<meta charset="utf-8">
+<title>terminal demo</title>
+<script src="https://unpkg.com/vue"></script>
+<script src="./terminal.umd.js"></script>
+
+
+<div id="app">
+  <demo></demo>
+</div>
+
+<script>
+new Vue({
+  components: {
+    demo: terminal
+  }
+}).$mount('#app')
+</script>

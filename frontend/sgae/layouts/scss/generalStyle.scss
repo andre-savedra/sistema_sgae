@@ -1,0 +1,34 @@
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
+}
+
+.normal-dark-btn {
+    background-color: var(--dark-background-color);
+    border: none;
+    cursor: pointer;
+    color: white;
+    &:focus {
+        background-color: var(--dark-background-color-hover);
+    }
+    &:hover {
+        background-color: var(--dark-background-color-hover);
+    }
+}
+
+.p-button-text:focus,
+.p-sidebar-icon:focus,
+.p-sidebar-close:focus,
+.p-link:focus {
+    box-shadow: none !important;
+}
+
