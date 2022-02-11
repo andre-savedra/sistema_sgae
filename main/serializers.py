@@ -25,7 +25,6 @@ class CustomTokenCreateSerializer(TokenCreateSerializer):
         self.fail("invalid_credentials")
 
 
-
 class CargosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cargos

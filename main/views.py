@@ -5,6 +5,32 @@ import datetime
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import requests
+from django.http import HttpResponseRedirect
+
+
+class ActivateUser(APIView):
+
+    def get(self, request, uid, token, format = None):
+        payload = {'uid': uid, 'token': token}
+
+        url = "http://localhost:8000/api/v1/auth/users/activation/"
+        response = requests.post(url, data = payload)
+        print("response")
+        print(response)
+        print(response.data)
+        print(response.status_code)
+
+        if response.status_code == 204:
+            # url = "http://localhost:3000/success/"
+            # response = requests.get(url)
+            return HttpResponseRedirect('http://localhost:3000/success/')
+            # return Response({}, response.status_code)
+        else:       
+            # url = "http://localhost:3000/error/"
+            # response = requests.get(url)
+            return HttpResponseRedirect('http://localhost:3000/error/')
+            # return Response(response.status_code)
 
 
 class CargosAPIView(APIView):
