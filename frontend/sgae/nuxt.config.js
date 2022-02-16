@@ -4,9 +4,9 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'sgae',
+    title: 'SGAE - Gestão Ambientes',
     htmlAttrs: {
-      lang: 'pt-br'
+      lang: 'pt'
     },
     meta: [
       { charset: 'utf-8' },
@@ -41,7 +41,7 @@ export default {
     theme: 'saga-blue',
     ripple: true,
     components: [
-        'Button', 'Sidebar', 'Avatar', 'TieredMenu', 'Chart', 'Dropdown', 'Tooltip', 'Message', 'Accordion', 'AccordionTab', 'Password', 'RadioButton'
+        'Button', 'Sidebar', 'Avatar', 'TieredMenu', 'Chart', 'Dropdown', 'Tooltip', 'Message', 'Accordion', 'AccordionTab', 'Password', 'RadioButton', 'InputText', 'InputMask'
     ]
   },
 
@@ -66,6 +66,24 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     // baseURL: '/',
   },
+
+  auth: {
+    strategies: {
+        local: {
+            endpoints: {
+                login: { url: 'http://localhost:8000/api/v1/auth/token/login/', method: 'post', propertyName: 'auth_token' },
+                logout: { url: 'http://localhost:8000/api/v1/auth/token/logout/', method: 'post', propertyName: 'auth_token' },
+                user: { url: 'http://localhost:8000/cargos/', method: 'get', propertyName: false }
+            },
+            tokenType: 'Token',
+            tokenName: 'Authorization'
+        }
+    },
+    redirect: {
+        login: '/',
+        home: '/home'
+    }
+},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

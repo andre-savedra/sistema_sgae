@@ -7,6 +7,27 @@
     "_name": "_40f2118a"
   },
   {
+    "name": "home",
+    "path": "/home",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\home\\\\index.vue",
+    "chunkName": "pages/home/index",
+    "_name": "_2646fa32"
+  },
+  {
+    "name": "register",
+    "path": "/register",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\register\\\\index.vue",
+    "chunkName": "pages/register/index",
+    "_name": "_32aaa26e"
+  },
+  {
+    "name": "reset",
+    "path": "/reset",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\reset\\\\index.vue",
+    "chunkName": "pages/reset/index",
+    "_name": "_63eda994"
+  },
+  {
     "name": "success",
     "path": "/success",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\success\\\\index.vue",

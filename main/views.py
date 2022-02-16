@@ -28,7 +28,7 @@ class CargosAPIView(APIView):
     """
     API Cargos
     """
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -66,7 +66,7 @@ class AmbientesAPIView(APIView):
     """
     API Ambientes
     """
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -104,7 +104,7 @@ class UsuariosAPIView(APIView):
     API Usuarios
     """
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -142,7 +142,7 @@ class TarefasAPIView(APIView):
     API tarefas
     """
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -180,7 +180,7 @@ class FotosAPIView(APIView):
     API Fotos
     """
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':

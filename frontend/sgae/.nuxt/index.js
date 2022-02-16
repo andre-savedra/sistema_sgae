@@ -14,6 +14,8 @@ import { createStore } from './store.js'
 /* Plugins */
 
 import nuxt_plugin_plugin_17a7e348 from 'nuxt_plugin_plugin_17a7e348' // Source: .\\components\\plugin.js (mode: 'all')
+import nuxt_plugin_inputmaskplugin1db0f8f0_0469a7d5 from 'nuxt_plugin_inputmaskplugin1db0f8f0_0469a7d5' // Source: .\\inputmask.plugin.1db0f8f0.js (mode: 'all')
+import nuxt_plugin_inputtextplugin3ac6a489_6faa0c88 from 'nuxt_plugin_inputtextplugin3ac6a489_6faa0c88' // Source: .\\inputtext.plugin.3ac6a489.js (mode: 'all')
 import nuxt_plugin_radiobuttonplugin54ad2d02_687fdee5 from 'nuxt_plugin_radiobuttonplugin54ad2d02_687fdee5' // Source: .\\radiobutton.plugin.54ad2d02.js (mode: 'all')
 import nuxt_plugin_passwordplugin458bff4e_5f705995 from 'nuxt_plugin_passwordplugin458bff4e_5f705995' // Source: .\\password.plugin.458bff4e.js (mode: 'all')
 import nuxt_plugin_accordiontabplugin7b3b798b_087a1859 from 'nuxt_plugin_accordiontabplugin7b3b798b_087a1859' // Source: .\\accordiontab.plugin.7b3b798b.js (mode: 'all')
@@ -93,7 +95,7 @@ async function createApp(ssrContext, config = {}) {
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    head: {"title":"sgae","htmlAttrs":{"lang":"pt-br"},"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.png"},{"hid":"gf-prefetch","rel":"dns-prefetch","href":"https:\u002F\u002Ffonts.gstatic.com\u002F"},{"hid":"gf-preconnect","rel":"preconnect","href":"https:\u002F\u002Ffonts.gstatic.com\u002F","crossorigin":""},{"hid":"gf-preload","rel":"preload","as":"style","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Roboto&family=Varela+Round"}],"style":[],"script":[{"hid":"gf-script","innerHTML":"(function(){var l=document.createElement('link');l.rel=\"stylesheet\";l.href=\"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Roboto&family=Varela+Round\";document.querySelector(\"head\").appendChild(l);})();"}],"noscript":[{"hid":"gf-noscript","innerHTML":"\u003Clink rel=\"stylesheet\" href=\"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Roboto&family=Varela+Round\"\u003E"}],"__dangerouslyDisableSanitizersByTagID":{"gf-script":["innerHTML"],"gf-noscript":["innerHTML"]}},
+    head: {"title":"SGAE - Gestão Ambientes","htmlAttrs":{"lang":"pt"},"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.png"},{"hid":"gf-prefetch","rel":"dns-prefetch","href":"https:\u002F\u002Ffonts.gstatic.com\u002F"},{"hid":"gf-preconnect","rel":"preconnect","href":"https:\u002F\u002Ffonts.gstatic.com\u002F","crossorigin":""},{"hid":"gf-preload","rel":"preload","as":"style","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Roboto&family=Varela+Round"}],"style":[],"script":[{"hid":"gf-script","innerHTML":"(function(){var l=document.createElement('link');l.rel=\"stylesheet\";l.href=\"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Roboto&family=Varela+Round\";document.querySelector(\"head\").appendChild(l);})();"}],"noscript":[{"hid":"gf-noscript","innerHTML":"\u003Clink rel=\"stylesheet\" href=\"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Roboto&family=Varela+Round\"\u003E"}],"__dangerouslyDisableSanitizersByTagID":{"gf-script":["innerHTML"],"gf-noscript":["innerHTML"]}},
 
     store,
     router,
@@ -224,6 +226,14 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_plugin_17a7e348 === 'function') {
     await nuxt_plugin_plugin_17a7e348(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_inputmaskplugin1db0f8f0_0469a7d5 === 'function') {
+    await nuxt_plugin_inputmaskplugin1db0f8f0_0469a7d5(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_inputtextplugin3ac6a489_6faa0c88 === 'function') {
+    await nuxt_plugin_inputtextplugin3ac6a489_6faa0c88(app.context, inject)
   }
 
   if (typeof nuxt_plugin_radiobuttonplugin54ad2d02_687fdee5 === 'function') {

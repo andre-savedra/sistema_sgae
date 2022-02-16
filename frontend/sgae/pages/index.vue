@@ -22,13 +22,30 @@
             <div class="inputCombo combo2">
               <label id="lblsenha" for="senha">SENHA</label>
               <!-- <Password id="senha" v-model="pass" toggleMask></Password> -->
-              <input type="password" v-model="login.password" id="senha" required />
+              <input
+                type="password"
+                v-model="login.password"
+                id="senha"
+                required
+              />
             </div>
 
-            <div class="links p-d-flex ">
-              <a class="p-ml-2" href="">Registrar?</a>
-              <a class="p-mr-2 p-d-flex p-jc-end" href="">Esqueceu a Senha?</a>
+            <div class="links p-d-flex p-d-row p-jc-between">
+              
+               <Button
+                icon="pi pi-user-plus"
+                label="Registrar?"
+                class="registerBtn p-button-text p-button-danger"
+                @click="registerPage()"
+              />
+              <Button
+                icon="pi pi-key"
+                label="Esqueceu Senha?"
+                class="resetPswBtn p-button-text p-button-danger"
+                @click="resetPage()"
+              />
             </div>
+
             <button type="submit" class="btn_enviar">ENTRAR</button>
           </div>
         </form>
@@ -44,71 +61,33 @@ export default {
   data() {
     return {
       login: {
-        username: null,        
+        username: null,
         password: null,
       },
     };
   },
   methods: {
+    registerPage() {
+      this.$router.push("register");      
+    },
+    resetPage() {
+      this.$router.push("reset");
+    },
     sendlogin() {
-      console.log("tentando autenticar....")
-      console.log(this.login);      
+      console.log("tentando autenticar....");
+      console.log(this.login);
 
-      this.$auth.loginWith("local", {data: this.login})
-      .then( ()=> {
-        console.log("DEU CERTO O LOGIN")
-       }
-      )
-      .catch( (erro)=> {
-        console.log("erro");
-        console.log(erro);
+      this.$auth
+        .loginWith("local", { data: this.login })
+        .then(() => {
+          console.log("DEU CERTO O LOGIN");
+        })
+        .catch((erro) => {
+          this.login.username = null;
+          this.login.password = null;
+          console.log("erro");
+          console.log(erro);
         });
-
-      // this.$store
-      //   .dispatch("user/getUser", this.login, this.pass)
-      //   .then((response) => {
-
-      //     switch(response)
-      //     {
-      //       case "authorized":
-
-      //         break;
-
-      //       case "unauthorized":
-
-      //         break;
-
-      //       case "invalid":
-
-      //         break;
-
-      //       case "exception":
-
-      //         break;
-      //     }
-
-
-      //     if (response.id > 0) {
-      //       if (
-      //         response.identificador === this.login &&
-      //         response.senha === this.pass
-      //       ) {
-      //         this.$router.push("/pshome");
-      //       } else {
-      //       }
-      //     }
-
-      //     console.log("terminou");
-      //     //   this.actualUser = response[0];
-      //     //   this.actual_admin = this.actualUser.admin;
-      //     //   this.$store.dispatch("user/setAdmin", this.actual_admin);
-
-      //     //   this.reloadButtons();
-      //     //   this.profileLoaded = true;
-      //   });
-
-
-      // this.$store.dispatch("user/getDjangoUser");
     },
   },
 };
@@ -195,11 +174,23 @@ img {
   }
 }
 
-.links{
-  font-size: 14px;  
+.links {
+  font-size: 14px;
+  .registerBtn {
+    width: 110px;
+    padding: 0px;
+    margin: 10px 0px 0px 5px;
+  }
+  .resetPswBtn {
+    width: 165px;
+    padding: 0px;
+    margin: 10px 5px 0px 0px;
+  }
+  .p-button .p-button-icon-left {
+    margin: 0px !important;
+    width: 25px;
+  }
 }
-
-
 
 .inputcontainer {
   display: flex;
@@ -238,24 +229,73 @@ img {
   border-color: crimson;
 }
 
-@media screen and (max-width: 510px) {
-  img {
-    display: none;
-  }
-
-  h5 {
-    display: none;
-  }
-
+@media screen and (max-width: 990px) {
   .logo_panel {
-    display: none;
-    width: 0%;
+    h1 {
+      max-width:80%;
+      font-size: 18px;
+    }
+    p {
+      font-size: 11px;
+    }
   }
 
-  .Cadastro_panel {
-    width: 500px;
+  .loginForm {
+    .links {
+      .registerBtn {
+        font-size: 12px;
+        width: 90px;
+      }
+      .resetPswBtn {
+        font-size: 12px;
+        width: 125px;
+      }
+    }
   }
 }
+
+@media screen and (max-width: 806px) {
+  .logo_panel {
+    img {
+      width: 65%;
+      height: 40%;
+    }
+    h1 {
+      font-size: 18px;
+    }
+  }
+
+  .loginForm {
+    .links {
+      .registerBtn {
+        font-size: 12px;
+        width: 90px;
+      }
+      .resetPswBtn {
+        font-size: 12px;
+        width: 90px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+
+  .logo_panel{
+    h1 {
+      max-width:80%;
+      font-size: 16px;
+    }
+    p {
+      font-size: 10px;
+    }
+  }
+  .loginForm {
+    width: 70%;
+    height: auto;
+  }
+}
+
 @media screen and (max-width: 510px) {
   img {
     display: none;
