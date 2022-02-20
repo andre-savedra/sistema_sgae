@@ -150,7 +150,8 @@ class TarefasAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        if 'solicitante' in request.GET:            
+        if 'solicitante' in request.GET:
+            print("ok")        
             solicitante = request.GET['solicitante']
             tarefas = Tarefas.objects.filter(idSolicitanteFK=solicitante)
             serializer = TarefasSerializer(tarefas, many=True)            
