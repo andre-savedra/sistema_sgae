@@ -25,27 +25,30 @@ class Ambientes(models.Model):
         return self.nome
 
 
+def upload_image_task(instance, filename):
+    return f"{instance.idTarefaFK}-{instance.idStatus}-{filename}"
+
+def upload_image_user(instance, filename):
+    return f"{instance.idUserFK}-{filename}"
+
+
 class Usuarios(models.Model):
     nome = models.CharField(max_length=55)
     idUserFK = models.BigIntegerField()
     email = models.CharField(max_length=80)
     fone = models.CharField(max_length=15)
     ativo = models.BooleanField(default=False)
-    nivelAcessoFK = models.ForeignKey(Cargos, on_delete=models.CASCADE)
+    idNivelAcessoFK = models.ForeignKey(Cargos, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=upload_image_user, blank=True, null=True)
 
     def __str__(self):
         return self.nome
 
 
-def upload_image_task(instance, filename):
-    return f"{instance.idTarefaFK}-{instance.idStatus}-{filename}"
-
-
 class Tarefas(models.Model):
     nome = models.CharField(max_length=80)
     descricao = models.CharField(max_length=500)
-    idSolicitanteFK = models.ForeignKey(Usuarios, related_name="idSolicitanteFK", on_delete=models.CASCADE)    
-    idResponsavelFK = models.ForeignKey(Usuarios, related_name="idResponsavelFK", on_delete=models.CASCADE)    
+    idSolicitanteFK = models.ForeignKey(Usuarios, on_delete=models.CASCADE)    
     idAmbienteFK = models.ForeignKey(Ambientes, on_delete=models.CASCADE)    
     idStatus = models.CharField(max_length=15, 
                 choices=(('1','Iniciada'),
@@ -58,6 +61,15 @@ class Tarefas(models.Model):
     
     def __str__(self):
         return self.nome
+
+
+class TarefasUsuarios(models.Model):    
+    idUsuarioFK = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    idTarefaFK = models.ForeignKey(Tarefas, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nome
+
 
 
 class Fotos(models.Model):

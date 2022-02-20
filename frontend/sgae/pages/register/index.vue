@@ -10,10 +10,21 @@
       <h1>Sistema de Gestão de Ambiente de Ensino</h1>
       <p>&reg; Senai Roberto Mange</p>
     </section>
-    <section class="Registro_panel">
-      <div class="formulario_registro">
+    <section
+      class="Registro_panel p-d-flex p-flex-column p-jc-center p-ai-center"
+    >
+      <div
+        class="
+          formulario_registro
+          p-d-flex p-flex-column p-jc-center p-ai-center
+        "
+      >
         <h1 id="myTitle">CADASTRE-SE</h1>
-        <form action="" class="registerForm" v-on:submit.prevent="sendRegister()">
+        <form
+          action=""
+          class="registerForm"
+          v-on:submit.prevent="sendRegister()"
+        >
           <div class="inputRegisterContainer">
             <div class="inputComboRegister">
               <label class="lblRegister" for="name">USUÁRIO</label>
@@ -23,6 +34,7 @@
                 id="name"
                 class="basicInputRegister"
                 placeholder="NIF ou Matrícula"
+                minlength="6"
                 required
               />
             </div>
@@ -30,7 +42,7 @@
               <label class="lblRegister" for="fullname">NOME</label>
               <InputText
                 type="text"
-                v-model="userSec.nome"
+                v-model="userSec[0].nome"
                 id="fullname"
                 class="basicInputRegister"
                 placeholder="Nome Completo"
@@ -52,7 +64,7 @@
               <label class="lblRegister" for="phone">CELULAR</label>
               <InputMask
                 mask="(99) 99999-9999"
-                v-model="userSec.fone"
+                v-model="phoneFormated"
                 id="phone"
                 class="basicInputRegister"
                 placeholder="(99) 9.9999-9999"
@@ -68,7 +80,7 @@
                 :options="jobs"
                 optionLabel="name"
                 placeholder="Selecione o cargo"
-                id="cargo"                
+                id="cargo"
               >
               </Dropdown>
             </div>
@@ -113,7 +125,7 @@
               />
             </div>
 
-            <button type="submit" class="btn_enviar">ENTRAR</button>
+            <button type="submit" class="btn_enviar">CADASTRAR</button>
           </div>
         </form>
       </div>
@@ -128,20 +140,25 @@ export default {
   name: "register",
   data() {
     return {
+      btnDisabled: true,
       passwordConfirm: null,
+      phoneFormated: null,
       userAuth: {
         username: null,
         password: null,
         email: null,
       },
-      userSec: {
-        nome: null,
-        idUserFK: null,
-        email: null,
-        fone: null,
-        ativo: null,
-        nivelAcessoFK: null,
-      },
+      userSec: 
+      [
+        {
+          nome: null,
+          idUserFK: null,
+          email: null,
+          fone: null,
+          ativo: false,
+          idNivelAcessoFK: null,
+        }
+      ],
       jobSelected: null,
       jobs: [],
     };
@@ -153,33 +170,66 @@ export default {
     resetPage() {
       this.$router.push("reset");
     },
-    sendRegister() {
-      console.log("tentando registrar....");
-      console.log(this.userAuth);
-      console.log(this.userSec);
+    postUser: async function () {
+      await this.$axios
+        .$post(
+          "http://localhost:8003/api/v1/users/",
+          JSON.stringify(this.userAuth),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          if (response.email === this.userAuth.email) {
+            this.userSec[0].email = this.userAuth.email;
+            this.userSec[0].idNivelAcessoFK = this.jobSelected.id;
+            this.userSec[0].idUserFK = response.id;
+            this.userSec[0].fone = this.phoneFormated.replaceAll('(','').replaceAll(')','').replaceAll(' ','').replaceAll('-','');
+            console.log(response);
+            this.postUsuario();
 
-      if(this.userAuth.password === this.passwordConfirm)
-      {
-        // this.userSec.nome
-      }
-      else
-      {
-        alert("Campos Senha e Confirmação de Senha não estão iguais");
-      }
-
-      this.$auth
-        .loginWith("local", { data: this.login })
-        .then(() => {
-          console.log("DEU CERTO O LOGIN");
+          } else {
+            console.log("Error:");
+          }
         })
-        .catch((erro) => {
-          this.login.username = null;
-          this.login.password = null;
-          console.log("erro");
-          console.log(erro);
+        .catch((response) => {
+          alert("Problema ao tentar registrar usuário");
+          console.log(response);
         });
     },
-    getJobs: async function(){
+    postUsuario: async function () {
+      await this.$axios
+          .$post(
+            "http://localhost:8003/usuarios/",
+            JSON.stringify(this.userSec),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((response) => {
+            this.$router.push("/");
+          })
+          .catch((response) => {
+            alert("Problema ao tentar registrar usuário");
+            console.log(response);
+          });
+    },
+    sendRegister: async function () {
+      console.log("tentando registrar....");
+      console.log(this.userAuth);
+
+      //User register:
+      if (this.userAuth.password === this.passwordConfirm) {
+        this.postUser();
+      } else {
+        alert("Campos Senha e Confirmação de Senha não estão iguais");
+      }
+    },
+    getJobs: async function () {
       //first, clear array
       this.jobs.length = 0;
 
@@ -187,14 +237,14 @@ export default {
         .get("http://localhost:8003/cargos")
         .then((dataResponse) => {
           dataResponse.data.forEach((element) => {
-             this.jobs.push({
+            this.jobs.push({
               name: element.nome,
               id: element.id,
               level: element.nivelAcesso,
             });
           });
         });
-    }
+    },
   },
   created() {
     this.getJobs();
@@ -210,25 +260,53 @@ export default {
 }
 
 .Registro_panel {
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
+  max-height: 100vh;
   width: 50%;
+  box-sizing: border-box;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
+  padding: 30px 0px 20px 0px;
 }
 
 .formulario_registro {
   overflow-y: auto;
+  box-sizing: border-box;
   width: 100%;
-  margin-top: 50px;
-  margin-bottom: 50px;
   height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+}
+
+.registerForm {
+  width: 65%;
+  height: auto;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 2px solid #dc3d3d;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 10px 13px -7px #000000,
+    5px 5px 15px 5px rgba(0, 0, 0, 0);
+  box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+    background-color: #cccccc;
+  }
+  &::-webkit-scrollbar {
+    width: 12px;
+    background-color: #f5f5f5;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #d62929;
+    background-image: -webkit-linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 0, 0, 0.4) 50%,
+      transparent,
+      transparent
+    );
+  }
 }
 
 #myTitle {
@@ -237,15 +315,10 @@ export default {
   justify-content: center;
   text-align: center;
   height: auto;
-  padding-top: 10px;
+  margin-bottom: 20px;
   font-size: 28px;
-
+  overflow-y: hidden;
   /* padding-bottom: 50px; */
-}
-
-.registerForm {
-  width: 55%;
-  height: auto;
 }
 
 .inputRegisterContainer {
@@ -331,6 +404,7 @@ img {
 #name,
 #mail,
 #phone,
+#fullname,
 .basicInputRegister {
   width: 100%;
   border: 0;
@@ -339,45 +413,42 @@ img {
   box-shadow: none;
   border-color: none;
 
-  &:focus, &:valid, &:hover{
+  &:focus,
+  &:valid,
+  &:hover {
     outline: 0;
     background-color: white;
     border-color: crimson;
     box-shadow: none;
     border-color: none;
-
   }
 }
 
-
-.dropdownRegister{  
+.dropdownRegister {
   width: 100%;
   overflow-x: visible;
 
-  #cargo{
-    overflow-x: visible;    
+  #cargo {
+    overflow-x: visible;
     box-shadow: none;
     border-color: none;
     border: 0;
     border-bottom: 1px solid black;
     font-size: 18px;
 
-    &:hover{
+    &:hover {
       border-color: #c22a1f !important;
     }
-    .p-dropdown-panel{
-      border:1px solid #c22a1f;
-      li{
+    .p-dropdown-panel {
+      border: 1px solid #c22a1f;
+      li {
         padding: 3px 10px;
-        &:hover{
+        &:hover {
           background-color: #f59993 !important;
-          }
+        }
       }
     }
-     
   }
-
-
 }
 
 #senhaRegister,
@@ -388,7 +459,7 @@ img {
   border-bottom: 1px solid black;
   font-size: 18px;
   overflow: hidden;
-
+  overflow-y: hidden;
   &:focus,
   &:valid {
     outline: 0;
@@ -396,8 +467,6 @@ img {
     overflow: hidden;
   }
 }
-
-
 
 @media screen and (max-width: 990px) {
   .logo_panel {
@@ -411,6 +480,7 @@ img {
   }
 
   .registerForm {
+    width: 75%;
     .linksRegister {
       .backBtn {
         font-size: 12px;
@@ -435,6 +505,7 @@ img {
   }
 
   .registerForm {
+    width: 82%;
     .linksRegister {
       .backBtn {
         font-size: 12px;
@@ -458,12 +529,11 @@ img {
     }
   }
   .registerForm {
-    width: 70%;
     height: auto;
   }
 }
 
-@media screen and (max-width: 510px) {
+@media screen and (max-width: 600px) {
   img {
     display: none;
   }

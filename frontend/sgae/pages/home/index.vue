@@ -5,6 +5,13 @@
 <script>
 export default {
   name: 'home',
-  middleware: 'auth',
+  layout: 'default',
+  // middleware: 'auth',
+
+
+  //todas tarefas
+  //tarefas por idResponsavel
+  //tarefas por idSolicitante
+  //tarefas por status
 }
 </script>

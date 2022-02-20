@@ -1,5 +1,12 @@
 [
   {
+    "name": "addTarefa",
+    "path": "/addTarefa",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\addTarefa\\\\index.vue",
+    "chunkName": "pages/addTarefa/index",
+    "_name": "_3f5d63b2"
+  },
+  {
     "name": "error",
     "path": "/error",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\error\\\\index.vue",
@@ -12,6 +19,13 @@
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\home\\\\index.vue",
     "chunkName": "pages/home/index",
     "_name": "_2646fa32"
+  },
+  {
+    "name": "meuAcesso",
+    "path": "/meuAcesso",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\meuAcesso\\\\index.vue",
+    "chunkName": "pages/meuAcesso/index",
+    "_name": "_9fb5f98c"
   },
   {
     "name": "register",
@@ -33,6 +47,20 @@
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\success\\\\index.vue",
     "chunkName": "pages/success/index",
     "_name": "_0f951c20"
+  },
+  {
+    "name": "tarefas",
+    "path": "/tarefas",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\tarefas\\\\index.vue",
+    "chunkName": "pages/tarefas/index",
+    "_name": "_e268616a"
+  },
+  {
+    "name": "usuarios",
+    "path": "/usuarios",
+    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\usuarios\\\\index.vue",
+    "chunkName": "pages/usuarios/index",
+    "_name": "_02cc2ccc"
   },
   {
     "name": "index",

@@ -31,13 +31,18 @@ class CargosAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        if pk == '':
-            cargos = Cargos.objects.all()
-            serializer = CargosSerializer(cargos, many=True)
+        if 'nivel' in request.GET:            
+            nivel = request.GET['nivel']
+            cargos = Cargos.objects.filter(nivelAcesso=nivel)
+            serializer = CargosSerializer(cargos, many=True)            
             return Response(serializer.data)
-        else:
+        elif pk != '':
             cargos = Cargos.objects.get(id=pk)
             serializer = CargosSerializer(cargos)
+            return Response(serializer.data)        
+        else:            
+            cargos = Cargos.objects.all()
+            serializer = CargosSerializer(cargos, many=True)            
             return Response(serializer.data)
 
 
@@ -112,7 +117,7 @@ class UsuariosAPIView(APIView):
             serializer = UsuariosSerializer(usuarios, many=True)
             return Response(serializer.data)
         else:
-            usuarios = Usuarios.objects.get(id=pk)
+            usuarios = Usuarios.objects.get(idUserFK=pk)
             serializer = UsuariosSerializer(usuarios)
             return Response(serializer.data)
 
@@ -145,15 +150,25 @@ class TarefasAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        if pk == '':
-            tarefas = Tarefas.objects.all()
-            serializer = TarefasSerializer(tarefas, many=True)
+        if 'solicitante' in request.GET:            
+            solicitante = request.GET['solicitante']
+            tarefas = Tarefas.objects.filter(idSolicitanteFK=solicitante)
+            serializer = TarefasSerializer(tarefas, many=True)            
             return Response(serializer.data)
+        elif 'ambiente' in request.GET:
+            ambiente = request.GET['ambiente']
+            tarefas = Tarefas.objects.filter(idAmbienteFK=ambiente)
+            serializer = TarefasSerializer(tarefas, many=True)            
+            return Response(serializer.data)
+        elif pk != '':
+            tarefas = Tarefas.objects.get(id=pk)            
+            serializer = TarefasSerializer(tarefas, many=True)            
+            return Response(serializer.data)        
         else:
-            tarefas = Tarefas.objects.get(id=pk)
-            serializer = TarefasSerializer(tarefas)
+            tarefas = Tarefas.objects.all()
+            serializer = TarefasSerializer(tarefas)            
             return Response(serializer.data)
-
+        
 
     def post(self, request):
         serializer = TarefasSerializer(data=request.data, many=True)
@@ -172,6 +187,44 @@ class TarefasAPIView(APIView):
     def delete(self, request, pk=''):
         tarefas = Tarefas.objects.get(id=pk)
         tarefas.delete()
+        return Response({"msg": "Apagado com sucesso"})
+
+
+class TarefasUsuariosAPIView(APIView):
+    """
+    API tarefas
+    """
+
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=''):
+        if pk == '':
+            tarefasUsuarios = TarefasUsuarios.objects.all()
+            serializer = TarefasUsuariosSerializer(tarefasUsuarios, many=True)
+            return Response(serializer.data)
+        else:
+            tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
+            serializer = TarefasUsuariosSerializer(tarefasUsuarios)
+            return Response(serializer.data)
+
+
+    def post(self, request):
+        serializer = TarefasUsuariosSerializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"msg": "Inserido com sucesso"})
+        #return Response({"id": serializer.data['id']})
+
+    def put(self, request, pk=''):
+        tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
+        serializer = TarefasUsuariosSerializer(tarefasUsuarios, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk=''):
+        tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
+        tarefasUsuarios.delete()
         return Response({"msg": "Apagado com sucesso"})
 
 

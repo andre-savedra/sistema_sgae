@@ -54,7 +54,17 @@ class UsuariosSerializer(serializers.ModelSerializer):
             'email',
             'fone',
             'ativo',
-            'nivelAcessoFK',
+            'idNivelAcessoFK',
+            'image'
+        ]
+
+class TarefasUsuariosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TarefasUsuarios
+        fields = [
+            'id',            
+            'idUserFK',
+            'idTarefaFK'
         ]
 
 
@@ -65,8 +75,7 @@ class TarefasSerializer(serializers.ModelSerializer):
             'id',
             'nome',
             'descricao',
-            'idSolicitanteFK',
-            'idResponsavelFK',
+            'idSolicitanteFK',            
             'idAmbienteFK',
             'idStatus',
             'prazo',
