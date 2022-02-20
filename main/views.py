@@ -236,13 +236,23 @@ class TarefasUsuariosAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        if pk == '':
-            tarefasUsuarios = TarefasUsuarios.objects.all()
-            serializer = TarefasUsuariosSerializer(tarefasUsuarios, many=True)
+        if 'tarefa' in request.GET:            
+            tarefa = request.GET['tarefa']
+            tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)
+            serializer = TarefasUsuariosSerializer(tarefasUsuarios, many=True)            
             return Response(serializer.data)
-        else:
+        elif 'usuario' in request.GET:            
+            usuario = request.GET['usuario']
+            tarefasUsuarios = TarefasUsuarios.objects.filter(idUsuarioFK=usuario)
+            serializer = TarefasUsuariosSerializer(tarefasUsuarios, many=True)            
+            return Response(serializer.data)
+        elif pk != '':            
             tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
             serializer = TarefasUsuariosSerializer(tarefasUsuarios)
+            return Response(serializer.data)
+        else:
+            tarefasUsuarios = TarefasUsuarios.objects.all()
+            serializer = TarefasUsuariosSerializer(tarefasUsuarios, many=True)
             return Response(serializer.data)
 
 
@@ -273,7 +283,17 @@ class TarefasStatusAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        if pk == '':
+        if 'tarefa' in request.GET:
+            tarefa = request.GET['tarefa']
+            tarefasStatus = TarefasStatus.objects.filter(idTarefaFK=tarefa)
+            serializer = TarefasStatusSerializer(tarefasStatus, many=True)            
+            return Response(serializer.data)
+        elif 'status' in request.GET:
+            status = request.GET['status']
+            tarefasStatus = TarefasStatus.objects.filter(idStatusFK=status)
+            serializer = TarefasStatusSerializer(tarefasStatus, many=True)            
+            return Response(serializer.data)
+        elif pk == '':
             tarefasStatus = TarefasStatus.objects.all()
             serializer = TarefasStatusSerializer(tarefasStatus, many=True)
             return Response(serializer.data)
