@@ -25,6 +25,13 @@ class Ambientes(models.Model):
         return self.nome
 
 
+class Status(models.Model):
+    nome = models.CharField(max_length=80)
+
+    def __str__(self):
+        return self.nome
+
+
 def upload_image_task(instance, filename):
     return f"{instance.idTarefaFK}-{instance.idStatus}-{filename}"
 
@@ -49,12 +56,7 @@ class Tarefas(models.Model):
     nome = models.CharField(max_length=80)
     descricao = models.CharField(max_length=500)
     idSolicitanteFK = models.ForeignKey(Usuarios, on_delete=models.CASCADE)    
-    idAmbienteFK = models.ForeignKey(Ambientes, on_delete=models.CASCADE)    
-    idStatus = models.CharField(max_length=15, 
-                choices=(('1','Iniciada'),
-                         ('2','Em Análise'),
-                         ('3','Em Andamento'),
-                         ('4','Finalizada')))
+    idAmbienteFK = models.ForeignKey(Ambientes, on_delete=models.CASCADE)
     prazo = models.DateTimeField()
     dataInicio = models.DateTimeField(default=timezone.now())
     dataFim = models.DateTimeField(null=True, blank=True)
@@ -67,6 +69,15 @@ class TarefasUsuarios(models.Model):
     idUsuarioFK = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
     idTarefaFK = models.ForeignKey(Tarefas, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.nome
+
+
+class TarefasStatus(models.Model):    
+    idStatusFK = models.ForeignKey(Status, on_delete=models.CASCADE)
+    idTarefaFK = models.ForeignKey(Tarefas, on_delete=models.CASCADE)
+    data = models.DateTimeField(null=True, blank=True)
+    
     def __str__(self):
         return self.nome
 

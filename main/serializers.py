@@ -44,6 +44,15 @@ class AmbientesSerializer(serializers.ModelSerializer):
         ]
 
 
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Status
+        fields = [
+            'id',
+            'nome',            
+        ]
+
+
 class UsuariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuarios
@@ -67,6 +76,15 @@ class TarefasUsuariosSerializer(serializers.ModelSerializer):
             'idTarefaFK'
         ]
 
+class TarefasStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TarefasStatus
+        fields = [
+            'id',
+            'idTarefaFK',
+            'idStatusFK',
+            'data',
+        ]
 
 class TarefasSerializer(serializers.ModelSerializer):
     class Meta:
@@ -77,7 +95,6 @@ class TarefasSerializer(serializers.ModelSerializer):
             'descricao',
             'idSolicitanteFK',            
             'idAmbienteFK',
-            'idStatus',
             'prazo',
             'dataInicio',
             'dataFim',

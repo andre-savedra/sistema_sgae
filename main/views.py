@@ -104,6 +104,44 @@ class AmbientesAPIView(APIView):
         return Response({"msg": "Apagado com sucesso"})
 
 
+class StatusAPIView(APIView):
+    """
+    API Status
+    """
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=''):
+        if pk == '':
+            status = Status.objects.all()
+            serializer = StatusSerializer(status, many=True)
+            return Response(serializer.data)
+        else:
+            status = Status.objects.get(id=pk)
+            serializer = StatusSerializer(status)
+            return Response(serializer.data)
+
+
+    def post(self, request):
+        serializer = StatusSerializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"msg": "Inserido com sucesso"})
+        #return Response({"id": serializer.data['id']})
+
+    def put(self, request, pk=''):
+        status = Status.objects.get(id=pk)
+        serializer = StatusSerializer(status, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk=''):
+        status = Status.objects.get(id=pk)
+        status.delete()
+        return Response({"msg": "Apagado com sucesso"})
+
+
+
 class UsuariosAPIView(APIView):
     """
     API Usuarios
@@ -226,6 +264,46 @@ class TarefasUsuariosAPIView(APIView):
         tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
         tarefasUsuarios.delete()
         return Response({"msg": "Apagado com sucesso"})
+
+
+class TarefasStatusAPIView(APIView):
+    """
+    API tarefasStatus
+    """
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=''):
+        if pk == '':
+            tarefasStatus = TarefasStatus.objects.all()
+            serializer = TarefasStatusSerializer(tarefasStatus, many=True)
+            return Response(serializer.data)
+        else:
+            tarefasStatus = TarefasStatus.objects.get(id=pk)
+            serializer = TarefasStatusSerializer(tarefasStatus)
+            return Response(serializer.data)
+
+
+    def post(self, request):
+        serializer = TarefasStatusSerializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"msg": "Inserido com sucesso"})
+        #return Response({"id": serializer.data['id']})
+
+    def put(self, request, pk=''):
+        tarefasStatus = TarefasStatus.objects.get(id=pk)
+        serializer = TarefasStatusSerializer(tarefasStatus, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk=''):
+        tarefasStatus = TarefasStatus.objects.get(id=pk)
+        tarefasStatus.delete()
+        return Response({"msg": "Apagado com sucesso"})
+
+
+
 
 
 class FotosAPIView(APIView):

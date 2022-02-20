@@ -7,6 +7,12 @@ urlpatterns = [
 
     path("ambientes/", AmbientesAPIView.as_view(), name='ambientes'),
     path('ambientes/<int:pk>/', AmbientesAPIView.as_view(), name='ambientesParameters'),
+   
+    path("status/", StatusAPIView.as_view(), name='status'),
+    path('status/<int:pk>/', StatusAPIView.as_view(), name='statusParameters'),
+    
+    path("tarefasStatus/", TarefasStatusAPIView.as_view(), name='tarefasStatus'),
+    path('tarefasStatus/<int:pk>/', TarefasStatusAPIView.as_view(), name='tarefasStatusParameters'),
 
     path("usuarios/", UsuariosAPIView.as_view(), name='usuarios'),
     path('usuarios/<int:pk>/', UsuariosAPIView.as_view(), name='usuariosParameters'),
