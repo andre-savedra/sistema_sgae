@@ -55,7 +55,7 @@
 }
 
 
-.customAutocomplete {   
+.customAutocomplete {
     .p-autocomplete-multiple{  
         .p-autocomplete-multiple-container {
             outline: 0;
@@ -96,3 +96,40 @@
     }
   }
 }
+
+.customFileUpload{             
+    .p-fileupload-buttonbar{
+        border: none !important;
+        border-color: white !important;
+        
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content:center;
+
+        span{
+            background-color: var(--red-background-color) !important;
+            border-color: var(--red-background-color) !important;
+            width: 33%;
+        }
+        
+        button{
+            // display: none !important;
+            background-color: var(--red-background-color) !important;
+            border-color: var(--red-background-color) !important;
+            width: 33%;
+        }
+    }
+
+    .p-fileupload-content{
+        .p-fileupload-row  {
+            div .p-button-icon-only{
+                background-color: var(--red-background-color) !important;
+                border-color: var(--red-background-color) !important;
+            }
+           
+            
+        }
+        
+    }
+  }

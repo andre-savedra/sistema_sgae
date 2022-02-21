@@ -103,18 +103,22 @@
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
             >
-              <label class="lblBasic" for="deadline">Fotos Upload</label>
-               <!-- url="./upload.php"
-                @upload="onUpload" -->
-              <FileUpload
-                name="demo[]"
-               
+              <label class="lblBasic" for="imageUpload">Fotos Upload</label>
+
+              <FileUpload                
                 :multiple="true"
                 accept="image/*"
                 :maxFileSize="1000000"
+                @upload="onUpload"
+                class="customFileUpload"
+                id="imageUpload"
+                chooseLabel="Adicionar fotos"
+                uploadLabel="Carregar fotos"
+                cancelLabel="Cancelar"                
+                @uploader="myUploader"                
               >
                 <template #empty>
-                  <p>Drag and drop files to here to upload.</p>
+                  <p>Arraste as imagens desejadas.</p>
                 </template>
               </FileUpload>
             </div>
@@ -137,6 +141,7 @@ export default {
   layout: "default",
   data() {
     return {
+      teste: null,
       selectedEmployees: [],
       filteredEmployees: null,
       allUsers: [],
@@ -193,6 +198,10 @@ export default {
     };
   },
   methods: {
+    cleanForm(){
+      console.log("this.teste");
+      console.log(this.teste);
+    },
     sendPost: async function (body) {},
     sendForm: async function () {},
     getUsers: async function () {
@@ -258,6 +267,16 @@ export default {
         }
       }, 250);
     },
+    onUpload: async function (event) {
+      // console.log(event);
+      const files = event.files;
+      console.log(files);
+      
+    },
+    myUploader: async function (event) {
+      console.log("my custom uploader...");
+      console.log(event);
+    },
   },
   mounted() {
     this.getUsers();
@@ -306,6 +325,7 @@ export default {
       background-color: $red-back;
       padding-left: 40px;
       color: #fff;
+      border-radius: 15px 15px 0px 0px;
 
       i {
         font-size: 25px;
@@ -320,7 +340,7 @@ export default {
       width: 100%;
       height: auto;
       padding: 20px;
-      border-radius: 0px 0px 15px;
+      border-radius: 0px 0px 15px 15px;
 
       .element {
         height: auto;
@@ -351,7 +371,7 @@ export default {
           margin-left: 15px;
           height: 120px;
           border-radius: 15px;
-          border: 1px solid black;
+          border: 2px solid black;
           padding: 10px;
           outline: none;
           word-break: break-all;
@@ -360,7 +380,8 @@ export default {
 
         .customAutocomplete {
           .lblBasic {
-            margin: 15px 0px;
+            /* margin: 15px 0px; */
+            margin: 28px 0px 15px 0px;
           }
           .p-autocomplete-multiple,
           .p-autocomplete {
@@ -371,11 +392,29 @@ export default {
 
         .inputElement {
           .lblBasic {
-            margin: 15px 0px;
+            margin: 18px 0px;
           }
           .customDatePicker {
             width: 30%;
             margin-left: 15px;
+          }
+
+          .customFileUpload {
+            width: 95%;
+            margin-left: 15px;
+            border: 2px solid black;
+            border-radius: 15px;
+            padding: 10px;
+
+            .p-fileupload-buttonbar {
+              border: none !important;
+              border-color: white !important;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+            
+            }
           }
         }
       }
