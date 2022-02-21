@@ -41,8 +41,57 @@ export default {
     theme: 'saga-blue',
     ripple: true,
     components: [
-        'Button', 'Sidebar', 'Avatar', 'TieredMenu', 'Chart', 'Dropdown', 'Tooltip', 'Message', 'Accordion', 'AccordionTab', 'Password', 'RadioButton', 'InputText', 'InputMask'
-    ]
+        'Button', 'Sidebar', 'Avatar', 'Chart', 'Dropdown', 'Tooltip', 'Message', 'Accordion', 'Password', 'RadioButton', 'InputText', 'InputMask', 'AutoComplete', 'Calendar', 'FileUpload'
+    ],
+    
+      locale: {
+        firstDayOfWeek: 0,
+        dayNames: [
+          "Domingo",
+          "Segunda",
+          "Terça",
+          "Quarta",
+          "Quinta",
+          "Sexta",
+          "Sábado",
+        ],
+        dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+        dayNamesMin: ["Do", "Seg", "Te", "Qua", "Qui", "Sex", "Sa"],
+        monthNames: [
+          "Janeiro",
+          "Fevereiro",
+          "Março",
+          "Abril",
+          "Maio",
+          "Junho",
+          "Julho",
+          "Agosto",
+          "Setembro",
+          "Outubro",
+          "Novembro",
+          "Dezembro",
+        ],
+        monthNamesShort: [
+          "Jan",
+          "Fev",
+          "Mar",
+          "Abr",
+          "Mai",
+          "Jun",
+          "Jul",
+          "Ago",
+          "Set",
+          "Out",
+          "Nov",
+          "Dez",
+        ],
+        today: "Hoje",
+        clear: "Limpar",
+        dateFormat: "mm/dd/yy",
+        weekHeader: "Semana",
+
+      
+    },
   },
 
   googleFonts: {

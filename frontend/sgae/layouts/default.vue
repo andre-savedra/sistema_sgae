@@ -247,7 +247,7 @@ export default {
       await this.$axios
         .get("http://localhost:8003/usuarios/" + userId)
         .then((dataResponse) => {
-          console.log(dataResponse.data);
+          // console.log(dataResponse.data);
           this.actualUser = dataResponse.data;
           this.actualUser.image = "userimg-1.jpg";
           this.profileLoaded = true;

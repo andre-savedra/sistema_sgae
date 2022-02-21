@@ -30,5 +30,69 @@
 .p-sidebar-close:focus,
 .p-link:focus {
     box-shadow: none !important;
+    // outline: 0 !important;
+    // border-color: none !important;
 }
 
+.customDatePicker {
+    .p-datepicker-trigger{
+        background-color:var(--red-background-color) !important;
+        border-color:var(--red-background-color) !important;   
+    }
+    .p-inputtext:enabled {
+        outline: 0;
+        box-shadow: none;
+        border-color: none;
+        border: none;
+        border-bottom: 2px solid black;
+        border-radius: 0;
+        &:focus,
+        &:hover{
+            border: none;
+            border-bottom: 2px solid black;
+        }
+    }
+}
+
+
+.customAutocomplete {   
+    .p-autocomplete-multiple{  
+        .p-autocomplete-multiple-container {
+            outline: 0;
+            box-shadow: none;
+            border-color: none;
+            border: none;
+            border-bottom: 2px solid black;
+            border-radius: 0;
+
+            display: flex;
+            align-items: flex-start;
+            flex-wrap: wrap;
+
+            .p-autocomplete-token {
+                background-color:rgb(228, 150, 144);
+                width: auto;
+                margin: 5px 2px;
+                color: black;
+                .p-autocomplete-token-icon{
+                    display: flex;
+                    flex-direction: row;                    
+                    align-items: center;
+                    justify-content: flex-end;
+                    width: 20px;
+                }
+            }            
+        }
+  }
+  .p-autocomplete{
+      .p-autocomplete-input{
+        outline: 0;
+        box-shadow: none;
+        border-color: none;
+        border: none;
+        border-bottom: 2px solid black;
+        border-radius: 0;
+          
+    }
+  }
+}
