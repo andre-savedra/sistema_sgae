@@ -21,6 +21,7 @@
                 id="name"
                 class="basicInputText"
                 placeholder="Preencha..."
+                v-model="task.nome"
                 required
               />
             </div>
@@ -45,6 +46,7 @@
                 class="basicInputText"
                 :disabled="true"
                 placeholder="Preencha..."
+                v-model="actualUser.nome"
                 required
               />
             </div>
@@ -98,6 +100,8 @@
                 :showIcon="true"
                 :locale="pt"
                 v-model="deadline"
+                dateFormat="dd/mm/yy"
+                :showTime="true"
               />
             </div>
             <div
@@ -105,20 +109,23 @@
             >
               <label class="lblBasic" for="imageUpload">Fotos Upload</label>
 
-              <FileUpload                
+              <FileUpload
                 :multiple="true"
                 accept="image/*"
                 :maxFileSize="1000000"
-                @upload="onUpload"
+                @upload="postPhoto"
                 class="customFileUpload"
                 id="imageUpload"
                 chooseLabel="Adicionar fotos"
                 uploadLabel="Carregar fotos"
-                cancelLabel="Cancelar"                
-                @uploader="myUploader"                
+                cancelLabel="Cancelar"
+                @uploader="myUploader"
               >
                 <template #empty>
-                  <p>Arraste as imagens desejadas.</p>
+                  <p>
+                    Arraste as imagens desejadas aqui ou clique em 'Adicionar
+                    fotos'
+                  </p>
                 </template>
               </FileUpload>
             </div>
@@ -129,7 +136,7 @@
       </div>
     </div>
     <div class="buttons p-d-flex p-flex-row p-jc-evenly p-ai-center">
-      <Button class="btn-send" label="Enviar" @click="sendForm()" />
+      <Button class="btn-send" label="Enviar" @click="postTask()" />
       <Button class="btn-clean" label="Limpar" @click="cleanForm()" />
     </div>
   </div>
@@ -195,15 +202,93 @@ export default {
         weekHeader: "Semana",
       },
       deadline: null,
+      photo: {
+        nome: null,
+        idTarefaFK: null,
+        idStatusFK: null,
+        image: null,
+      },
+      task: {
+        nome: null,
+        descricao: null,
+        idSolicitanteFK: null,
+        idAmbienteFK: null,
+        prazo: null,
+        dataInicio: null,
+        dataFim: null,
+      },
+      actualUser: {
+        id: null,
+        nome: null,
+      },
     };
   },
   methods: {
-    cleanForm(){
-      console.log("this.teste");
-      console.log(this.teste);
+    cleanForm() {
+      console.log(this.allEnviroments);
+      console.log(this.selectedEnviroment);
     },
-    sendPost: async function (body) {},
-    sendForm: async function () {},
+    formatNumber: function (input) {
+      if (input >= 0 && input <= 9) return "0" + input.toString();
+      else return input.toString();
+    },
+    formatDate: function (input) {
+      let dt = new Date();
+
+      if (input === null) return input;
+
+      if (input === "frontend")
+        //new datetime to show in front
+        return (
+          this.formatNumber(dt.getDate()) +
+          "/" +
+          this.formatNumber(dt.getMonth() + 1) +
+          "/" +
+          dt.getFullYear() +
+          " - " +
+          this.formatNumber(dt.getHours()) +
+          ":" +
+          this.formatNumber(dt.getMinutes())
+        );
+      else if (input === "backend")
+        //new datetime to show in front
+        return (
+          dt.getFullYear() +
+          "-" +
+          this.formatNumber(dt.getMonth() + 1) +
+          "-" +
+          this.formatNumber(dt.getDate()) +
+          "T" +
+          this.formatNumber(dt.getHours()) +
+          ":" +
+          this.formatNumber(dt.getMinutes()) +
+          ".000000-03:00"
+        );
+      else if (input.includes("GMT")) {
+        //convert frontend date to backend date
+        let val = input.split(" ");
+        val[3] = val[0].trim().replaceAll("/", "-"); //date
+        val[1] = val[1].trim().replaceAll("/", "-"); //time
+        //invert date position
+        const separator = val[0].split("-");
+        if (separator.length === 3)
+          val[0] = separator[2] + "-" + separator[1] + "-" + separator[0];
+
+        return val[0] + "T" + val[1] + ".000000-03:00";
+      } else if (input.includes("T")) {
+        let val = input.split("T");
+
+        const separator = val[0].split("-");
+        if (separator.length === 3)
+          val[0] = separator[2] + "/" + separator[1] + "/" + separator[0];
+
+        const separator2 = val[1].split(":");
+        if (separator2.length >= 2)
+          val[1] = separator2[0] + ":" + separator2[1];
+
+        return val[0] + " - " + val[1];
+      } else return input;
+    },
     getUsers: async function () {
       this.allUsers.length = 0;
 
@@ -230,6 +315,7 @@ export default {
         .then((dataResponse) => {
           dataResponse.forEach((enviroment) => {
             this.allEnviroments.push({
+              id: enviroment.id,
               name: enviroment.nome,
             });
           });
@@ -267,11 +353,52 @@ export default {
         }
       }, 250);
     },
-    onUpload: async function (event) {
+    postPhoto: async function (event) {
       // console.log(event);
       const files = event.files;
       console.log(files);
-      
+
+      // this.photo.nome = "MinhaFoto1";
+      // this.photo.idTarefaFK = 1;
+      // this.photo.idStatusFK = 1;
+      // this.photo.image = files[0];
+
+      // await this.$axios
+      //   .$post("http://localhost:8003/fotos/", JSON.stringify(this.photo), {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   })
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((response) => {
+      //     alert("Problema ao tentar cadastrar  foto");
+      //     console.log(response);
+      //   });
+    },
+    postTask: async function () {
+      this.task.idSolicitanteFK = this.actualUser.id;
+      this.task.idAmbienteFK = this.selectedEnviroment.id;
+      console.log(this.deadline.toString());
+      this.task.prazo = this.formatDate(this.deadline.toString());
+      this.task.dataInicio = this.formatDate("backend");
+
+      console.log(this.task);
+      // await this.$axios
+      //   .$post("http://localhost:8003/tarefas/",
+      //   JSON.stringify(this.task), {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   })
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((response) => {
+      //     alert("Problema ao tentar cadastrar a tarefa");
+      //     console.log(response);
+      //   });
     },
     myUploader: async function (event) {
       console.log("my custom uploader...");
@@ -281,6 +408,8 @@ export default {
   mounted() {
     this.getUsers();
     this.getEnviroments();
+    this.actualUser.id = 7;
+    this.actualUser.nome = "André Felipe Savedra Cruz";
   },
 };
 </script>
@@ -304,7 +433,7 @@ export default {
 
   $size-title: 15px;
   $size-topic: 15px;
-  $size-container: 80vw;
+  $size-container: 70vw;
   $red-back: rgba(194, 42, 31, 1);
   $white-back: rgba(255, 255, 255, 1);
 
@@ -413,7 +542,6 @@ export default {
               flex-direction: row;
               align-items: center;
               justify-content: center;
-            
             }
           }
         }
@@ -462,6 +590,30 @@ export default {
       background-color: rgba(255, 255, 255, 1);
       border: 2px solid #c22a1f;
       color: #c22a1f;
+    }
+  }
+}
+
+@media screen and (max-width: 945px) {
+  $size-title: 13px;
+  $size-topic: 13px;
+  $size-container: 80vw !important;
+
+  .titulo,
+  .titulo1 {
+    font-size: $size-title;
+  }
+
+  .container {
+    width: $size-container;
+  }
+
+  .buttons {
+    width: $size-container;
+    .btn-send,
+    .btn-clean {
+      width: 38%;
+      font-size: 16px !important;
     }
   }
 }

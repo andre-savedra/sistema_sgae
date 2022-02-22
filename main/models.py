@@ -33,7 +33,7 @@ class Status(models.Model):
 
 
 def upload_image_task(instance, filename):
-    return f"{instance.idTarefaFK}-{instance.idStatus}-{filename}"
+    return f"{instance.idTarefaFK}-{instance.idStatusFK}-{timezone.now()}-{filename}"
 
 def upload_image_user(instance, filename):
     return f"{instance.idUserFK}-{filename}"
@@ -65,12 +65,12 @@ class Tarefas(models.Model):
         return self.nome
 
 
-class TarefasUsuarios(models.Model):    
+class TarefasUsuarios(models.Model):
     idUsuarioFK = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
     idTarefaFK = models.ForeignKey(Tarefas, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.nome
+        return "ok"
 
 
 class TarefasStatus(models.Model):    
@@ -79,18 +79,14 @@ class TarefasStatus(models.Model):
     data = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
-        return self.nome
+        return "ok"
 
 
 
 class Fotos(models.Model):
     nome = models.CharField(max_length=55)
     idTarefaFK = models.ForeignKey(Tarefas, on_delete=models.CASCADE)    
-    idStatus = models.CharField(max_length=15, 
-                choices=(('1','Iniciada'),
-                         ('2','Em Análise'),
-                         ('3','Em Andamento'),
-                         ('4','Finalizada')))
+    idStatusFK = models.ForeignKey(Status, on_delete=models.CASCADE)    
     image = models.ImageField(upload_to=upload_image_task, blank=True, null=True)
     
     def __str__(self):

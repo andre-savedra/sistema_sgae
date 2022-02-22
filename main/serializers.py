@@ -108,7 +108,7 @@ class FotosSerializer(serializers.ModelSerializer):
             'id',
             'nome',
             'idTarefaFK',
-            'idStatus',
+            'idStatusFK',
             'image',
         ]
 

@@ -258,7 +258,7 @@ export default {
     },
   },
   mounted() {
-    (this.actualUser = null), this.getUsuarios(38);
+    (this.actualUser = null), this.getUsuarios(7);
   },
 };
 </script>

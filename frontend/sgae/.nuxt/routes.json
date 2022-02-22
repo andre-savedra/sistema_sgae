@@ -3,70 +3,60 @@
     "name": "addTarefa",
     "path": "/addTarefa",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\addTarefa\\\\index.vue",
-    "chunkName": "pages/addTarefa/index",
-    "_name": "_3f5d63b2"
+    "chunkName": "pages/addTarefa/index"
   },
   {
     "name": "error",
     "path": "/error",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\error\\\\index.vue",
-    "chunkName": "pages/error/index",
-    "_name": "_40f2118a"
+    "chunkName": "pages/error/index"
   },
   {
     "name": "home",
     "path": "/home",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\home\\\\index.vue",
-    "chunkName": "pages/home/index",
-    "_name": "_2646fa32"
+    "chunkName": "pages/home/index"
   },
   {
     "name": "meuAcesso",
     "path": "/meuAcesso",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\meuAcesso\\\\index.vue",
-    "chunkName": "pages/meuAcesso/index",
-    "_name": "_9fb5f98c"
+    "chunkName": "pages/meuAcesso/index"
   },
   {
     "name": "register",
     "path": "/register",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\register\\\\index.vue",
-    "chunkName": "pages/register/index",
-    "_name": "_32aaa26e"
+    "chunkName": "pages/register/index"
   },
   {
     "name": "reset",
     "path": "/reset",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\reset\\\\index.vue",
-    "chunkName": "pages/reset/index",
-    "_name": "_63eda994"
+    "chunkName": "pages/reset/index"
   },
   {
     "name": "success",
     "path": "/success",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\success\\\\index.vue",
-    "chunkName": "pages/success/index",
-    "_name": "_0f951c20"
+    "chunkName": "pages/success/index"
   },
   {
     "name": "tarefas",
     "path": "/tarefas",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\tarefas\\\\index.vue",
-    "chunkName": "pages/tarefas/index",
-    "_name": "_e268616a"
+    "chunkName": "pages/tarefas/index"
   },
   {
     "name": "usuarios",
     "path": "/usuarios",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\usuarios\\\\index.vue",
-    "chunkName": "pages/usuarios/index",
-    "_name": "_02cc2ccc"
+    "chunkName": "pages/usuarios/index"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\index.vue",
-    "chunkName": "pages/index",
-    "_name": "_1f4bed31"
+    "chunkName": "pages/index"
   }
 ]

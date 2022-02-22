@@ -15,7 +15,7 @@ class ActivateUser(APIView):
     def get(self, request, uid, token, format = None):
         payload = {'uid': uid, 'token': token}
 
-        url = "http://localhost:8000/api/v1/users/activation/"
+        url = "http://localhost:8003/api/v1/users/activation/"
         response = requests.post(url, data = payload)
 
         if response.status_code == 204:
@@ -200,11 +200,11 @@ class TarefasAPIView(APIView):
             return Response(serializer.data)
         elif pk != '':
             tarefas = Tarefas.objects.get(id=pk)            
-            serializer = TarefasSerializer(tarefas, many=True)            
+            serializer = TarefasSerializer(tarefas)            
             return Response(serializer.data)        
         else:
             tarefas = Tarefas.objects.all()
-            serializer = TarefasSerializer(tarefas)            
+            serializer = TarefasSerializer(tarefas, many=True)            
             return Response(serializer.data)
         
 
@@ -212,8 +212,10 @@ class TarefasAPIView(APIView):
         serializer = TarefasSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"msg": "Inserido com sucesso"})
-        #return Response({"id": serializer.data['id']})
+        # return Response({"msg": "Inserido com sucesso"})
+        # return Response({"id": serializer.data['id']})
+        return Response(serializer.data)
+        
 
     def put(self, request, pk=''):
         tarefas = Tarefas.objects.get(id=pk)
@@ -348,7 +350,8 @@ class FotosAPIView(APIView):
         serializer = FotosSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"msg": "Inserido com sucesso"})
+        return Response(serializer.data)
+        # return Response({"msg": "Inserido com sucesso"})
         #return Response({"id": serializer.data['id']})
 
     def put(self, request, pk=''):

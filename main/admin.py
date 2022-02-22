@@ -44,7 +44,7 @@ class detTarefasStatus(admin.ModelAdmin):
     list_per_page = 10
 
 class detFotos(admin.ModelAdmin):
-    list_display = ('id','nome', 'idTarefaFK', 'idStatus', 'image')
+    list_display = ('id','nome', 'idTarefaFK', 'idStatusFK', 'image')
     list_display_links = ('id',)
     search_fields = ('nome',)
     list_per_page = 10

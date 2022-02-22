@@ -110,14 +110,24 @@
         span{
             background-color: var(--red-background-color) !important;
             border-color: var(--red-background-color) !important;
-            width: 33%;
+            width: 80%;            
+            height: 40px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;            
         }
         
         button{
-            // display: none !important;
-            background-color: var(--red-background-color) !important;
-            border-color: var(--red-background-color) !important;
-            width: 33%;
+            display: none !important;
+            // background-color: var(--red-background-color) !important;
+            // border-color: var(--red-background-color) !important;
+            // width: 33%;
+            // height: 40px;
+            // display: flex;
+            // flex-direction: row;
+            // align-items: center;
+            // justify-content: center;
         }
     }
 
@@ -126,10 +136,32 @@
             div .p-button-icon-only{
                 background-color: var(--red-background-color) !important;
                 border-color: var(--red-background-color) !important;
-            }
-           
+            }           
             
         }
         
     }
   }
+
+
+//   @media screen and (max-width: 945px) {
+
+//     .customFileUpload{             
+//         .p-fileupload-buttonbar{
+
+//             flex-wrap: wrap;
+//             span{           
+//                font-size: 12px !important;
+//                width: 100% !important;
+//                margin: 7px 0px;
+//                // display: none;
+//             }
+            
+//             button{            
+//                 font-size: 12px !important;
+//                   width: 47% !important;
+//                   margin: 7px 0px;
+//             }
+//         }
+//       }
+//     }
