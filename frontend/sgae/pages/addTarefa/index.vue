@@ -21,7 +21,7 @@
                 id="name"
                 class="basicInputText"
                 placeholder="Preencha..."
-                v-model="task.nome"
+                v-model="task[0].nome"
                 required
               />
             </div>
@@ -34,6 +34,7 @@
                 type="text"
                 placeholder="Insira aqui a descrição da sua tarefa..."
                 id="description"
+                v-model="task[0].descricao"
               ></textarea>
             </div>
             <div
@@ -208,15 +209,17 @@ export default {
         idStatusFK: null,
         image: null,
       },
-      task: {
-        nome: null,
-        descricao: null,
-        idSolicitanteFK: null,
-        idAmbienteFK: null,
-        prazo: null,
-        dataInicio: null,
-        dataFim: null,
-      },
+      task: [
+        {
+          nome: null,
+          descricao: null,
+          idSolicitanteFK: null,
+          idAmbienteFK: null,
+          prazo: null,
+          dataInicio: null,
+          dataFim: null,
+        },
+      ],
       actualUser: {
         id: null,
         nome: null,
@@ -262,20 +265,13 @@ export default {
           this.formatNumber(dt.getHours()) +
           ":" +
           this.formatNumber(dt.getMinutes()) +
-          ".000000-03:00"
+          ":00.000000-03:00"
         );
       else if (input.includes("GMT")) {
         //convert frontend date to backend date
-        let val = input.split(" ");
-        val[3] = val[0].trim().replaceAll("/", "-"); //date
-        val[1] = val[1].trim().replaceAll("/", "-"); //time
-        //invert date position
-        const separator = val[0].split("-");
-        if (separator.length === 3)
-          val[0] = separator[2] + "-" + separator[1] + "-" + separator[0];
-
-        return val[0] + "T" + val[1] + ".000000-03:00";
-      } else if (input.includes("T")) {
+        let dt = new Date(input).toISOString();              
+        return dt.replaceAll("Z","-03:00");
+      } else if (input.includes("TT")) {
         let val = input.split("T");
 
         const separator = val[0].split("-");
@@ -378,27 +374,27 @@ export default {
       //   });
     },
     postTask: async function () {
-      this.task.idSolicitanteFK = this.actualUser.id;
-      this.task.idAmbienteFK = this.selectedEnviroment.id;
-      console.log(this.deadline.toString());
-      this.task.prazo = this.formatDate(this.deadline.toString());
-      this.task.dataInicio = this.formatDate("backend");
+      this.task[0].idSolicitanteFK = this.actualUser.id;
+      this.task[0].idAmbienteFK = this.selectedEnviroment.id;
+      this.task[0].prazo = this.formatDate(this.deadline.toString());
+      this.task[0].dataInicio = this.formatDate("backend");
 
       console.log(this.task);
-      // await this.$axios
-      //   .$post("http://localhost:8003/tarefas/",
-      //   JSON.stringify(this.task), {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   })
-      //   .then((response) => {
-      //     console.log(response);
-      //   })
-      //   .catch((response) => {
-      //     alert("Problema ao tentar cadastrar a tarefa");
-      //     console.log(response);
-      //   });
+      console.log(JSON.stringify(this.task));
+      
+      await this.$axios
+        .$post("http://localhost:8003/tarefas/", JSON.stringify(this.task), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((response) => {
+          alert("Problema ao tentar cadastrar a tarefa");
+          console.log(response);
+        });
     },
     myUploader: async function (event) {
       console.log("my custom uploader...");
