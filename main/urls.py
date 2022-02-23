@@ -25,6 +25,6 @@ urlpatterns = [
 
     path("fotos/", FotosAPIView.as_view(), name='fotos'),
     path('fotos/<int:pk>/', FotosAPIView.as_view(), name='fotosParameters'),
-
+   
     path("activate/<slug:uid>/<slug:token>/", ActivateUser.as_view(), name='activate'),
 ]

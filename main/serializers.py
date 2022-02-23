@@ -112,4 +112,3 @@ class FotosSerializer(serializers.ModelSerializer):
             'image',
         ]
 
-

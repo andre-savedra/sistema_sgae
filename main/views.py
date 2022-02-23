@@ -347,7 +347,8 @@ class FotosAPIView(APIView):
 
 
     def post(self, request):
-        serializer = FotosSerializer(data=request.data, many=True)
+        serializer = FotosSerializer(data=request.data)
+        print(request.data);
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -365,3 +366,5 @@ class FotosAPIView(APIView):
         fotos = Fotos.objects.get(id=pk)
         fotos.delete()
         return Response({"msg": "Apagado com sucesso"})
+
+

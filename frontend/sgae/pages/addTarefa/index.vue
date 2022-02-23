@@ -156,6 +156,8 @@ export default {
       selectedEnviroment: null,
       filteredEnviroments: null,
       allEnviroments: [],
+      taskID: 1,
+      initialStatus: 1,
       pt: {
         firstDayOfWeek: 0,
         dayNames: [
@@ -203,12 +205,7 @@ export default {
         weekHeader: "Semana",
       },
       deadline: null,
-      photo: {
-        nome: null,
-        idTarefaFK: null,
-        idStatusFK: null,
-        image: null,
-      },
+      photos: [],
       task: [
         {
           nome: null,
@@ -228,8 +225,7 @@ export default {
   },
   methods: {
     cleanForm() {
-      console.log(this.allEnviroments);
-      console.log(this.selectedEnviroment);
+      this.loadPhoto();
     },
     formatNumber: function (input) {
       if (input >= 0 && input <= 9) return "0" + input.toString();
@@ -269,8 +265,8 @@ export default {
         );
       else if (input.includes("GMT")) {
         //convert frontend date to backend date
-        let dt = new Date(input).toISOString();              
-        return dt.replaceAll("Z","-03:00");
+        let dt = new Date(input).toISOString();
+        return dt.replaceAll("Z", "-03:00");
       } else if (input.includes("TT")) {
         let val = input.split("T");
 
@@ -349,39 +345,49 @@ export default {
         }
       }, 250);
     },
+    loadPhoto: function () {
+      let el = document.querySelectorAll(".p-fileupload-buttonbar button");
+      el.forEach((element, index) => {
+        if (element.textContent.includes("Carregar")) {
+          element.click();
+        }
+      });
+    },
     postPhoto: async function (event) {
       // console.log(event);
       const files = event.files;
-      console.log(files);
+      const taskID = this.taskID;
+      const initialStatus = this.initialStatus;
 
-      // this.photo.nome = "MinhaFoto1";
-      // this.photo.idTarefaFK = 1;
-      // this.photo.idStatusFK = 1;
-      // this.photo.image = files[0];
+      await files.forEach((file) => {
+        let formData = new FormData();
+        formData.append("nome", file.name);
+        formData.append("idTarefaFK", taskID);
+        formData.append("idStatusFK", initialStatus);
+        formData.append("image", file);
 
-      // await this.$axios
-      //   .$post("http://localhost:8003/fotos/", JSON.stringify(this.photo), {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   })
-      //   .then((response) => {
-      //     console.log(response);
-      //   })
-      //   .catch((response) => {
-      //     alert("Problema ao tentar cadastrar  foto");
-      //     console.log(response);
-      //   });
+         this.$axios
+          .$post("http://localhost:8003/fotos/", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((response) => {
+            alert("Problema ao tentar cadastrar  foto");
+            console.log(response);
+          });
+      });
     },
     postTask: async function () {
-      this.task[0].idSolicitanteFK = this.actualUser.id;
-      this.task[0].idAmbienteFK = this.selectedEnviroment.id;
-      this.task[0].prazo = this.formatDate(this.deadline.toString());
-      this.task[0].dataInicio = this.formatDate("backend");
+      const index = 0;
+      this.task[index].idSolicitanteFK = this.actualUser.id;
+      this.task[index].idAmbienteFK = this.selectedEnviroment.id;
+      this.task[index].prazo = this.formatDate(this.deadline.toString());
+      this.task[index].dataInicio = this.formatDate("backend");
 
-      console.log(this.task);
-      console.log(JSON.stringify(this.task));
-      
       await this.$axios
         .$post("http://localhost:8003/tarefas/", JSON.stringify(this.task), {
           headers: {
@@ -390,6 +396,13 @@ export default {
         })
         .then((response) => {
           console.log(response);
+          //request ok
+          if (
+            response[index].nome === this.task[index].nome &&
+            response[index].id > 0
+          )
+            this.taskID = response[index].id;
+          this.loadPhoto();
         })
         .catch((response) => {
           alert("Problema ao tentar cadastrar a tarefa");

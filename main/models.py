@@ -35,6 +35,9 @@ class Status(models.Model):
 def upload_image_task(instance, filename):
     return f"{instance.idTarefaFK}-{instance.idStatusFK}-{timezone.now()}-{filename}"
 
+def upload_image_teste(instance, filename):
+    return f"{timezone.now()}-{filename}"
+
 def upload_image_user(instance, filename):
     return f"{instance.idUserFK}-{filename}"
 
@@ -84,10 +87,11 @@ class TarefasStatus(models.Model):
 
 
 class Fotos(models.Model):
-    nome = models.CharField(max_length=55)
-    idTarefaFK = models.ForeignKey(Tarefas, on_delete=models.CASCADE)    
-    idStatusFK = models.ForeignKey(Status, on_delete=models.CASCADE)    
-    image = models.ImageField(upload_to=upload_image_task, blank=True, null=True)
+    nome = models.CharField(max_length=55, blank=True, null=True)
+    idTarefaFK = models.ForeignKey(Tarefas, on_delete=models.CASCADE, blank=True, null=True)
+    idStatusFK = models.ForeignKey(Status, on_delete=models.CASCADE, blank=True, null=True)
+    image = models.FileField(upload_to=upload_image_task, blank=True, null=True)
     
     def __str__(self):
         return self.nome
+

@@ -50,6 +50,8 @@ class detFotos(admin.ModelAdmin):
     list_per_page = 10
 
 
+
+
 admin.site.register(Cargos, detCargos)
 admin.site.register(Ambientes, detAmbientes)
 admin.site.register(Status, detStatus)
