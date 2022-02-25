@@ -163,6 +163,7 @@ export default {
           //request ok
           if (response.length > 0) {
             this.tasks = structuredClone(response);
+            
             console.log(this.tasks);
             // this.postTaskUsers();
           }

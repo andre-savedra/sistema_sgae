@@ -82,7 +82,7 @@ class TarefasStatus(models.Model):
     data = models.DateTimeField(null=True, blank=True, default=timezone.now())
     
     def __str__(self):
-        return "ok"
+        return "OK"
 
 
 
