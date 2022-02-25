@@ -19,14 +19,14 @@ class CustomTokenCreateSerializer(TokenCreateSerializer):
             self.user = User.objects.filter(**params).first()
             if self.user and not self.user.check_password(password):
                 self.fail("invalid_credentials")
-        # We changed only below line
         if self.user: # and self.user.is_active: 
             return attrs
         self.fail("invalid_credentials")
 
 
 class CargosSerializer(serializers.ModelSerializer):
-    class Meta:
+
+    class Meta:        
         model = Cargos
         fields = '__all__'
 
@@ -44,23 +44,65 @@ class StatusSerializer(serializers.ModelSerializer):
 
 
 class UsuariosSerializer(serializers.ModelSerializer):
+    idNivelAcessoFK = CargosSerializer(read_only=True)
+
     class Meta:
+        many = True
         model = Usuarios
         fields = '__all__'
 
+
+class UsuariosSerializerSimple(serializers.ModelSerializer):
+
+    class Meta:
+        many = True
+        model = Usuarios
+        fields = '__all__'
+
+
+class TarefasSerializer(serializers.ModelSerializer):   
+    idSolicitanteFK = UsuariosSerializer(read_only=True)
+    idAmbienteFK = AmbientesSerializer(read_only=True)
+
+    class Meta:        
+        model = Tarefas
+        fields = '__all__'
+
+
+class TarefasSerializerSimple(serializers.ModelSerializer):   
+   
+    class Meta:        
+        model = Tarefas
+        fields = '__all__'
+
+
 class TarefasUsuariosSerializer(serializers.ModelSerializer):
+    idUsuarioFK = UsuariosSerializer(read_only=True)
+    idTarefaFK = TarefasSerializer(read_only=True)
+
     class Meta:
         model = TarefasUsuarios
         fields = '__all__'
 
+
+class TarefasUsuariosSerializerSimple(serializers.ModelSerializer):
+    class Meta:
+        model = TarefasUsuarios
+        fields = '__all__'
+
+
 class TarefasStatusSerializer(serializers.ModelSerializer):
+    idStatusFK = StatusSerializer(read_only=True)
+    # idTarefaFK = TarefasSerializer(read_only=True)
+
     class Meta:
         model = TarefasStatus
         fields = '__all__'
 
-class TarefasSerializer(serializers.ModelSerializer):
+
+class TarefasStatusSerializerSimple(serializers.ModelSerializer):
     class Meta:
-        model = Tarefas
+        model = TarefasStatus
         fields = '__all__'
 
 

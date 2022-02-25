@@ -160,8 +160,8 @@ class UsuariosAPIView(APIView):
             return Response(serializer.data)
 
 
-    def post(self, request):
-        serializer = UsuariosSerializer(data=request.data, many=True)
+    def post(self, request):        
+        serializer = UsuariosSerializerSimple(data=request.data, many=True)      
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"msg": "Inserido com sucesso"})
@@ -209,7 +209,7 @@ class TarefasAPIView(APIView):
         
 
     def post(self, request):
-        serializer = TarefasSerializer(data=request.data, many=True)
+        serializer = TarefasSerializerSimple(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         # return Response({"msg": "Inserido com sucesso"})
@@ -259,7 +259,7 @@ class TarefasUsuariosAPIView(APIView):
 
 
     def post(self, request):
-        serializer = TarefasUsuariosSerializer(data=request.data,  many=True)
+        serializer = TarefasUsuariosSerializerSimple(data=request.data,  many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"msg": "Inserido com sucesso"})
@@ -306,7 +306,7 @@ class TarefasStatusAPIView(APIView):
 
 
     def post(self, request):
-        serializer = TarefasStatusSerializer(data=request.data, many=True)
+        serializer = TarefasStatusSerializerSimple(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"msg": "Inserido com sucesso"})
@@ -326,8 +326,6 @@ class TarefasStatusAPIView(APIView):
 
 
 
-
-
 class FotosAPIView(APIView):
     """
     API Fotos
@@ -336,13 +334,18 @@ class FotosAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        if pk == '':
-            fotos = Fotos.objects.all()
-            serializer = FotosSerializer(fotos, many=True)
+        if 'tarefa' in request.GET:   
+            tarefa = request.GET['tarefa']
+            fotos = Fotos.objects.filter(idTarefaFK=tarefa)
+            serializer = FotosSerializer(fotos, many=True)            
             return Response(serializer.data)
-        else:
+        elif pk != '':
             fotos = Fotos.objects.get(id=pk)
             serializer = FotosSerializer(fotos)
+            return Response(serializer.data)
+        else:
+            fotos = Fotos.objects.all()
+            serializer = FotosSerializer(fotos, many=True)
             return Response(serializer.data)
 
 

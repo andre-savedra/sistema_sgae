@@ -48,7 +48,7 @@ class Usuarios(models.Model):
     email = models.CharField(max_length=80)
     fone = models.CharField(max_length=15)
     ativo = models.BooleanField(default=False)
-    idNivelAcessoFK = models.ForeignKey(Cargos, on_delete=models.CASCADE)
+    idNivelAcessoFK = models.ForeignKey(Cargos, related_name="cargo", blank=True, null=True, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=upload_image_user, blank=True, null=True)
 
     def __str__(self):
