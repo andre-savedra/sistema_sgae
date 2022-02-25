@@ -14,6 +14,7 @@ import { createStore } from './store.js'
 /* Plugins */
 
 import nuxt_plugin_plugin_17a7e348 from 'nuxt_plugin_plugin_17a7e348' // Source: .\\components\\plugin.js (mode: 'all')
+import nuxt_plugin_dataviewlayoutoptionsplugin3b422f57_62476600 from 'nuxt_plugin_dataviewlayoutoptionsplugin3b422f57_62476600' // Source: .\\dataviewlayoutoptions.plugin.3b422f57.js (mode: 'all')
 import nuxt_plugin_dataviewplugin668bba0d_4d49b300 from 'nuxt_plugin_dataviewplugin668bba0d_4d49b300' // Source: .\\dataview.plugin.668bba0d.js (mode: 'all')
 import nuxt_plugin_fileuploadplugin14ec843b_5bf1b97a from 'nuxt_plugin_fileuploadplugin14ec843b_5bf1b97a' // Source: .\\fileupload.plugin.14ec843b.js (mode: 'all')
 import nuxt_plugin_calendarplugin3e1d113c_2eb84e39 from 'nuxt_plugin_calendarplugin3e1d113c_2eb84e39' // Source: .\\calendar.plugin.3e1d113c.js (mode: 'all')
@@ -228,6 +229,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_plugin_17a7e348 === 'function') {
     await nuxt_plugin_plugin_17a7e348(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_dataviewlayoutoptionsplugin3b422f57_62476600 === 'function') {
+    await nuxt_plugin_dataviewlayoutoptionsplugin3b422f57_62476600(app.context, inject)
   }
 
   if (typeof nuxt_plugin_dataviewplugin668bba0d_4d49b300 === 'function') {

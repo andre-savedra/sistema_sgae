@@ -52,7 +52,8 @@ export default {
       "AutoComplete",
       "Calendar",
       "FileUpload",
-      "DataView"
+      "DataView",
+      "DataViewLayoutOptions"
     ],
     locale: {
       firstDayOfWeek: 0,

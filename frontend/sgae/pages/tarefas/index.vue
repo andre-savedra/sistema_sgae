@@ -1,30 +1,32 @@
 <template>
-  <h1>TELINHA</h1>
-  <!-- <DataView
-    :value="products"
-    :layout="layout"
-    :paginator="true"
-    :rows="9"
-    :sortOrder="sortOrder"
-    :sortField="sortField"
-  >
-    <template #header>
-      <div class="grid grid-nogutter">
-        <div class="col-6" style="text-align: left">
-          <Dropdown
-            v-model="sortKey"
-            :options="sortOptions"
-            optionLabel="label"
-            placeholder="Sort By Price"
-            @change="onSortChange($event)"
-          />
+  <div class="all p-d-flex p-flex-column p-jc-center p-ai-center">
+    <!-- <h1>TELINHA</h1> -->
+    <DataView
+      :value="tasks"
+      :layout="layout"
+      :paginator="true"
+      :rows="9"
+      :sortOrder="sortOrder"
+      :sortField="sortField"
+    >
+      <template #header>
+        <div class="grid grid-nogutter">
+          <div class="col-6" style="text-align: left">
+            <Dropdown
+              class="sortClass"
+              v-model="sortKey"
+              :options="sortOptions"
+              optionLabel="label"
+              placeholder="Mais Recentes"
+              @change="onSortChange($event)"
+            />
+          </div>
+          <div class="col-6" style="text-align: right">
+            <DataViewLayoutOptions v-model="layout" />
+          </div>
         </div>
-        <div class="col-6" style="text-align: right">
-          <DataViewLayoutOptions v-model="layout" />
-        </div>
-      </div>
-    </template>
-
+      </template>
+      <!--
     <template #list="slotProps">
       <div class="col-12">
         <div class="product-list-item">
@@ -106,8 +108,9 @@
           </div>
         </div>
       </div>
-    </template>
-  </DataView> -->
+    </template>-->
+    </DataView>
+  </div>
 </template>
 
 <script>
@@ -118,16 +121,16 @@ export default {
   data() {
     return {
       products: null,
-      layout: "grid",
       sortKey: null,
       sortOrder: null,
       sortField: null,
       sortOptions: [
-        { label: "Price High to Low", value: "!price" },
-        { label: "Price Low to High", value: "price" },
+        { label: "Mais Recentes", value: "!price" },
+        { label: "Concluídas", value: "price" },
       ],
-
+      //useful
       BaseURL: "http://localhost:8003/",
+      layout: "grid",
       tasks: null,
     };
   },
@@ -157,14 +160,13 @@ export default {
 
     getTask: async function () {
       await this.$axios
-        .$get(this.BaseURL + "tarefas/")
+        .$get(this.BaseURL + "tarefasUsuarios/")
         .then((response) => {
           console.log(response);
           //request ok
           if (response.length > 0) {
             this.tasks = structuredClone(response);
             console.log(this.tasks);
-            // this.postTaskUsers();
           }
         })
         .catch((response) => {
@@ -175,3 +177,22 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.all {
+  * {
+    overflow-x: visible;
+  }
+
+  height: auto;
+  min-height: calc(100vh - var(--height-default-header));
+  width: 100vw;
+  max-width: 100vw;
+  padding: 70px 90px;
+  
+  .p-dataview .p-dataview-header{
+    overflow-x: visible !important;    
+    
+  }
+}
+</style>
