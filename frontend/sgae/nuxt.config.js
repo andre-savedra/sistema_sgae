@@ -51,7 +51,8 @@ export default {
       "InputMask",
       "AutoComplete",
       "Calendar",
-      "FileUpload"
+      "FileUpload",
+      "DataView"
     ],
     locale: {
       firstDayOfWeek: 0,

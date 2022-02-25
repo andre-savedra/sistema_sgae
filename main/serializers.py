@@ -28,87 +28,44 @@ class CustomTokenCreateSerializer(TokenCreateSerializer):
 class CargosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cargos
-        fields = [
-            'id',            
-            'nome',            
-            'nivelAcesso',            
-        ]
+        fields = '__all__'
 
 
 class AmbientesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ambientes
-        fields = [
-            'id',            
-            'nome',            
-        ]
+        fields = '__all__'
 
 
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
-        fields = [
-            'id',
-            'nome',            
-        ]
+        fields = '__all__'
 
 
 class UsuariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuarios
-        fields = [
-            'id',
-            'nome',
-            'idUserFK',
-            'email',
-            'fone',
-            'ativo',
-            'idNivelAcessoFK',
-            'image'
-        ]
+        fields = '__all__'
 
 class TarefasUsuariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = TarefasUsuarios
-        fields = [
-            'id',            
-            'idUserFK',
-            'idTarefaFK'
-        ]
+        fields = '__all__'
 
 class TarefasStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = TarefasStatus
-        fields = [
-            'id',
-            'idTarefaFK',
-            'idStatusFK',
-            'data',
-        ]
+        fields = '__all__'
 
 class TarefasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tarefas
-        fields = [
-            'id',
-            'nome',
-            'descricao',
-            'idSolicitanteFK',            
-            'idAmbienteFK',
-            'prazo',
-            'dataInicio',
-            'dataFim',
-        ]
+        fields = '__all__'
 
 
 class FotosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fotos
-        fields = [
-            'id',
-            'nome',
-            'idTarefaFK',
-            'idStatusFK',
-            'image',
-        ]
+        fields = '__all__'
 

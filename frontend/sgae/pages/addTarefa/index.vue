@@ -15,7 +15,9 @@
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
             >
-              <label class="lblBasic" for="name">Título</label>
+              <label class="lblBasic" for="name"
+                ><i class="pi pi-bookmark" /><strong>Título</strong></label
+              >
               <InputText
                 type="text"
                 id="name"
@@ -28,7 +30,11 @@
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
             >
-              <label class="lblBasic" for="description">Descrição</label>
+              <label class="lblBasic" for="description"
+                ><i class="pi pi-info-circle" /><strong
+                  >Descrição</strong
+                ></label
+              >
               <textarea
                 class="textInput"
                 type="text"
@@ -40,7 +46,9 @@
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
             >
-              <label class="lblBasic" for="requester">Solicitante</label>
+              <label class="lblBasic" for="requester"
+                ><i class="pi pi-user" /><strong>Solicitante</strong></label
+              >
               <InputText
                 type="text"
                 id="requester"
@@ -58,7 +66,9 @@
                 p-d-flex p-flex-column p-jc-start p-ai-start
               "
             >
-              <label class="lblBasic" for="employee">Responsáveis</label>
+              <label class="lblBasic" for="employee"
+                ><i class="pi pi-users" /><strong>Responsáveis</strong></label
+              >
               <AutoComplete
                 :multiple="true"
                 v-model="selectedEmployees"
@@ -78,7 +88,9 @@
               "
             >
               <label class="lblBasic" for="enviroment"
-                >Ambiente de Ensino</label
+                ><i class="pi pi-map-marker" /><strong
+                  >Ambiente de Ensino</strong
+                ></label
               >
               <AutoComplete
                 :multiple="false"
@@ -94,7 +106,9 @@
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
             >
-              <label class="lblBasic" for="deadline">Prazo</label>
+              <label class="lblBasic" for="deadline"
+                ><i class="pi pi-calendar" /><strong>Prazo</strong></label
+              >
               <Calendar
                 class="customDatePicker"
                 id="deadline"
@@ -108,12 +122,14 @@
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
             >
-              <label class="lblBasic" for="imageUpload">Fotos Upload</label>
+              <label class="lblBasic" for="imageUpload"
+                ><i class="pi pi-camera" /><strong>Fotos Upload</strong></label
+              >
 
               <FileUpload
                 :multiple="true"
                 accept="image/*"
-                :maxFileSize="1000000"
+                :maxFileSize="10000000"
                 @upload="postPhoto"
                 class="customFileUpload"
                 id="imageUpload"
@@ -149,7 +165,7 @@ export default {
   layout: "default",
   data() {
     return {
-      teste: null,
+      BaseURL: "http://localhost:8003/",
       selectedEmployees: [],
       filteredEmployees: null,
       allUsers: [],
@@ -225,7 +241,23 @@ export default {
   },
   methods: {
     cleanForm() {
-      this.loadPhoto();
+      this.task.map((task) => {
+        task.nome = null;
+        (task.descricao = null),
+          (task.idSolicitanteFK = null),
+          (task.idAmbienteFK = null),
+          (task.prazo = null),
+          (task.dataInicio = null),
+          (task.dataFim = null);
+      });
+
+      this.actualUser.id = null;
+      this.actualUser.nome = null;
+
+      this.selectedEmployees.length = 0;
+      this.selectedEnviroment.length = 0;
+      this.deadline = null;
+      this.virtualClickUpload("Cancelar");
     },
     formatNumber: function (input) {
       if (input >= 0 && input <= 9) return "0" + input.toString();
@@ -285,7 +317,7 @@ export default {
       this.allUsers.length = 0;
 
       await this.$axios
-        .$get("http://localhost:8003/usuarios")
+        .$get(this.BaseURL + "usuarios/")
         .then((dataResponse) => {
           dataResponse.forEach((user) => {
             this.allUsers.push({
@@ -303,7 +335,7 @@ export default {
       this.allUsers.length = 0;
 
       await this.$axios
-        .$get("http://localhost:8003/ambientes")
+        .$get(this.BaseURL + "ambientes/")
         .then((dataResponse) => {
           dataResponse.forEach((enviroment) => {
             this.allEnviroments.push({
@@ -345,13 +377,95 @@ export default {
         }
       }, 250);
     },
-    loadPhoto: function () {
+    virtualClickUpload: function (buttonText) {
       let el = document.querySelectorAll(".p-fileupload-buttonbar button");
       el.forEach((element, index) => {
-        if (element.textContent.includes("Carregar")) {
+        if (element.textContent.includes(buttonText)) {
           element.click();
         }
       });
+    },
+    postTask: async function () {
+      const index = 0;
+      this.task[index].idSolicitanteFK = this.actualUser.id;
+      this.task[index].idAmbienteFK = this.selectedEnviroment.id;
+      this.task[index].prazo = this.formatDate(this.deadline.toString());
+      this.task[index].dataInicio = this.formatDate("backend");
+
+      await this.$axios
+        .$post(this.BaseURL + "tarefas/", JSON.stringify(this.task), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          //request ok
+          if (
+            response[index].nome === this.task[index].nome &&
+            response[index].id > 0
+          ) {
+            this.taskID = response[index].id;
+            this.postTaskUsers();
+          }
+        })
+        .catch((response) => {
+          alert("Problema ao tentar cadastrar a tarefa");
+          console.log(response);
+        });
+    },
+    postTaskUsers: async function () {
+      let taskUsers = [];
+
+      this.selectedEmployees.forEach((employee) => {
+        taskUsers.push({
+          idUsuarioFK: employee.id,
+          idTarefaFK: this.taskID,
+        });
+      });
+
+      console.log(taskUsers);
+      console.log(JSON.stringify(taskUsers));
+
+      await this.$axios
+        .$post(this.BaseURL + "tarefasUsuarios/", JSON.stringify(taskUsers), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          //request ok
+          this.postTaskStatus();
+        })
+        .catch((response) => {
+          alert("Problema ao tentar cadastrar os usuários na tarefa");
+          console.log(response);
+        });
+    },
+    postTaskStatus: async function () {
+      let taskStatus = [
+        {
+          idStatusFK: this.initialStatus,
+          idTarefaFK: this.taskID,
+        },
+      ];
+
+      await this.$axios
+        .$post(this.BaseURL + "tarefasStatus/", JSON.stringify(taskStatus), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          //request ok
+          this.virtualClickUpload("Carregar");
+        })
+        .catch((response) => {
+          alert("Problema ao tentar cadastrar a tarefa");
+          console.log(response);
+        });
     },
     postPhoto: async function (event) {
       // console.log(event);
@@ -366,48 +480,21 @@ export default {
         formData.append("idStatusFK", initialStatus);
         formData.append("image", file);
 
-         this.$axios
-          .$post("http://localhost:8003/fotos/", formData, {
+        this.$axios
+          .$post(this.BaseURL + "fotos/", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
           })
           .then((response) => {
             console.log(response);
+            this.cleanForm();
           })
           .catch((response) => {
             alert("Problema ao tentar cadastrar  foto");
             console.log(response);
           });
       });
-    },
-    postTask: async function () {
-      const index = 0;
-      this.task[index].idSolicitanteFK = this.actualUser.id;
-      this.task[index].idAmbienteFK = this.selectedEnviroment.id;
-      this.task[index].prazo = this.formatDate(this.deadline.toString());
-      this.task[index].dataInicio = this.formatDate("backend");
-
-      await this.$axios
-        .$post("http://localhost:8003/tarefas/", JSON.stringify(this.task), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          //request ok
-          if (
-            response[index].nome === this.task[index].nome &&
-            response[index].id > 0
-          )
-            this.taskID = response[index].id;
-          this.loadPhoto();
-        })
-        .catch((response) => {
-          alert("Problema ao tentar cadastrar a tarefa");
-          console.log(response);
-        });
     },
     myUploader: async function (event) {
       console.log("my custom uploader...");
@@ -496,6 +583,15 @@ export default {
 
         .lblBasic {
           margin: 15px 0px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          .pi {
+            width: auto;
+            margin-right: 10px;
+            font-weight: bold;
+          }
         }
 
         #name,

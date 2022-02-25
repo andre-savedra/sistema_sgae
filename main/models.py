@@ -79,7 +79,7 @@ class TarefasUsuarios(models.Model):
 class TarefasStatus(models.Model):    
     idStatusFK = models.ForeignKey(Status, on_delete=models.CASCADE)
     idTarefaFK = models.ForeignKey(Tarefas, on_delete=models.CASCADE)
-    data = models.DateTimeField(null=True, blank=True)
+    data = models.DateTimeField(null=True, blank=True, default=timezone.now())
     
     def __str__(self):
         return "ok"

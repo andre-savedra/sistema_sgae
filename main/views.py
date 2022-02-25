@@ -259,7 +259,7 @@ class TarefasUsuariosAPIView(APIView):
 
 
     def post(self, request):
-        serializer = TarefasUsuariosSerializer(data=request.data, many=True)
+        serializer = TarefasUsuariosSerializer(data=request.data,  many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"msg": "Inserido com sucesso"})
