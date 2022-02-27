@@ -143,25 +143,42 @@
     }
   }
 
+.allTasks 
+{
+  .p-dataview 
+  {
+    .p-dataview-header{
+        overflow-x: visible !important;
+        // background-color: #f5d0cf !important;
+        // border-radius: 25px 25px 0px 0px;
+        // background: linear-gradient(
+        //     135deg,
+        //     rgba(221, 57, 16, 0.849),
+        //     rgba(230, 112, 2, 0.87)
+        // );
+        border: none;
 
-//   @media screen and (max-width: 945px) {
+        background: linear-gradient(-45deg, #313131, #525d69, #c22a1f, #bd244a);
+	    background-size: 400% 400%;
+	    animation: gradient 15s ease infinite;
+	    // height: 100vh;
+      }
 
-//     .customFileUpload{             
-//         .p-fileupload-buttonbar{
+      @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
 
-//             flex-wrap: wrap;
-//             span{           
-//                font-size: 12px !important;
-//                width: 100% !important;
-//                margin: 7px 0px;
-//                // display: none;
-//             }
-            
-//             button{            
-//                 font-size: 12px !important;
-//                   width: 47% !important;
-//                   margin: 7px 0px;
-//             }
-//         }
-//       }
-//     }
+  }
+}
+
+
+  
+  

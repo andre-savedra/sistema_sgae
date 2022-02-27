@@ -16,6 +16,9 @@
           alt="Logo Senai"
         />
       </div>
+       <div class="stars1"></div>
+      <div class="stars2"></div>
+      <div class="stars3"></div>
 
       <div
         class="default-header-right p-d-flex p-flex-row p-jc-end p-ai-center"
@@ -27,6 +30,7 @@
           back_color="#313131"
         />
       </div>
+     
 
       <Sidebar
         :visible.sync="visibleLeft"
@@ -135,7 +139,7 @@ export default {
           showSidebar: false,
           hasSidebar: false,
           sideButtons: null,
-        },       
+        },
         {
           textLabel: "Meu Acesso",
           iconBtn: "pi pi-user",
@@ -206,11 +210,10 @@ export default {
 
       //logicall to each button
       switch (buttonNumber) {
-        
-        case 0://button "Recuar"
+        case 0: //button "Recuar"
           this.checkSideBarVisibility();
           break;
-        
+
         case 1: //button "Home"
           this.$router.push("/home");
           this.checkSideBarVisibility();
@@ -221,26 +224,25 @@ export default {
           this.checkSideBarVisibility();
           break;
 
-        case 3: //button "ad. Tarefa"          
+        case 3: //button "ad. Tarefa"
           this.$router.push("/addTarefa");
           this.checkSideBarVisibility();
           break;
-       
+
         case 4: //button "Meu acesso"
-          this.$router.push("/meuAcesso");          
+          this.$router.push("/meuAcesso");
           this.checkSideBarVisibility();
           break;
 
         case 5: //button "Usuários"
-          this.$router.push("/usuarios");          
+          this.$router.push("/usuarios");
           this.checkSideBarVisibility();
           break;
 
         case 6: //button "logout"
-          this.$router.push("/");          
+          this.$router.push("/");
           this.checkSideBarVisibility();
           break;
-
       }
     },
     getUsuarios: async function (userId) {
@@ -277,13 +279,14 @@ $sidebar_second_positions: 150px, 220px, 220px, 300px;
     height: var(--height-default-header);
     width: 100vw;
     background-color: var(--dark-background-color);
+    overflow-y: hidden;
 
     .default-header-left {
       width: 20vw;
       min-width: 190px;
       max-width: 250px;
       height: 100%;
-
+      
       .btn-leftbar {
         font-size: 25px;
         height: 100%;
@@ -309,6 +312,73 @@ $sidebar_second_positions: 150px, 220px, 220px, 300px;
       height: 100%;
     } //default-header-right
 
+    @function box-shadow-stars($n) {
+      $star-shadows: "#{random(4000)-2000}px #{random(4000)-2000}px #fff";
+      @for $i from 2 through $n {
+        $star-color-num: random(3);
+        $star-color: #fff;
+        @if ($star-color-num == 1) {
+          $star-color: "#fff";
+        }
+        @if ($star-color-num == 2) {
+          $star-color: "#FF6666";
+        }
+        @if ($star-color-num == 3) {
+          $star-color: "#79bfea";
+        }
+        $star-shadows: "#{$star-shadows}, #{random(4000)-2000}px #{random(4000)-2000}px #{$star-color}";
+      }
+      @return unquote($star-shadows);
+    }
+    $stars1-shadows: box-shadow-stars(10000);
+    $stars2-shadows: box-shadow-stars(1000);
+    $stars3-shadows: box-shadow-stars(500);
+
+    html {
+      /* height: 100vh; */
+      /* overflow: hidden; */
+      /* background: #240f54; */
+      /* background: linear-gradient(180deg,#240f54,#240f54 5%,#440bc8); */
+    }
+    .stars1 {
+      width: 1px;
+      height: 1px;
+      box-shadow: $stars1-shadows;
+      border-radius: 50%;
+      animation: rotateEarth 200s linear infinite;
+      opacity: 0.9;
+      /* position: absolute; */
+      max-height: var(--height-default-header);
+    }
+    .stars2 {
+      max-height: var(--height-default-header);
+      width: 2px;
+      height: 2px;
+      box-shadow: $stars2-shadows;
+      border-radius: 50%;
+      animation: rotateEarth 190s linear infinite;
+      opacity: 0.9;
+      /* position: absolute; */
+    }
+    .stars3 {
+      max-height: var(--height-default-header);
+      /* position: absolute; */
+      width: 3px;
+      height: 3px;
+      box-shadow: $stars3-shadows;
+      border-radius: 50%;
+      animation: rotateEarth 180s linear infinite;
+      opacity: 0.9;
+    }
+    @keyframes rotateEarth {
+      from {
+        transform: translateY(0px);
+      }
+      to {
+        transform: translateY(2000px);
+      }
+    }
+
     .default-sidebar {
       width: 8vw;
       min-width: 55px;
@@ -318,28 +388,27 @@ $sidebar_second_positions: 150px, 220px, 220px, 300px;
       color: white;
       background-color: var(--red-background-color);
       border-radius: 0px 10px 10px 0px;
-       
-        .p-sidebar-content::-webkit-scrollbar-track {
-          -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
-          border-radius: 10px;
-          background-color: #cccccc;
-        }
-        .p-sidebar-content::-webkit-scrollbar {
-          width: 12px;
-          background-color: #d62929;
-        }
-        .p-sidebar-content::-webkit-scrollbar-thumb {
-          border-radius: 10px;
-          background-color: #af1d1d ;
-          background-image: -webkit-linear-gradient(
-            90deg,
-            transparent,
-            rgba(0, 0, 0, 0.4) 50%,
-            transparent,
-            transparent
-          );
-        }
-      
+
+      .p-sidebar-content::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+        border-radius: 10px;
+        background-color: #cccccc;
+      }
+      .p-sidebar-content::-webkit-scrollbar {
+        width: 12px;
+        background-color: #d62929;
+      }
+      .p-sidebar-content::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: #af1d1d;
+        background-image: -webkit-linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 0, 0, 0.4) 50%,
+          transparent,
+          transparent
+        );
+      }
 
       .p-sidebar-content {
         padding: 0;

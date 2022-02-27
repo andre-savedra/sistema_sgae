@@ -9,6 +9,9 @@
       <img src="@/assets/media/sgae.png" />
       <h1>Sistema de Gestão de Ambiente de Ensino</h1>
       <p>&reg; Senai Roberto Mange</p>
+      <div class="stars1"></div>
+      <div class="stars2"></div>
+      <div class="stars3"></div>
     </section>
     <section
       class="Registro_panel p-d-flex p-flex-column p-jc-center p-ai-center"
@@ -148,8 +151,7 @@ export default {
         password: null,
         email: null,
       },
-      userSec: 
-      [
+      userSec: [
         {
           nome: null,
           idUserFK: null,
@@ -157,7 +159,7 @@ export default {
           fone: null,
           ativo: false,
           idNivelAcessoFK: null,
-        }
+        },
       ],
       jobSelected: null,
       jobs: [],
@@ -186,10 +188,13 @@ export default {
             this.userSec[0].email = this.userAuth.email;
             this.userSec[0].idNivelAcessoFK = this.jobSelected.id;
             this.userSec[0].idUserFK = response.id;
-            this.userSec[0].fone = this.phoneFormated.replaceAll('(','').replaceAll(')','').replaceAll(' ','').replaceAll('-','');
+            this.userSec[0].fone = this.phoneFormated
+              .replaceAll("(", "")
+              .replaceAll(")", "")
+              .replaceAll(" ", "")
+              .replaceAll("-", "");
             console.log(response);
             this.postUsuario();
-
           } else {
             console.log("Error:");
           }
@@ -201,22 +206,22 @@ export default {
     },
     postUsuario: async function () {
       await this.$axios
-          .$post(
-            "http://localhost:8003/usuarios/",
-            JSON.stringify(this.userSec),
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          )
-          .then((response) => {
-            this.$router.push("/");
-          })
-          .catch((response) => {
-            alert("Problema ao tentar registrar usuário");
-            console.log(response);
-          });
+        .$post(
+          "http://localhost:8003/usuarios/",
+          JSON.stringify(this.userSec),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          this.$router.push("/");
+        })
+        .catch((response) => {
+          alert("Problema ao tentar registrar usuário");
+          console.log(response);
+        });
     },
     sendRegister: async function () {
       console.log("tentando registrar....");
@@ -467,6 +472,70 @@ img {
     overflow: hidden;
   }
 }
+
+
+@function box-shadow-stars($n) {
+  $star-shadows: '#{random(4000)-2000}px #{random(4000)-2000}px #fff';
+  @for $i from 2 through $n {
+    $star-color-num: random(3);
+    $star-color: #fff;
+    @if ($star-color-num == 1) {
+      $star-color: '#fff';
+    }
+    @if ($star-color-num == 2) {
+      $star-color: '#FF6666';
+    }
+    @if ($star-color-num == 3) {
+      $star-color: '#79bfea';
+    }
+    $star-shadows: '#{$star-shadows}, #{random(4000)-2000}px #{random(4000)-2000}px #{$star-color}';
+  }
+  @return unquote($star-shadows);
+}
+$stars1-shadows: box-shadow-stars(10000);
+$stars2-shadows: box-shadow-stars(1000);
+$stars3-shadows: box-shadow-stars(500);
+
+
+html {
+  height: 100vh;
+  overflow: hidden;
+  /* background: #240f54; */
+  /* background: linear-gradient(180deg,#240f54,#240f54 5%,#440bc8); */
+}
+.stars1 {
+  width: 1px;
+  height: 1px;
+  box-shadow: $stars1-shadows;
+  border-radius: 50%;
+  animation: rotateEarth 200s linear infinite;
+  opacity: 0.9;
+}
+.stars2 {
+  width: 2px;
+  height: 2px;
+  box-shadow: $stars2-shadows;
+  border-radius: 50%;
+  animation: rotateEarth 190s linear infinite;
+  opacity: 0.9;
+}
+.stars3 {
+  width: 3px;
+  height: 3px;
+  box-shadow: $stars3-shadows;
+  border-radius: 50%;
+  animation: rotateEarth 180s linear infinite;
+  opacity: 0.9;
+}
+@keyframes rotateEarth {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(2000px);
+  }
+};
+
 
 @media screen and (max-width: 990px) {
   .logo_panel {
