@@ -17,9 +17,11 @@
     border: none;
     cursor: pointer;
     color: white;
+
     &:focus {
         background-color: var(--dark-background-color-hover);
     }
+
     &:hover {
         background-color: var(--dark-background-color-hover);
     }
@@ -35,10 +37,11 @@
 }
 
 .customDatePicker {
-    .p-datepicker-trigger{
-        background-color:var(--red-background-color) !important;
-        border-color:var(--red-background-color) !important;   
+    .p-datepicker-trigger {
+        background-color: var(--red-background-color) !important;
+        border-color: var(--red-background-color) !important;
     }
+
     .p-inputtext:enabled {
         outline: 0;
         box-shadow: none;
@@ -46,8 +49,9 @@
         border: none;
         border-bottom: 2px solid black;
         border-radius: 0;
+
         &:focus,
-        &:hover{
+        &:hover {
             border: none;
             border-bottom: 2px solid black;
         }
@@ -56,7 +60,7 @@
 
 
 .customAutocomplete {
-    .p-autocomplete-multiple{  
+    .p-autocomplete-multiple {
         .p-autocomplete-multiple-container {
             outline: 0;
             box-shadow: none;
@@ -70,55 +74,57 @@
             flex-wrap: wrap;
 
             .p-autocomplete-token {
-                background-color:rgb(228, 150, 144);
+                background-color: rgb(228, 150, 144);
                 width: auto;
                 margin: 5px 2px;
                 color: black;
-                .p-autocomplete-token-icon{
+
+                .p-autocomplete-token-icon {
                     display: flex;
-                    flex-direction: row;                    
+                    flex-direction: row;
                     align-items: center;
                     justify-content: flex-end;
                     width: 20px;
                 }
-            }            
+            }
         }
-  }
-  .p-autocomplete{
-      .p-autocomplete-input{
-        outline: 0;
-        box-shadow: none;
-        border-color: none;
-        border: none;
-        border-bottom: 2px solid black;
-        border-radius: 0;
-          
     }
-  }
+
+    .p-autocomplete {
+        .p-autocomplete-input {
+            outline: 0;
+            box-shadow: none;
+            border-color: none;
+            border: none;
+            border-bottom: 2px solid black;
+            border-radius: 0;
+
+        }
+    }
 }
 
-.customFileUpload{             
-    .p-fileupload-buttonbar{
+.customFileUpload {
+    .p-fileupload-buttonbar {
         border: none !important;
         border-color: white !important;
-        
+
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content:center;
+        justify-content: center;
 
-        span{
+        span {
             background-color: var(--red-background-color) !important;
             border-color: var(--red-background-color) !important;
-            width: 80%;            
+            width: 80%;
             height: 40px;
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: flex-start;            
+            justify-content: flex-start;
         }
-        
-        button{
+
+        button {
             display: none !important;
             // background-color: var(--red-background-color) !important;
             // border-color: var(--red-background-color) !important;
@@ -131,54 +137,47 @@
         }
     }
 
-    .p-fileupload-content{
-        .p-fileupload-row  {
-            div .p-button-icon-only{
+    .p-fileupload-content {
+        .p-fileupload-row {
+            div .p-button-icon-only {
                 background-color: var(--red-background-color) !important;
                 border-color: var(--red-background-color) !important;
-            }           
-            
+            }
+
         }
-        
+
     }
-  }
-
-.allTasks 
-{
-  .p-dataview 
-  {
-    .p-dataview-header{
-        overflow-x: visible !important;
-        // background-color: #f5d0cf !important;
-        // border-radius: 25px 25px 0px 0px;
-        // background: linear-gradient(
-        //     135deg,
-        //     rgba(221, 57, 16, 0.849),
-        //     rgba(230, 112, 2, 0.87)
-        // );
-        border: none;
-
-        background: linear-gradient(-45deg, #313131, #525d69, #c22a1f, #bd244a);
-	    background-size: 400% 400%;
-	    animation: gradient 15s ease infinite;
-	    // height: 100vh;
-      }
-
-      @keyframes gradient {
-        0% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-
-  }
 }
 
 
-  
-  
+.allTasks {
+    .dataTaskViewer .p-dataview-header {
+        overflow-x: visible !important;
+    }
+}
+
+
+@media screen and (max-width: 670px) {
+    .allTasks {
+        .dataTaskViewer {
+            .p-dataview-header {
+                padding: 0px 0px !important;
+
+
+            }
+        }
+
+        .sortClass,
+        .filteredField {
+
+            .p-dropdown-items-wrapper{
+                font-size: 12px !important;
+            }
+
+            .p-dropdown-label,
+            .p-autocomplete-input {
+                font-size: 13px !important;
+            }
+        }
+    }
+}
