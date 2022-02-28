@@ -312,7 +312,7 @@ export default {
         .viewSwitch {
           width: auto;
           height: 100%;
-          background-color: blue;
+          /* background-color: blue; */
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -322,6 +322,8 @@ export default {
           .p-dataview-layout-options {
             button {
               margin: 0px 0px 5px 0px;
+              border: 1px solid #c22a1f !important;
+              background-color: #c22a1f !important;
             }
             display: flex;
             flex-direction: column;

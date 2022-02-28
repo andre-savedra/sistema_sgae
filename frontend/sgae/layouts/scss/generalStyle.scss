@@ -36,6 +36,9 @@
     // border-color: none !important;
 }
 
+
+// ******************* TELA ADD TAREFAS ***************************
+
 .customDatePicker {
     .p-datepicker-trigger {
         background-color: var(--red-background-color) !important;
@@ -125,15 +128,7 @@
         }
 
         button {
-            display: none !important;
-            // background-color: var(--red-background-color) !important;
-            // border-color: var(--red-background-color) !important;
-            // width: 33%;
-            // height: 40px;
-            // display: flex;
-            // flex-direction: row;
-            // align-items: center;
-            // justify-content: center;
+            display: none !important;        
         }
     }
 
@@ -150,30 +145,44 @@
 }
 
 
+
+// ******************* TELA DE TAREFAS ***************************
 .allTasks {
     .dataTaskViewer .p-dataview-header {
         overflow-x: visible !important;
     }
-}
 
+    .viewSwitch {        
+        .p-dataview-layout-options {
+            button{
+                margin-top: 4px;       
+                border: 1px solid black !important;
+                border-radius: 5px;
+                &:focus{
+                    box-shadow: none !important;
+                }
+            }
+            .p-highlight {               
+              border: 1px solid #c22a1f !important;              
+              background-color: #c22a1f !important;
+          }
+        }
+      }
+}
 
 @media screen and (max-width: 670px) {
     .allTasks {
         .dataTaskViewer {
             .p-dataview-header {
                 padding: 0px 0px !important;
-
-
             }
         }
 
         .sortClass,
         .filteredField {
-
             .p-dropdown-items-wrapper{
                 font-size: 12px !important;
             }
-
             .p-dropdown-label,
             .p-autocomplete-input {
                 font-size: 13px !important;
