@@ -87,7 +87,9 @@
                     >Organizar caixa de componentes eletr...</span
                   >
                 </div>
-                <div class="top-index">
+                <div
+                  class="top-index p-d-flex p-flex-column p-jc-start p-ai-end"
+                >
                   <h4>#0233</h4>
                 </div>
               </div>
@@ -122,9 +124,7 @@
                     "
                   >
                     <i class="pi pi-users p-mr-2" />
-                    <span class="p-mr-3"
-                      ><strong>André, Guedes, Luís</strong></span
-                    >
+                    <span class="p-mr-3"><strong>André...</strong></span>
                   </div>
                 </div>
                 <div
@@ -418,91 +418,14 @@ export default {
     }
   }
 
-  @media screen and (max-width: 670px) {
-    #titleTasks {
-      font-size: 22px !important;
-      height: 50px;
-    }
-
-    .dataTaskViewer {
-      .taskToolBox {
-        font-size: 13px;
-
-        .sortClass,
-        .filteredField {
-          height: 35px;
-          margin: 0px 0px 10px 0px !important;
-        }
-        .oneElement label {
-          width: 88px !important;
-        }
-      }
-    }
-  }
-
-  @media screen and (max-width: 500px) {
-    .dataTaskViewer {
-      .taskToolBox {
-        font-size: 13px;
-
-        .sortClass,
-        .filteredField {
-          height: 35px;
-          margin: 0px 0px 10px 0px !important;
-        }
-        .oneElement label {
-          width: 105px !important;
-        }
-        .twoElements {
-          flex-direction: column !important;
-          label {
-            width: 103px !important;
-          }
-        }
-      }
-    }
-  }
-
-  @media screen and (max-width: 335px) {
-    #titleTasks {
-      font-size: 18px !important;
-    }
-    .dataTaskViewer {
-      .taskToolBox {
-        font-size: 12px;
-
-        .sortClass,
-        .filteredField {
-          height: 33px !important;
-          margin: 0px 0px 4px 0px !important;
-        }
-        .oneElement {
-          /* align-items: flex-start; */
-          .filteredField {
-            width: 140px !important;
-          }
-          label {
-            width: 57px !important;
-          }
-        }
-
-        .twoElements {
-          div {
-            /* align-items: flex-start; */
-            label {
-              width: 55px !important;
-            }
-          }
-        }
-      }
-    }
-  }
-
   .dataTaskViewer .p-dataview-content {
     .p-nogutter {
       .listTaskDataView {
         margin: 20px 0px;
         background-color: white !important;
+        &:hover {
+          background-color: rgb(243, 223, 223) !important;
+        }
         border-radius: 17px 17px 0px 0px;
 
         .elementListTaskDataView {
@@ -545,8 +468,11 @@ export default {
               }
               .top-index {
                 /* background-color: black; */
-                width: 5%;
+                width: 10%;
                 height: 100%;
+                h4 {
+                  width: auto;
+                }
               }
             }
             .bottom {
@@ -622,6 +548,203 @@ export default {
           height: 10px;
           background-color: yellowgreen;
           box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px, rgb(0 0 0 / 17%) 0px 3px 6px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 830px) {
+    .bottom-texts {
+      flex-direction: column !important;
+      align-items: flex-start;
+      padding: 4px;
+      .textsInfos {
+        padding-top: 3px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 670px) {
+    .top-texts {
+      h3 {
+        font-size: 15px;
+      }
+      span {
+        font-size: 13px;
+      }
+    }
+    .bottom-texts .textsInfos {
+      font-size: 13px !important;
+    }
+
+    .listTaskDataView {
+      margin: 10px 0px !important;
+
+      .elementListTaskDataView {
+        height: 130px !important;
+      }
+    }
+
+    #titleTasks {
+      font-size: 22px !important;
+      height: 50px;
+    }
+
+    .dataTaskViewer {
+      .taskToolBox {
+        font-size: 13px;
+
+        .sortClass,
+        .filteredField {
+          height: 35px;
+          margin: 0px 0px 10px 0px !important;
+        }
+        .oneElement label {
+          width: 88px !important;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 570px) {
+    .top-texts span {
+      display: none;
+    }
+
+    .listTaskDataView {
+      .elementListTaskDataView {
+        height: 115px !important;
+
+        .itemTaskContainer {
+          .top {
+            height: 30% !important;
+
+            h4 {
+              font-size: 13px;
+            }
+
+            .top-texts {
+              h3 {
+                font-size: 13px;
+              }
+              span {
+                font-size: 12px;
+              }
+            }
+          }
+          .bottom {
+            height: 70% !important;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .top-texts {
+      h3 {
+        font-size: 12px !important;
+      }
+    }
+    .top-index h4 {
+      font-size: 11px !important;
+    }
+    .bottom-texts .textsInfos {
+      font-size: 11px !important;
+    }
+
+    .listTaskDataView {
+      .elementListTaskDataView {
+        height: 105px !important;
+
+        .imgTaskContainer {
+          min-width: 90px !important;
+          height: 80% !important;
+        }
+      }
+    }
+
+    .dataTaskViewer {
+      .taskToolBox {
+        font-size: 13px;
+
+        .sortClass,
+        .filteredField {
+          height: 35px;
+          margin: 0px 0px 10px 0px !important;
+        }
+        .oneElement label {
+          width: 105px !important;
+        }
+        .twoElements {
+          flex-direction: column !important;
+          label {
+            width: 103px !important;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 405px) {
+    .listTaskDataView {
+      .elementListTaskDataView {
+
+        .imgTaskContainer {
+          margin-left: 0px !important;
+          width: 15%;
+          min-width: 50px !important;
+          height: 80% !important;
+        }
+      }
+    }
+  }
+
+   @media screen and (max-width: 360px) {
+    .listTaskDataView {
+      .elementListTaskDataView {
+
+        .imgTaskContainer {
+          display: none;
+        }
+
+        .itemTaskContainer{
+          width: 100% !important;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 335px) {
+    #titleTasks {
+      font-size: 18px !important;
+    }
+    .dataTaskViewer {
+      .taskToolBox {
+        font-size: 12px;
+
+        .sortClass,
+        .filteredField {
+          height: 33px !important;
+          margin: 0px 0px 4px 0px !important;
+        }
+        .oneElement {
+          /* align-items: flex-start; */
+          .filteredField {
+            width: 140px !important;
+          }
+          label {
+            width: 57px !important;
+          }
+        }
+
+        .twoElements {
+          div {
+            /* align-items: flex-start; */
+            label {
+              width: 55px !important;
+            }
+          }
         }
       }
     }
