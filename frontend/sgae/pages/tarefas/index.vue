@@ -69,28 +69,102 @@
       </template>
 
       <template #list="slotProps">
-        <div class="col-12">
-          <div class="product-list-item">
-            <img src="@/static/post.jpg" alt="slotProps.data.name" />
-            <div class="product-list-detail">
-              <div class="product-name">slotProps.data.name</div>
-              <div class="product-description">slotProps.data.description</div>
-              <Rating :readonly="true" :cancel="false"></Rating>
-              <i class="pi pi-tag product-category-icon"></i
-              ><span class="product-category">slotProps.data.category</span>
+        <div class="listTaskDataView">
+          <div class="col-12 elementListTaskDataView">
+            <div class="imgTaskContainer">
+              <img src="@/static/clipboard.jpg" alt="Foto Tarefa" />
             </div>
-            <div class="product-list-action">
-              <span class="product-price">$$$$$$$</span>
-              <Button
-                icon="pi pi-shopping-cart"
-                label="Add to Cart"
-                :disabled="false"
-              ></Button>
-              <span class="product-badge status"
-                >slotProps.data.inventoryStatus
-              </span>
+            <div
+              class="
+                itemTaskContainer
+                p-d-flex p-flex-column p-jc-between p-ai-center
+              "
+            >
+              <div class="top p-d-flex p-flex-row p-jc-between p-ai-center">
+                <div class="top-texts">
+                  <h3 class="p-ml-2">ORGANIZAR O LABORATÓRIO</h3>
+                  <span class="p-ml-3"
+                    >Organizar caixa de componentes eletr...</span
+                  >
+                </div>
+                <div class="top-index">
+                  <h4>#0233</h4>
+                </div>
+              </div>
+              <div class="bottom p-d-flex p-flex-row p-jc-between p-ai-center">
+                <div
+                  class="bottom-texts p-d-flex p-flex-row p-jc-start p-ai-end"
+                >
+                  <div
+                    class="
+                      textsInfos
+                      p-d-flex p-flex-row p-jc-start p-ai-center p-ml-2
+                    "
+                  >
+                    <i class="pi pi-flag p-mr-2" />
+                    <span class="p-mr-3"><strong>Iniciada</strong></span>
+                  </div>
+                  <div
+                    class="
+                      textsInfos
+                      p-d-flex p-flex-row p-jc-start p-ai-center
+                    "
+                  >
+                    <i class="pi pi-map-marker p-mr-2" />
+                    <span class="p-mr-3"
+                      ><strong>Laboratório Eletrônica 1</strong></span
+                    >
+                  </div>
+                  <div
+                    class="
+                      textsInfos
+                      p-d-flex p-flex-row p-jc-start p-ai-center
+                    "
+                  >
+                    <i class="pi pi-users p-mr-2" />
+                    <span class="p-mr-3"
+                      ><strong>André, Guedes, Luís</strong></span
+                    >
+                  </div>
+                </div>
+                <div
+                  class="bottom-index p-d-flex p-flex-column p-jc-end p-ai-end"
+                >
+                  <div
+                    class="
+                      buttons-container
+                      p-d-flex p-flex-column p-jc-center p-ai-center
+                    "
+                  >
+                    <div
+                      class="container-up p-d-flex p-flex-row p-jc-end p-ai-end"
+                    >
+                      <button class="progressTask">
+                        <i class="pi pi-arrow-circle-right" />
+                      </button>
+                      <button class="editTask">
+                        <i class="pi pi-pencil" />
+                      </button>
+                    </div>
+                    <div
+                      class="
+                        container-down
+                        p-d-flex p-flex-row p-jc-end p-ai-end
+                      "
+                    >
+                      <button class="deleteTask">
+                        <i class="pi pi-trash" />
+                      </button>
+                      <button class="printTask">
+                        <i class="pi pi-print" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+          <div class="statusTask"></div>
         </div>
       </template>
       <!--
@@ -229,11 +303,6 @@ export default {
   width: 100vw;
   max-width: 100vw;
 
-  img {
-    width: 200px;
-    height: 200px;
-  }
-
   #titleTasks {
     overflow-x: visible !important;
     border: none;
@@ -249,6 +318,8 @@ export default {
   }
 
   .dataTaskViewer {
+    /* background-color: #f8f9fa; */
+    background-color: #e3e7eb;
     width: 100vw;
     /* background-color: yellowgreen; */
     display: flex;
@@ -268,7 +339,7 @@ export default {
       padding: 10px 0px;
 
       .grid-nogutter {
-        background-color: white;
+        /* background-color: white; */
         .taskToolBox {
           width: 90%;
           /* background-color: red; */
@@ -346,6 +417,7 @@ export default {
       }
     }
   }
+
   @media screen and (max-width: 670px) {
     #titleTasks {
       font-size: 22px !important;
@@ -421,6 +493,135 @@ export default {
               width: 55px !important;
             }
           }
+        }
+      }
+    }
+  }
+
+  .dataTaskViewer .p-dataview-content {
+    .p-nogutter {
+      .listTaskDataView {
+        margin: 20px 0px;
+        background-color: white !important;
+        border-radius: 17px 17px 0px 0px;
+
+        .elementListTaskDataView {
+          padding: 10px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          height: 150px;
+          width: 100%;
+          /* background-color: yellowgreen !important; */
+
+          .imgTaskContainer {
+            margin-left: 5px;
+            width: 19%;
+            max-width: 250px;
+            min-width: 150px;
+            height: 100%;
+            /* background-color: red; */
+            img {
+              width: 100%;
+              height: 100%;
+              border-radius: 17px;
+            }
+          }
+          .itemTaskContainer {
+            width: 80%;
+            height: 100%;
+            color: black;
+            /* background-color: blue; */
+            .top {
+              /* background-color: yellow; */
+              width: 98%;
+              height: 50%;
+
+              .top-texts {
+                /* background-color: blue; */
+                width: 80%;
+                height: 100%;
+              }
+              .top-index {
+                /* background-color: black; */
+                width: 5%;
+                height: 100%;
+              }
+            }
+            .bottom {
+              /* background-color: orange; */
+              width: 98%;
+              height: 48%;
+
+              .bottom-texts {
+                /* background-color: pink; */
+                width: 79%;
+                height: 100%;
+
+                .textsInfos {
+                  width: auto;
+                  color: #ac2117;
+                  i {
+                    width: 20px;
+                    font-weight: bold;
+                  }
+                }
+              }
+              .bottom-index {
+                /* background-color: grey; */
+                width: 20%;
+                height: 100%;
+
+                .buttons-container {
+                  width: 100px;
+                  height: 100px;
+                  /* background-color:yellowgreen; */
+                  button {
+                    border: none;
+                    width: 27px;
+                    height: 27px;
+                    margin: 2px;
+                    border-radius: 3px;
+
+                    &:hover {
+                      cursor: pointer;
+                    }
+                  }
+                  .progressTask {
+                    background-color: yellowgreen;
+                    &:hover {
+                      background-color: rgb(196, 230, 128);
+                    }
+                  }
+                  .editTask {
+                    background-color: orange;
+                    &:hover {
+                      background-color: rgb(246, 196, 102);
+                    }
+                  }
+                  .deleteTask {
+                    background-color: #c22a1f;
+                    &:hover {
+                      background-color: #d15850;
+                    }
+                  }
+                  .printTask {
+                    background-color: rgb(79, 79, 190);
+                    &:hover {
+                      background-color: rgb(118, 118, 223);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        .statusTask {
+          width: 100%;
+          height: 10px;
+          background-color: yellowgreen;
+          box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px, rgb(0 0 0 / 17%) 0px 3px 6px;
         }
       }
     }

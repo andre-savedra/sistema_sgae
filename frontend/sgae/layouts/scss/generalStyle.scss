@@ -150,7 +150,34 @@
 .allTasks {
     .dataTaskViewer .p-dataview-header {
         overflow-x: visible !important;
+        background-color: #e3e7eb;
+        border-bottom: 3px solid #dadada;
     }
+
+     /*********** LIST VIEW***********/
+     .dataTaskViewer .p-dataview-content {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;         
+         width: 90vw;
+        .p-nogutter {
+            background-color: #e3e7eb;
+            // background-color: red;
+            .listTaskDataView{
+                // margin: 20px 0px;
+                // background-color: red;
+                // border-radius: 20px 20px 20px 20px;
+                .elementListTaskDataView{
+                //    padding: 10px;
+                   
+                }
+
+            }
+
+            
+        }
+      }
 
     .viewSwitch {        
         .p-dataview-layout-options {
