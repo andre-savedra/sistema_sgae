@@ -9,6 +9,7 @@ import requests
 from django.http import HttpResponseRedirect
 
 from rest_framework.permissions import IsAuthenticated
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 class ActivateUser(APIView):
 
@@ -23,6 +24,22 @@ class ActivateUser(APIView):
         else:       
             return HttpResponseRedirect('http://localhost:3000/error/')
             
+
+
+def getPagination(request, listItems):
+
+    if 'page' in request.GET:
+        try:
+            parameter_page = request.GET['page']
+            page = Paginator(listItems, 10)
+            return page.page(parameter_page)
+        except (EmptyPage, PageNotAnInteger):
+            return page.page(1)
+    else:
+        return listItems
+
+
+
 
 class CargosAPIView(APIView):
     """
@@ -152,7 +169,7 @@ class UsuariosAPIView(APIView):
     def get(self, request, pk=''):
         if pk == '':
             usuarios = Usuarios.objects.all()
-            serializer = UsuariosSerializer(usuarios, many=True)
+            serializer = UsuariosSerializer(getPagination(request, usuarios), many=True)
             return Response(serializer.data)
         else:
             usuarios = Usuarios.objects.get(idUserFK=pk)
@@ -184,27 +201,27 @@ class TarefasAPIView(APIView):
     """
     API tarefas
     """
-
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        if 'solicitante' in request.GET:            
+        if 'solicitante' in request.GET:          
             solicitante = request.GET['solicitante']
             tarefas = Tarefas.objects.filter(idSolicitanteFK=solicitante)
-            serializer = TarefasSerializer(tarefas, many=True)            
+            serializer = TarefasSerializer(getPagination(request, tarefas), many=True)           
+            
             return Response(serializer.data)
         elif 'ambiente' in request.GET:
             ambiente = request.GET['ambiente']
-            tarefas = Tarefas.objects.filter(idAmbienteFK=ambiente)
-            serializer = TarefasSerializer(tarefas, many=True)            
+            tarefas = Tarefas.objects.filter(idAmbienteFK=ambiente)            
+            serializer = TarefasSerializer(getPagination(request, tarefas), many=True)
             return Response(serializer.data)
         elif pk != '':
             tarefas = Tarefas.objects.get(id=pk)            
             serializer = TarefasSerializer(tarefas)            
             return Response(serializer.data)        
         else:
-            tarefas = Tarefas.objects.all()
-            serializer = TarefasSerializer(tarefas, many=True)            
+            tarefas = Tarefas.objects.all()            
+            serializer = TarefasSerializer(getPagination(request, tarefas), many=True)            
             return Response(serializer.data)
         
 
@@ -241,16 +258,16 @@ class TarefasUsuariosAPIView(APIView):
         if 'tarefa' in request.GET:            
             tarefa = request.GET['tarefa']
             tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)
-            serializer = TarefasUsuariosSerializer(tarefasUsuarios, many=True)            
+            serializer = TarefasUsuariosSerializer(getPagination(request, tarefasUsuarios), many=True)            
             return Response(serializer.data)
         elif 'tarefasReduzida' in request.GET:            
             tarefasUsuarios = TarefasUsuarios.objects.all()
-            serializer = TarefasUsuariosSerializerReduced(tarefasUsuarios, many=True)
+            serializer = TarefasUsuariosSerializerReduced(getPagination(request, tarefasUsuarios), many=True)
             return Response(serializer.data)
         elif 'usuario' in request.GET:            
             usuario = request.GET['usuario']
             tarefasUsuarios = TarefasUsuarios.objects.filter(idUsuarioFK=usuario)
-            serializer = TarefasUsuariosSerializer(tarefasUsuarios, many=True)            
+            serializer = TarefasUsuariosSerializer(getPagination(request,tarefasUsuarios), many=True)            
             return Response(serializer.data)
         elif pk != '':            
             tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
@@ -258,7 +275,7 @@ class TarefasUsuariosAPIView(APIView):
             return Response(serializer.data)
         else:
             tarefasUsuarios = TarefasUsuarios.objects.all()
-            serializer = TarefasUsuariosSerializer(tarefasUsuarios, many=True)
+            serializer = TarefasUsuariosSerializer(getPagination(request,tarefasUsuarios), many=True)
             return Response(serializer.data)
 
 
@@ -292,12 +309,12 @@ class TarefasStatusAPIView(APIView):
         if 'tarefa' in request.GET:
             tarefa = request.GET['tarefa']
             tarefasStatus = TarefasStatus.objects.filter(idTarefaFK=tarefa)
-            serializer = TarefasStatusSerializer(tarefasStatus, many=True)            
+            serializer = TarefasStatusSerializer(getPagination(request, tarefasStatus), many=True)            
             return Response(serializer.data)
         elif 'status' in request.GET:
             status = request.GET['status']
             tarefasStatus = TarefasStatus.objects.filter(idStatusFK=status)
-            serializer = TarefasStatusSerializer(tarefasStatus, many=True)            
+            serializer = TarefasStatusSerializer(getPagination(request, tarefasStatus), many=True)            
             return Response(serializer.data)
         elif pk == '':
             tarefasStatus = TarefasStatus.objects.all()
@@ -305,7 +322,7 @@ class TarefasStatusAPIView(APIView):
             return Response(serializer.data)
         else:
             tarefasStatus = TarefasStatus.objects.get(id=pk)
-            serializer = TarefasStatusSerializer(tarefasStatus)
+            serializer = TarefasStatusSerializer(getPagination(request,tarefasStatus))
             return Response(serializer.data)
 
 
@@ -341,7 +358,7 @@ class FotosAPIView(APIView):
         if 'tarefa' in request.GET:   
             tarefa = request.GET['tarefa']
             fotos = Fotos.objects.filter(idTarefaFK=tarefa)
-            serializer = FotosSerializer(fotos, many=True)            
+            serializer = FotosSerializer(getPagination(request,fotos), many=True)            
             return Response(serializer.data)
         elif pk != '':
             fotos = Fotos.objects.get(id=pk)
@@ -349,7 +366,7 @@ class FotosAPIView(APIView):
             return Response(serializer.data)
         else:
             fotos = Fotos.objects.all()
-            serializer = FotosSerializer(fotos, many=True)
+            serializer = FotosSerializer(getPagination(request, fotos), many=True)
             return Response(serializer.data)
 
 
