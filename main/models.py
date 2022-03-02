@@ -63,7 +63,8 @@ class Tarefas(models.Model):
     prazo = models.DateTimeField()
     dataInicio = models.DateTimeField(default=timezone.now())
     dataFim = models.DateTimeField(null=True, blank=True)
-    
+    idStatusFK = models.ForeignKey(Status, default=1, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.nome
 

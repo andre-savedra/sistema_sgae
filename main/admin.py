@@ -26,7 +26,7 @@ class detUsuarios(admin.ModelAdmin):
     list_per_page = 10
 
 class detTarefas(admin.ModelAdmin):
-    list_display = ('id','nome', 'descricao', 'idSolicitanteFK', 'idAmbienteFK', 'prazo', 'dataInicio', 'dataFim')
+    list_display = ('id','nome', 'descricao', 'idSolicitanteFK', 'idAmbienteFK', 'prazo', 'dataInicio', 'dataFim', 'idStatusFK')
     list_display_links = ('id',)
     search_fields = ('nome',)
     list_per_page = 10

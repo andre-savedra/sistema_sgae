@@ -63,6 +63,7 @@ class UsuariosSerializerSimple(serializers.ModelSerializer):
 class TarefasSerializer(serializers.ModelSerializer):   
     idSolicitanteFK = UsuariosSerializer(read_only=True)
     idAmbienteFK = AmbientesSerializer(read_only=True)
+    idStatusFK = StatusSerializer(read_only=True)
 
     class Meta:        
         model = Tarefas
@@ -79,6 +80,14 @@ class TarefasSerializerSimple(serializers.ModelSerializer):
 class TarefasUsuariosSerializer(serializers.ModelSerializer):
     idUsuarioFK = UsuariosSerializer(read_only=True)
     idTarefaFK = TarefasSerializer(read_only=True)
+
+    class Meta:
+        model = TarefasUsuarios
+        fields = '__all__'
+
+
+class TarefasUsuariosSerializerReduced(serializers.ModelSerializer):
+    idUsuarioFK = UsuariosSerializer(read_only=True)
 
     class Meta:
         model = TarefasUsuarios

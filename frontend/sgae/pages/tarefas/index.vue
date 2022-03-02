@@ -82,15 +82,17 @@
             >
               <div class="top p-d-flex p-flex-row p-jc-between p-ai-center">
                 <div class="top-texts">
-                  <h3 class="p-ml-2">ORGANIZAR O LABORATÓRIO</h3>
-                  <span class="p-ml-3"
-                    >Organizar caixa de componentes eletr...</span
-                  >
+                  <h3 class="p-ml-2">
+                    {{ limitText(slotProps.data.idTarefaFK.nome, 30) }}
+                  </h3>
+                  <span class="p-ml-3">{{
+                    limitText(slotProps.data.idTarefaFK.descricao, 40)
+                  }}</span>
                 </div>
                 <div
                   class="top-index p-d-flex p-flex-column p-jc-start p-ai-end"
                 >
-                  <h4>#0233</h4>
+                  <h4>#{{ slotProps.data.idTarefaFK.id }}</h4>
                 </div>
               </div>
               <div class="bottom p-d-flex p-flex-row p-jc-between p-ai-center">
@@ -256,7 +258,12 @@ export default {
     // this.productService.getProducts().then(data => this.products = data);
     this.getTask();
   },
+
   methods: {
+    limitText: function (data, limit) {
+      if (data.length > limit) return data.slice(0, limit) + "...";
+      else return data;
+    },
     onSortChange(event) {
       const value = event.value.value;
       const sortValue = event.value;
@@ -424,7 +431,11 @@ export default {
         margin: 20px 0px;
         background-color: white !important;
         &:hover {
-          background-color: rgb(243, 223, 223) !important;
+          background: linear-gradient(
+            135deg,
+            rgba(243, 223, 223, 0.8),
+            rgba(226, 152, 152, 0.8)            
+          ) !important;
         }
         border-radius: 17px 17px 0px 0px;
 
@@ -689,7 +700,6 @@ export default {
   @media screen and (max-width: 405px) {
     .listTaskDataView {
       .elementListTaskDataView {
-
         .imgTaskContainer {
           margin-left: 0px !important;
           width: 15%;
@@ -700,15 +710,14 @@ export default {
     }
   }
 
-   @media screen and (max-width: 360px) {
+  @media screen and (max-width: 360px) {
     .listTaskDataView {
       .elementListTaskDataView {
-
         .imgTaskContainer {
           display: none;
         }
 
-        .itemTaskContainer{
+        .itemTaskContainer {
           width: 100% !important;
         }
       }

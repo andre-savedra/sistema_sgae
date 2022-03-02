@@ -243,6 +243,10 @@ class TarefasUsuariosAPIView(APIView):
             tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)
             serializer = TarefasUsuariosSerializer(tarefasUsuarios, many=True)            
             return Response(serializer.data)
+        elif 'tarefasReduzida' in request.GET:            
+            tarefasUsuarios = TarefasUsuarios.objects.all()
+            serializer = TarefasUsuariosSerializerReduced(tarefasUsuarios, many=True)
+            return Response(serializer.data)
         elif 'usuario' in request.GET:            
             usuario = request.GET['usuario']
             tarefasUsuarios = TarefasUsuarios.objects.filter(idUsuarioFK=usuario)
