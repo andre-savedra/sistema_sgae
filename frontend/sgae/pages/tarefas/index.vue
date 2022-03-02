@@ -281,7 +281,7 @@ export default {
 
     getTask: async function () {
       await this.$axios
-        .$get(this.BaseURL + "tarefasUsuarios/")
+        .$get(this.BaseURL + "tarefas/")
         .then((response) => {
           console.log(response);
           //request ok
