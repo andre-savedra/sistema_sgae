@@ -241,7 +241,7 @@ export default {
       await this.$axios
         .get("http://localhost:8003/cargos")
         .then((dataResponse) => {
-          dataResponse.data.forEach((element) => {
+          dataResponse.data.data.forEach((element) => {
             this.jobs.push({
               name: element.nome,
               id: element.id,
@@ -473,29 +473,27 @@ img {
   }
 }
 
-
 @function box-shadow-stars($n) {
-  $star-shadows: '#{random(4000)-2000}px #{random(4000)-2000}px #fff';
+  $star-shadows: "#{random(4000)-2000}px #{random(4000)-2000}px #fff";
   @for $i from 2 through $n {
     $star-color-num: random(3);
     $star-color: #fff;
     @if ($star-color-num == 1) {
-      $star-color: '#fff';
+      $star-color: "#fff";
     }
     @if ($star-color-num == 2) {
-      $star-color: '#FF6666';
+      $star-color: "#FF6666";
     }
     @if ($star-color-num == 3) {
-      $star-color: '#79bfea';
+      $star-color: "#79bfea";
     }
-    $star-shadows: '#{$star-shadows}, #{random(4000)-2000}px #{random(4000)-2000}px #{$star-color}';
+    $star-shadows: "#{$star-shadows}, #{random(4000)-2000}px #{random(4000)-2000}px #{$star-color}";
   }
   @return unquote($star-shadows);
 }
 $stars1-shadows: box-shadow-stars(10000);
 $stars2-shadows: box-shadow-stars(1000);
 $stars3-shadows: box-shadow-stars(500);
-
 
 html {
   height: 100vh;
@@ -534,8 +532,7 @@ html {
   to {
     transform: translateY(2000px);
   }
-};
-
+}
 
 @media screen and (max-width: 990px) {
   .logo_panel {

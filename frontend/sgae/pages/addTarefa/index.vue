@@ -263,7 +263,8 @@ export default {
       if (input >= 0 && input <= 9) return "0" + input.toString();
       else return input.toString();
     },
-    formatDate: function (input) {
+     formatDate: function (input) {
+       
       let dt = new Date();
 
       if (input === null) return input;
@@ -319,7 +320,7 @@ export default {
       await this.$axios
         .$get(this.BaseURL + "usuarios/")
         .then((dataResponse) => {
-          dataResponse.forEach((user) => {
+          dataResponse.data.forEach((user) => {
             this.allUsers.push({
               name: user.nome,
               id: user.id,
@@ -337,7 +338,7 @@ export default {
       await this.$axios
         .$get(this.BaseURL + "ambientes/")
         .then((dataResponse) => {
-          dataResponse.forEach((enviroment) => {
+          dataResponse.data.forEach((enviroment) => {
             this.allEnviroments.push({
               id: enviroment.id,
               name: enviroment.nome,

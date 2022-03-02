@@ -38,7 +38,7 @@ class detTarefasUsuarios(admin.ModelAdmin):
     list_per_page = 10
 
 class detTarefasStatus(admin.ModelAdmin):
-    list_display = ('id','idStatusFK', 'idTarefaFK', 'data')
+    list_display = ('id','idStatusFK', 'idTarefaFK', 'data', 'descricao')
     list_display_links = ('id',)
     search_fields = ('idTarefaFK',)
     list_per_page = 10

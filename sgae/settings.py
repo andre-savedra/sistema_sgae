@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',    
     'djoser',
+    'django_seed',
     'main',
 ]
 
@@ -168,6 +169,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+
 'DEFAULT_PERMISSION_CLASSES': [
     #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly’,
     'rest_framework.permissions.AllowAny',

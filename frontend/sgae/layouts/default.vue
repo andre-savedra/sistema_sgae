@@ -250,7 +250,7 @@ export default {
         .get("http://localhost:8003/usuarios/" + userId)
         .then((dataResponse) => {
           // console.log(dataResponse.data);
-          this.actualUser = dataResponse.data;
+          this.actualUser = dataResponse.data.data;
           this.actualUser.image = "userimg-1.jpg";
           this.profileLoaded = true;
         })

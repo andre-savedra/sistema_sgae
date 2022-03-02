@@ -5,9 +5,10 @@
       :value="tasks"
       :layout="layout"
       :paginator="true"
-      :rows="9"
+      :rows="5"
       :sortOrder="sortOrder"
       :sortField="sortField"
+      @page="onPage($event)"
       class="dataTaskViewer"
     >
       <template #header>
@@ -70,9 +71,15 @@
 
       <template #list="slotProps">
         <div class="listTaskDataView">
-          <div class="col-12 elementListTaskDataView">
+          <div
+            class="col-12 elementListTaskDataView"
+            v-if="
+              slotProps.data.nome !== null && slotProps.data.nome !== undefined
+            "
+          >
             <div class="imgTaskContainer">
-              <img src="@/static/clipboard.jpg" alt="Foto Tarefa" />
+              <!-- <img src="@/static/clipboard.jpg" alt="Foto Tarefa" /> -->
+              <img :src='BaseURL2 + slotProps.data.fotos[0].image' alt="Foto Tarefa" />
             </div>
             <div
               class="
@@ -83,16 +90,16 @@
               <div class="top p-d-flex p-flex-row p-jc-between p-ai-center">
                 <div class="top-texts">
                   <h3 class="p-ml-2">
-                    {{ limitText(slotProps.data.idTarefaFK.nome, 30) }}
+                    {{ limitText(slotProps.data.nome, 30) }}
                   </h3>
                   <span class="p-ml-3">{{
-                    limitText(slotProps.data.idTarefaFK.descricao, 40)
+                    limitText(slotProps.data.descricao, 40)
                   }}</span>
                 </div>
                 <div
                   class="top-index p-d-flex p-flex-column p-jc-start p-ai-end"
                 >
-                  <h4>#{{ slotProps.data.idTarefaFK.id }}</h4>
+                  <h4>#{{ slotProps.data.id }}</h4>
                 </div>
               </div>
               <div class="bottom p-d-flex p-flex-row p-jc-between p-ai-center">
@@ -106,7 +113,7 @@
                     "
                   >
                     <i class="pi pi-flag p-mr-2" />
-                    <span class="p-mr-3"><strong>Iniciada</strong></span>
+                    <span class="p-mr-3"><strong>{{limitText(slotProps.data.idStatusFK.nome,15)}}</strong></span>
                   </div>
                   <div
                     class="
@@ -116,7 +123,7 @@
                   >
                     <i class="pi pi-map-marker p-mr-2" />
                     <span class="p-mr-3"
-                      ><strong>Laboratório Eletrônica 1</strong></span
+                      ><strong>{{limitText(slotProps.data.idAmbienteFK.nome,30)}}</strong></span
                     >
                   </div>
                   <div
@@ -126,7 +133,7 @@
                     "
                   >
                     <i class="pi pi-users p-mr-2" />
-                    <span class="p-mr-3"><strong>André...</strong></span>
+                    <span class="p-mr-3"><strong>{{limitText(slotProps.data.responsaveis[0].idUsuarioFK.nome,12)}}</strong></span>
                   </div>
                 </div>
                 <div
@@ -154,7 +161,7 @@
                         p-d-flex p-flex-row p-jc-end p-ai-end
                       "
                     >
-                      <button class="deleteTask">
+                      <button class="deleteTask" v-on:click="deleteTask(slotProps.data.id)">
                         <i class="pi pi-trash" />
                       </button>
                       <button class="printTask">
@@ -166,7 +173,12 @@
               </div>
             </div>
           </div>
-          <div class="statusTask"></div>
+          <div
+            class="statusTask"
+            v-if="
+              slotProps.data.nome !== null && slotProps.data.nome !== undefined
+            "
+          ></div>
         </div>
       </template>
       <!--
@@ -236,8 +248,13 @@ export default {
       ],
       //useful
       BaseURL: "http://localhost:8003/",
+      BaseURL2: "http://localhost:8003",
       layout: "grid",
       tasks: null,
+      totalTasks: null,
+      totalPages: null,
+      taskPage: 1,
+      taskPagesLoaded: [],
       filterKey: null,
       filterOptions: [
         { label: "Todas", value: "!price" },
@@ -256,45 +273,177 @@ export default {
   },
   mounted() {
     // this.productService.getProducts().then(data => this.products = data);
-    this.getTask();
+    this.getTask(1);
   },
 
   methods: {
     limitText: function (data, limit) {
-      if (data.length > limit) return data.slice(0, limit) + "...";
-      else return data;
+      if (data !== null && data !== undefined) {
+        if (data.length > limit) return data.slice(0, limit) + "...";
+        else return data;
+      } else return data;
     },
     onSortChange(event) {
-      const value = event.value.value;
-      const sortValue = event.value;
+      // const value = event.value.value;
+      // const sortValue = event.value;
+      // if (value.indexOf("!") === 0) {
+      //   this.sortOrder = -1;
+      //   this.sortField = value.substring(1, value.length);
+      //   this.sortKey = sortValue;
+      // } else {
+      //   this.sortOrder = 1;
+      //   this.sortField = value;
+      //   this.sortKey = sortValue;
+      // }
+    },
+    onPage(event) {
+      console.log("event:");
+      console.log(event);
 
-      if (value.indexOf("!") === 0) {
-        this.sortOrder = -1;
-        this.sortField = value.substring(1, value.length);
-        this.sortKey = sortValue;
-      } else {
-        this.sortOrder = 1;
-        this.sortField = value;
-        this.sortKey = sortValue;
+      if (event.page === event.pageCount - 1) {
+        if (event.page !== 2) {
+          console.log("REQUISITANDO " + (this.taskPage + 1));
+          this.getTask(this.taskPage + 1);
+        }
       }
     },
+    getTask: async function (page) {
+      if (!this.taskPagesLoaded.includes(page)) {
+        await this.$axios
+          .$get(this.BaseURL + ("tarefas/?page=" + page))
+          .then((response) => {
+            console.log(response);
+            //request ok
+            if (response.total > 0) {
+              this.totalTasks = response.total;
+              this.totalPages = response.pages;
+              this.taskPagesLoaded.push(page);
 
-    getTask: async function () {
-      await this.$axios
-        .$get(this.BaseURL + "tarefasUsuarios/")
+              //first time
+              if (this.tasks === null) {
+                this.tasks = structuredClone(response.data);
+                this.taskPage = 1;
+
+                const timeChangeLayout = setTimeout(() => {
+                  this.layout = "list";
+                }, 1000);
+              }
+              //it's not a first time
+              else {
+                //check if it is not loaded
+                response.data.map((task) => {
+                  this.tasks.push(structuredClone(task));
+                });
+                this.taskPage = page;
+                console.log("this.tasks");
+                console.log(this.tasks);
+              }
+              this.getAllTaskUsers();
+            }
+          })
+          .catch((response) => {
+            alert("Problema ao tentar coletar as tarefas");
+            console.log(response);
+          });
+      } else {
+        console.log("JÁ CARREGADO!!");
+      }
+    },
+    getTasksUsers: function (task) {
+      console.log("solicitando task user tarefa: " + task)
+
+      return this.$axios
+        .$get(this.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
         .then((response) => {
-          console.log(response);
+          // console.log("response Task User");
+          // console.log(response);
           //request ok
-          if (response.length > 0) {
-            this.tasks = structuredClone(response);
-            console.log(this.tasks);
+          if (response.data !== null && response.data !== undefined) {
+            return response.data;
           }
         })
         .catch((response) => {
-          alert("Problema ao tentar coletar as tarefas");
+          alert("Problema ao tentar pega Usuário da tarefa " + task);
           console.log(response);
+          return null;
         });
     },
+    getAllTaskUsers: async function () {
+
+      console.log("before tasks")
+      console.log(this.tasks)
+   
+      if (this.tasks !== null) {
+        for(let i=0; i<this.tasks.length; i++) {
+          if(this.tasks[i].responsaveis === undefined) {
+              console.log("precisa solicitar para " + this.tasks[i].id)              
+              this.tasks[i].responsaveis = await this.getTasksUsers(this.tasks[i].id);              
+            }
+            else{
+              console.log("NÃO precisa solicitar")
+            }           
+        }
+
+        console.log("TERMINOU ITERAÇÃO!");
+        console.log(this.tasks);
+        this.getAllTaskPhotos();
+      }
+    },
+    getTaskPhotos: function (task) {
+      console.log("solicitando task FOTO tarefa: " + task)
+
+      return this.$axios
+        .$get(this.BaseURL + ("fotos/?tarefa=" + task))
+        .then((response) => {
+          
+          //request ok
+          if (response.data !== null && response.data !== undefined) {
+            return response.data;
+          }
+        })
+        .catch((response) => {
+          alert("Problema ao tentar pegar FOTOS da tarefa " + task);
+          console.log(response);
+          return null;
+        });
+    },
+    getAllTaskPhotos: async function () {    
+   
+      if (this.tasks !== null) {
+        for(let i=0; i<this.tasks.length; i++) {
+          if(this.tasks[i].fotos === undefined) {
+              console.log("precisa solicitar FOTO para " + this.tasks[i].id)              
+              this.tasks[i].fotos = await this.getTaskPhotos(this.tasks[i].id);              
+            }
+            else{
+              console.log("NÃO precisa solicitar")
+            }           
+        }
+       
+        console.log("TERMINOU ITERAÇÃO DAS FOTOS!");
+        console.log(this.tasks)
+      }
+    },
+    deleteTask: function(taskId){
+
+       this.$axios
+          .$delete(this.BaseURL + ("tarefas/" + taskId))
+          .then((response) => {
+            //request ok
+            if (response !== null) {
+              //remove
+              this.tasks.map((task,index)=>{
+                if(task.id === taskId)
+                  this.tasks.splice(index, 1);
+                  console.log("excluindo index" + index)
+              });
+            }
+          })
+          .catch((response) => {
+            alert("Problema ao tentar deletar a tarefa");
+            console.log(response);
+          });
+    }
   },
 };
 </script>
@@ -434,7 +583,7 @@ export default {
           background: linear-gradient(
             135deg,
             rgba(243, 223, 223, 0.8),
-            rgba(226, 152, 152, 0.8)            
+            rgba(226, 152, 152, 0.8)
           ) !important;
         }
         border-radius: 17px 17px 0px 0px;
