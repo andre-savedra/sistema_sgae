@@ -173,6 +173,9 @@ export default {
       this.$router.push("reset");
     },
     postUser: async function () {
+      this.userAuth.username = this.userAuth.username.toString();
+
+      
       await this.$axios
         .$post(
           "http://localhost:8003/api/v1/users/",
@@ -262,6 +265,7 @@ export default {
   width: 50%;
   background-color: #313131;
   color: white;
+  overflow-y: hidden;
 }
 
 .Registro_panel {

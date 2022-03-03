@@ -148,7 +148,7 @@
                     <div
                       class="container-up p-d-flex p-flex-row p-jc-end p-ai-end"
                     >
-                      <button class="progressTask">
+                      <button class="progressTask" v-on:click="progressTask(slotProps.data.id)">
                         <i class="pi pi-arrow-circle-right" />
                       </button>
                       <button class="editTask" v-on:click="editTask(slotProps.data.id)">
@@ -351,13 +351,11 @@ export default {
       }
     },
     getTasksUsers: function (task) {
-      console.log("solicitando task user tarefa: " + task)
-
+      
       return this.$axios
         .$get(this.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
         .then((response) => {
-          // console.log("response Task User");
-          // console.log(response);
+         
           //request ok
           if (response.data !== null && response.data !== undefined) {
             return response.data;
@@ -370,28 +368,17 @@ export default {
         });
     },
     getAllTaskUsers: async function () {
-
-      console.log("before tasks")
-      console.log(this.tasks)
    
       if (this.tasks !== null) {
         for(let i=0; i<this.tasks.length; i++) {
           if(this.tasks[i].responsaveis === undefined) {
-              console.log("precisa solicitar para " + this.tasks[i].id)              
               this.tasks[i].responsaveis = await this.getTasksUsers(this.tasks[i].id);              
-            }
-            else{
-              console.log("NÃO precisa solicitar")
-            }           
-        }
-
-        console.log("TERMINOU ITERAÇÃO!");
-        console.log(this.tasks);
+            }                     
+        }       
         this.getAllTaskPhotos();
       }
     },
     getTaskPhotos: function (task) {
-      console.log("solicitando task FOTO tarefa: " + task)
 
       return this.$axios
         .$get(this.BaseURL + ("fotos/?tarefa=" + task))
@@ -413,16 +400,9 @@ export default {
       if (this.tasks !== null) {
         for(let i=0; i<this.tasks.length; i++) {
           if(this.tasks[i].fotos === undefined) {
-              console.log("precisa solicitar FOTO para " + this.tasks[i].id)              
               this.tasks[i].fotos = await this.getTaskPhotos(this.tasks[i].id);              
-            }
-            else{
-              console.log("NÃO precisa solicitar")
-            }           
-        }
-       
-        console.log("TERMINOU ITERAÇÃO DAS FOTOS!");
-        console.log(this.tasks)
+            }                     
+        }        
       }
     },
     deleteTask: function(taskId){
@@ -456,6 +436,15 @@ export default {
           this.$router.push("/addTarefa");
         })
       }
+    },
+    progressTask: function(taskId){
+      if(taskId > 0)
+      {
+        this.$store.dispatch("setEditTask",taskId)
+        .then((response) => {
+          this.$router.push("/andamentoTarefa");
+        })
+      }
     }
 
   },
@@ -476,9 +465,9 @@ export default {
   #titleTasks {
     overflow-x: visible !important;
     border: none;
-    background: linear-gradient(-45deg, #313131, #525d69, #c22a1f, #bd244a);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
+    background: linear-gradient(-15deg, #313131, #525d69, #c22a1f, #bd244a);
+    background-size: 300% 300%;
+    animation: gradient 7s ease infinite;
     margin: 0;
     padding: 10px;
     margin: 0px;

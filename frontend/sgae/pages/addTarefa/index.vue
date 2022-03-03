@@ -315,6 +315,16 @@ export default {
           val[1] = separator2[0] + ":" + separator2[1];
 
         return val[0] + " - " + val[1];
+      } else if (input.includes("/")) {
+        let val = input.split("-");
+        val[0] = val[0].trim().replaceAll("/", "-"); //date
+        val[1] = val[1].trim().replaceAll("/", "-"); //time
+        //invert date position
+        const separator = val[0].split("-");
+        if (separator.length === 3)
+          val[0] = separator[2] + "-" + separator[1] + "-" + separator[0];
+
+        return val[0] + "T" + val[1] + ":00-03:00";
       } else return input;
     },
     getUsers: async function () {
@@ -428,6 +438,13 @@ export default {
     },
     putTask: async function () {
       const index = 0;
+
+      let p = this.formatDate(this.deadline.toString());
+      console.log("this.deadline.toString()");
+      console.log(this.deadline.toString());
+      console.log("p");
+      console.log(p);
+
       const body = {
         idSolicitanteFK: this.actualUser.id,
         idAmbienteFK: this.selectedEnviroment.id,
@@ -436,24 +453,25 @@ export default {
         descricao: this.task[index].descricao,
         prazo: this.formatDate(this.deadline.toString()),
         dataInicio: this.task[index].dataInicio,
-      }        
-       
+      };
+      console.log("body");
+      console.log(body);
 
       await this.$axios
-        .$put(this.BaseURL + "tarefas/" + this.updateModeId, JSON.stringify(body), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .$put(
+          this.BaseURL + "tarefas/" + this.updateModeId + "/",
+          JSON.stringify(body),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((response) => {
           console.log(response);
           //request ok
-          if (
-            response.nome === body.nome &&
-            response.id > 0
-          ) {
+          if (response.nome === body.nome && response.id > 0) {
             this.taskID = response.id;
-            // this.postTaskUsers();
           }
         })
         .catch((response) => {
@@ -663,6 +681,10 @@ export default {
       color: #fff;
       border-radius: 15px 15px 0px 0px;
 
+      background: linear-gradient(-15deg, #313131, #525d69, #c22a1f, #bd244a);
+      background-size: 300% 300%;
+      animation: gradientPosition 7s ease infinite;      
+
       i {
         font-size: 25px;
         width: auto;
@@ -810,6 +832,18 @@ export default {
   }
 }
 
+  @keyframes gradientPosition {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
 @media screen and (max-width: 945px) {
   $size-title: 13px;
   $size-topic: 13px;
@@ -833,4 +867,69 @@ export default {
     }
   }
 }
+
+@media screen and (max-width: 610px) {
+  $size-title: 11px;
+  $size-topic: 13px;
+  $size-container: 87vw !important;
+
+  .titulo,
+  .titulo1 {
+    font-size: $size-title !important;
+  }
+
+  .container {
+    width: $size-container;
+  }
+
+  .buttons {
+    width: $size-container;
+    .btn-send,
+    .btn-clean {
+      width: 30% !important;
+      font-size: 16px !important;
+    }
+  }
+
+  .customDatePicker {
+    width: 50% !important;
+    margin-left: 15px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  $size-container: 100vw !important;
+
+  .all {
+    padding: 0px !important;
+  }
+
+  .container {
+    width: $size-container;
+    border-radius: 0px !important;
+  }
+
+  .titulo {
+    border-radius: 0px !important;
+  }
+
+  .buttons {
+    width: $size-container;
+    .btn-send,
+    .btn-clean {
+      width: 30% !important;
+      font-size: 15px !important;
+    }
+  }
+
+  .customDatePicker {
+    width: 60% !important;
+    margin-left: 15px;
+  }
+
+
+}
+
+
+
 </style>

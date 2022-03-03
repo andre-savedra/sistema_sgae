@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     registerPage() {
-      this.$router.push("register");      
+      this.$router.push("registrar");      
     },
     resetPage() {
       this.$router.push("reset");

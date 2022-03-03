@@ -21,9 +21,9 @@ class ActivateUser(APIView):
         response = requests.post(url, data = payload)
 
         if response.status_code == 204:
-            return HttpResponseRedirect('http://localhost:3000/success/')            
+            return HttpResponseRedirect('http://localhost:3000/sucesso/')            
         else:       
-            return HttpResponseRedirect('http://localhost:3000/error/')
+            return HttpResponseRedirect('http://localhost:3000/erro/')
             
 
 
@@ -348,8 +348,20 @@ class TarefasUsuariosAPIView(APIView):
                     'pages': resp[2]
                 }
             )
-        elif 'tarefasCompleta' in request.GET:            
+        elif 'completa' in request.GET:            
             tarefasUsuarios = TarefasUsuarios.objects.all()
+            resp = getPagination(request, tarefasUsuarios)
+            serializer = TarefasUsuariosSerializer(resp[0], many=True)
+            return Response(
+                {
+                    'data': serializer.data,
+                    'total': resp[1],
+                    'pages': resp[2]
+                }
+            )
+        elif 'tarefaCompleta' in request.GET:
+            tarefa = request.GET['tarefaCompleta']
+            tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)         
             resp = getPagination(request, tarefasUsuarios)
             serializer = TarefasUsuariosSerializer(resp[0], many=True)
             return Response(
@@ -403,7 +415,7 @@ class TarefasUsuariosAPIView(APIView):
 
     def put(self, request, pk=''):
         tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
-        serializer = TarefasUsuariosSerializer(tarefasUsuarios, data=request.data)
+        serializer = TarefasUsuariosSerializerSimple(tarefasUsuarios, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
