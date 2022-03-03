@@ -153,7 +153,7 @@
       </div>
     </div>
     <div class="buttons p-d-flex p-flex-row p-jc-evenly p-ai-center">
-      <Button class="btn-send" label="Enviar" @click="postTask()" />
+      <Button class="btn-send" label="Enviar" @click="checkMode()" />
       <Button class="btn-clean" label="Limpar" @click="cleanForm()" />
     </div>
   </div>
@@ -228,6 +228,7 @@ export default {
           descricao: null,
           idSolicitanteFK: null,
           idAmbienteFK: null,
+          idStatusFK: null,
           prazo: null,
           dataInicio: null,
           dataFim: null,
@@ -237,6 +238,7 @@ export default {
         id: null,
         nome: null,
       },
+      updateModeId: 0,
     };
   },
   methods: {
@@ -257,14 +259,15 @@ export default {
       this.selectedEmployees.length = 0;
       this.selectedEnviroment.length = 0;
       this.deadline = null;
+      this.$store.dispatch("setEditTask", 0);
+      this.updateModeId = 0;
       this.virtualClickUpload("Cancelar");
     },
     formatNumber: function (input) {
       if (input >= 0 && input <= 9) return "0" + input.toString();
       else return input.toString();
     },
-     formatDate: function (input) {
-       
+    formatDate: function (input) {
       let dt = new Date();
 
       if (input === null) return input;
@@ -300,8 +303,8 @@ export default {
         //convert frontend date to backend date
         let dt = new Date(input).toISOString();
         return dt.replaceAll("Z", "-03:00");
-      } else if (input.includes("TT")) {
-        let val = input.split("T");
+      } else if (input.includes("T")) {
+        let val = input.split("T"); //val[0] date, val[1] time
 
         const separator = val[0].split("-");
         if (separator.length === 3)
@@ -326,6 +329,8 @@ export default {
               id: user.id,
             });
           });
+          console.log("this.allUsers");
+          console.log(this.allUsers);
         })
         .catch((response) => {
           console.log("problema ao pegar usuarios");
@@ -344,6 +349,8 @@ export default {
               name: enviroment.nome,
             });
           });
+          console.log("this.allEnviroments");
+          console.log(this.allEnviroments);
         })
         .catch((response) => {
           console.log("problema ao pegar ambientes");
@@ -386,13 +393,17 @@ export default {
         }
       });
     },
+    checkMode: function () {
+      if (this.updateModeId > 0) this.putTask();
+      else this.postTask();
+    },
     postTask: async function () {
       const index = 0;
       this.task[index].idSolicitanteFK = this.actualUser.id;
       this.task[index].idAmbienteFK = this.selectedEnviroment.id;
       this.task[index].prazo = this.formatDate(this.deadline.toString());
       this.task[index].dataInicio = this.formatDate("backend");
-
+      this.task[index].idStatusFK = 1;
       await this.$axios
         .$post(this.BaseURL + "tarefas/", JSON.stringify(this.task), {
           headers: {
@@ -408,6 +419,41 @@ export default {
           ) {
             this.taskID = response[index].id;
             this.postTaskUsers();
+          }
+        })
+        .catch((response) => {
+          alert("Problema ao tentar cadastrar a tarefa");
+          console.log(response);
+        });
+    },
+    putTask: async function () {
+      const index = 0;
+      const body = {
+        idSolicitanteFK: this.actualUser.id,
+        idAmbienteFK: this.selectedEnviroment.id,
+        idStatusFK: this.task[index].idStatusFK,
+        nome: this.task[index].nome,
+        descricao: this.task[index].descricao,
+        prazo: this.formatDate(this.deadline.toString()),
+        dataInicio: this.task[index].dataInicio,
+      }        
+       
+
+      await this.$axios
+        .$put(this.BaseURL + "tarefas/" + this.updateModeId, JSON.stringify(body), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          //request ok
+          if (
+            response.nome === body.nome &&
+            response.id > 0
+          ) {
+            this.taskID = response.id;
+            // this.postTaskUsers();
           }
         })
         .catch((response) => {
@@ -501,12 +547,76 @@ export default {
       console.log("my custom uploader...");
       console.log(event);
     },
+    getTaskUser: async function (task) {
+      this.$axios
+        .$get(this.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
+        .then((response) => {
+          //request ok
+          if (response.data !== null && response.data !== undefined) {
+            response.data.map((user) => {
+              this.selectedEmployees.push({
+                name: user.idUsuarioFK.nome,
+                id: user.idUsuarioFK.id,
+              });
+            });
+
+            console.log("finalizado gettaskuser");
+            console.log(this.selectedEmployees);
+            console.log(this.allUsers);
+          }
+        })
+        .catch((response) => {
+          alert("Problema ao tentar pegar tarefa " + task);
+          console.log(response);
+        });
+    },
+    getTask: async function (task) {
+      if (this.updateModeId > 0) {
+        console.log("VAI ALTERAR A TAREFA " + this.$store.state.editTaskId);
+        const endGetters = await Promise.all([
+          this.getUsers(),
+          this.getEnviroments(),
+        ]);
+        console.log("finalizado processos!");
+      }
+
+      this.$axios
+        .$get(this.BaseURL + ("tarefas/" + task))
+        .then((response) => {
+          console.log(response);
+          console.log(this.allEnviroments);
+          //request ok
+          if (response.data !== null && response.data !== undefined) {
+            this.task[0].nome = response.data.nome;
+            this.task[0].descricao = response.data.descricao;
+            this.selectedEnviroment = {
+              id: response.data.idAmbienteFK.id,
+              name: response.data.idAmbienteFK.nome,
+            };
+            this.task[0].dataInicio = response.data.dataInicio;
+            this.task[0].idStatusFK = response.data.idStatusFK.id;
+            this.deadline = this.formatDate(response.data.prazo);
+            this.getTaskUser(task);
+            console.log("finalizado gettask");
+          }
+        })
+        .catch((response) => {
+          alert("Problema ao tentar pegar tarefa " + task);
+          console.log(response);
+        });
+    },
   },
   mounted() {
-    this.getUsers();
-    this.getEnviroments();
     this.actualUser.id = 7;
     this.actualUser.nome = "André Felipe Savedra Cruz";
+
+    if (this.$store.state.editTaskId > 0) {
+      this.updateModeId = this.$store.state.editTaskId;
+      this.getTask(this.updateModeId);
+    } else {
+      this.getUsers();
+      this.getEnviroments();
+    }
   },
 };
 </script>

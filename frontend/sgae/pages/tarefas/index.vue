@@ -151,7 +151,7 @@
                       <button class="progressTask">
                         <i class="pi pi-arrow-circle-right" />
                       </button>
-                      <button class="editTask">
+                      <button class="editTask" v-on:click="editTask(slotProps.data.id)">
                         <i class="pi pi-pencil" />
                       </button>
                     </div>
@@ -274,6 +274,7 @@ export default {
   mounted() {
     // this.productService.getProducts().then(data => this.products = data);
     this.getTask(1);
+    this.$store.dispatch("setEditTask",0);
   },
 
   methods: {
@@ -426,7 +427,9 @@ export default {
     },
     deleteTask: function(taskId){
 
-       this.$axios
+       if(taskId > 0)
+       {
+         this.$axios
           .$delete(this.BaseURL + ("tarefas/" + taskId))
           .then((response) => {
             //request ok
@@ -443,7 +446,18 @@ export default {
             alert("Problema ao tentar deletar a tarefa");
             console.log(response);
           });
+       }
+    },
+    editTask: function(taskId){
+      if(taskId > 0)
+      {
+        this.$store.dispatch("setEditTask",taskId)
+        .then((response) => {
+          this.$router.push("/addTarefa");
+        })
+      }
     }
+
   },
 };
 </script>

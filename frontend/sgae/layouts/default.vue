@@ -217,6 +217,7 @@ export default {
         case 1: //button "Home"
           this.$router.push("/home");
           this.checkSideBarVisibility();
+
           break;
 
         case 2: //button "Tarefas"
@@ -226,6 +227,7 @@ export default {
 
         case 3: //button "ad. Tarefa"
           this.$router.push("/addTarefa");
+          this.$store.dispatch("setEditTask",0);
           this.checkSideBarVisibility();
           break;
 
