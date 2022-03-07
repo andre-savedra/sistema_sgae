@@ -126,7 +126,7 @@
             align-items: center;
             justify-content: center;
 
-            .pi-plus{
+            .pi-plus {
                 width: 40px;
             }
         }
@@ -251,6 +251,7 @@
                 color: black !important;
                 font-weight: bold !important;
                 border-radius: 20px;
+
                 &:hover {
                     background-color: #d15850 !important;
                 }
@@ -283,4 +284,36 @@
             }
         }
     }
+}
+
+
+
+.p-image-mask {
+    width: 90vw !important;
+    height: 90vh !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    left: 15vw !important;
+    top: 10vh !important;
+
+    .p-image-toolbar button {
+        background-color: #c22a1f !important;
+        text-align: center !important;
+        margin-bottom: 5px !important;
+        i {
+            color: white !important;
+        }
+    }
+
+    div img {
+        width: 70vw !important;
+        height: 70vh !important;
+    }
+}
+
+.p-image-preview-indicator i {
+    display: none !important;
 }

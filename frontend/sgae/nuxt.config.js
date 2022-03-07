@@ -55,7 +55,9 @@ export default {
       "Calendar",
       "FileUpload",
       "DataView",
-      "DataViewLayoutOptions"
+      "DataViewLayoutOptions",
+      "Carousel",
+      "ImagePreview"
     ],
     locale: {
       firstDayOfWeek: 0,

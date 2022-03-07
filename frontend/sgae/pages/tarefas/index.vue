@@ -461,6 +461,7 @@ export default {
   min-height: calc(100vh - var(--height-default-header));
   width: 100vw;
   max-width: 100vw;
+  background-color: #e3e7eb;
 
   #titleTasks {
     overflow-x: visible !important;

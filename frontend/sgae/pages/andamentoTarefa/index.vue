@@ -1,6 +1,6 @@
 <template>
   <div class="all p-d-flex p-flex-column p-jc-center p-ai-center">
-    <div class="container p-d-flex p-flex-column p-jc-top p-ai-center">
+    <div class="containerTask p-d-flex p-flex-column p-jc-top p-ai-center">
       <div class="titulo p-d-flex p-flex-row p-jc-start p-ai-center">
         <i class="pi pi-check-square" />
         <h1>Gerencie sua tarefa!</h1>
@@ -15,6 +15,7 @@
           <div
             class="subelement p-d-flex p-flex-column p-jc-center p-ai-center"
           >
+            <!-- FIRST ELEMENT -->
             <div
               class="
                 frameGeneralInfo
@@ -33,7 +34,9 @@
                     >Ambiente de Ensino</strong
                   ></label
                 >
-                <p class="lblBasic">{{ this.task[0].idTarefaFK.idAmbienteFK.nome }}</p>
+                <p class="lblBasic">
+                  {{ this.task[0].idTarefaFK.idAmbienteFK.nome }}
+                </p>
               </div>
               <div
                 class="
@@ -49,65 +52,138 @@
               </div>
             </div>
 
-            <div
-              class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
-            >
-              <label class="lblBasic" for="requester"
-                ><i class="pi pi-user" /><strong>Solicitante</strong></label
-              >
-              <label class="lblBasic" for="requester">
-                <Avatar
-                  :image="
-                    BaseURL2 + this.task[0].idTarefaFK.idSolicitanteFK.image
-                  "
-                  size="large"
-                  shape="circle"
-                />
-                <strong class="p-ml-2">{{
-                  limitName(this.task[0].idTarefaFK.idSolicitanteFK.nome)
-                }}</strong>
-              </label>
-            </div>
+            <!-- SECOND ELEMENT -->
+
             <div
               class="
-                customAutocomplete
-                inputElement
-                p-d-flex p-flex-column p-jc-start p-ai-start
+                frameGeneralInfo
+                p-d-flex p-flex-row p-jc-center p-ai-start p-mt-4
               "
             >
-              <label class="lblBasic" for="employee"
-                ><i class="pi pi-users" /><strong>Responsáveis</strong></label
+              <div
+                class="
+                  customAutocomplete
+                  p-d-flex p-flex-column p-jc-start p-ai-start
+                "
               >
-              <div v-for="(taskElement, index) in task" :key="index">
+                <label class="lblBasic" for="requester"
+                  ><i class="pi pi-user" /><strong>Solicitante</strong></label
+                >
                 <label class="lblBasic" for="requester">
                   <Avatar
-                    :image="BaseURL2 + taskElement.idUsuarioFK.image"
+                    :image="
+                      BaseURL2 + this.task[0].idTarefaFK.idSolicitanteFK.image
+                    "
                     size="large"
                     shape="circle"
                   />
                   <strong class="p-ml-2">{{
-                    limitName(taskElement.idUsuarioFK.nome)
+                    limitName(this.task[0].idTarefaFK.idSolicitanteFK.nome)
                   }}</strong>
                 </label>
               </div>
-            </div>
-            <div
-              class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
-            >
-              <label class="lblBasic" for="description"
-                ><i class="pi pi-info-circle" /><strong
-                  >Descrição da Tarefa</strong
-                ></label
+
+              <div
+                class="
+                  customAutocomplete
+                  inputElement
+                  p-d-flex p-flex-column p-jc-start p-ai-start
+                "
               >
-              <textarea
-                class="textInput"
-                type="text"
-                placeholder="Insira aqui a descrição da sua tarefa..."
-                id="description"
-                v-model="task[0].idTarefaFK.descricao"
-                disabled
-              ></textarea>
+                <label class="lblBasic" for="employee"
+                  ><i class="pi pi-users" /><strong>Responsáveis</strong></label
+                >
+                <div v-for="(taskElement, index) in task" :key="index">
+                  <label class="lblBasic" for="requester">
+                    <Avatar
+                      :image="BaseURL2 + taskElement.idUsuarioFK.image"
+                      size="large"
+                      shape="circle"
+                    />
+                    <strong class="p-ml-2">{{
+                      limitName(taskElement.idUsuarioFK.nome)
+                    }}</strong>
+                  </label>
+                </div>
+              </div>
             </div>
+
+            <!-- THIRD ELEMENT -->
+
+            <div
+              class="
+                frameGeneralInfo
+                p-d-flex p-flex-row p-jc-center p-ai-start p-mt-4
+              "
+            >
+              <div
+                class="
+                  inputElement
+                  p-d-flex p-flex-column p-jc-start p-ai-start
+                "
+              >
+                <label class="lblBasic" for="description"
+                  ><i class="pi pi-info-circle" /><strong
+                    >Descrição da Tarefa</strong
+                  ></label
+                >
+                <textarea
+                  class="textInput p-mb-3"
+                  type="text"
+                  placeholder="Insira aqui a descrição da sua tarefa..."
+                  id="description"
+                  v-model="task[0].idTarefaFK.descricao"
+                  disabled
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- PHOTOS GALLERY -->
+
+            <div class="
+            frameGeneralInfo
+            p-d-flex p-flex-row p-jc-center p-ai-center
+            p-mt-3">
+              <div class="taskGallery p-d-flex p-flex-row p-jc-center p-ai-center">
+                <CustomCarousel
+                  v-if="photos"
+                  :photos="photos"
+                  background="white"
+                  :baseURL="BaseURL2"
+                />
+              </div>
+            </div>
+
+            <!-- :responsiveOptions="responsiveOptions" -->
+
+            <!-- <Carousel
+              v-if="photos"
+              :value="photos"
+              :numVisible="3"
+              :numScroll="3"
+            >
+              <template #header>
+              </template>
+              <template #item="slotProps">
+                <div class="product-item">
+                  <div class="product-item-content">
+                    <div >
+                    <h4>{{slotProps.data.nome}}</h4>
+                      <img
+                        :src=" BaseURL2 + slotProps.data.image"
+                        :alt="slotProps.data.nome"
+                        class="product-image"
+                      />
+                    </div>
+                    <div>
+                      <h4 class="mb-1">{{ slotProps.data.nome }}</h4>
+                      <h6 class="mt-0 mb-3">${{ slotProps.data.id }}</h6>
+                      
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </Carousel> -->
 
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
@@ -163,6 +239,24 @@ export default {
       initialStatus: 1,
       deadline: null,
       photos: [],
+      photosNumber: 1,
+      responsiveOptions: [
+        {
+          breakpoint: "1024px",
+          numVisible: 1,
+          numScroll: 1,
+        },
+        {
+          breakpoint: "600px",
+          numVisible: 1,
+          numScroll: 1,
+        },
+        {
+          breakpoint: "480px",
+          numVisible: 1,
+          numScroll: 1,
+        },
+      ],
       task: null,
       actualUser: {
         id: null,
@@ -375,35 +469,6 @@ export default {
         });
     },
 
-    postTaskUsers: async function () {
-      let taskUsers = [];
-
-      this.selectedEmployees.forEach((employee) => {
-        taskUsers.push({
-          idUsuarioFK: employee.id,
-          idTarefaFK: this.taskID,
-        });
-      });
-
-      console.log(taskUsers);
-      console.log(JSON.stringify(taskUsers));
-
-      await this.$axios
-        .$post(this.BaseURL + "tarefasUsuarios/", JSON.stringify(taskUsers), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          //request ok
-          this.postTaskStatus();
-        })
-        .catch((response) => {
-          alert("Problema ao tentar cadastrar os usuários na tarefa");
-          console.log(response);
-        });
-    },
     postTaskStatus: async function () {
       let taskStatus = [
         {
@@ -480,6 +545,27 @@ export default {
           console.log(response);
         });
     },
+    getTaskPhotos: function (task) {
+      this.$axios
+        .$get(this.BaseURL + ("fotos/?tarefa=" + task))
+        .then((response) => {
+          //request ok
+          if (response.data !== null && response.data !== undefined) {
+            this.photos = response.data;
+            this.photosNumber = this.photos.length;
+
+            console.log("FOTOS CARREGADAS");
+            console.log(this.photos);
+
+            console.log("NÚMERO DE FOTOS CARREGADAS");
+            console.log(this.photosNumber);
+          }
+        })
+        .catch((response) => {
+          alert("Problema ao tentar pegar FOTOS da tarefa " + task);
+          console.log(response);
+        });
+    },
   },
   mounted() {
     this.actualUser.id = 7;
@@ -488,9 +574,11 @@ export default {
     if (this.$store.state.editTaskId > 0) {
       this.taskID = this.$store.state.editTaskId;
       this.getTaskUser(this.taskID);
+      this.getTaskPhotos(this.taskID);
     } else {
-      this.taskID = 30;
+      this.taskID = 33;
       this.getTaskUser(this.taskID);
+      this.getTaskPhotos(this.taskID);
     }
   },
 };
@@ -521,12 +609,17 @@ export default {
   $white-back: rgba(255, 255, 255, 1);
   $red-strong: #99180f;
 
+  img {
+    max-width: 400px !important;
+    max-height: 400px !important;
+  }
+
   .titulo,
   .titulo1 {
     font-size: $size-title;
   }
 
-  .container {
+  .containerTask {
     width: $size-container;
     background-color: $white-back;
     border-radius: 15px;
@@ -539,7 +632,6 @@ export default {
       padding-left: 40px;
       color: #fff;
       border-radius: 15px 15px 0px 0px;
-
       background: linear-gradient(-15deg, #313131, #525d69, #c22a1f, #bd244a);
       background-size: 300% 300%;
       animation: gradientPosition 7s ease infinite;
@@ -575,21 +667,33 @@ export default {
 
         .frameGeneralInfo {
           width: 100%;
+          max-width: 100%;
           border: 2px solid $red-strong;
           height: auto;
           border-radius: 7px;
           padding: 10px;
           box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px, rgb(0 0 0 / 17%) 0px 3px 6px;
 
-          .customAutocomplete {            
-            width:48%;
-            .lblBasic {              
+          .customAutocomplete {
+            width: 48%;
+            .lblBasic {
               margin: 7px 0px;
-            }            
+            }
+          }
+
+          .textInput {
+            border: none !important;
+            background-color: rgb(255, 223, 223);
+            font-weight: bold;
+          }
+
+          .taskGallery {
+            width: 95%;
+            max-width: 95%;
+            height: 350px;
+            /* background-color:red; */
           }
         }
-
-       
 
         .basicInputText {
           outline: 0;
@@ -631,7 +735,7 @@ export default {
           resize: none;
         }
 
-        .inputElement {
+        /* .inputElement {
           .lblBasic {
             margin: 18px 0px;
           }
@@ -656,7 +760,7 @@ export default {
               justify-content: center;
             }
           }
-        }
+        } */
       }
     }
     .divisor {
@@ -728,7 +832,7 @@ export default {
     font-size: $size-title;
   }
 
-  .container {
+  .containerTask {
     width: $size-container;
   }
 
@@ -752,7 +856,7 @@ export default {
     font-size: $size-title !important;
   }
 
-  .container {
+  .containerTask {
     width: $size-container;
   }
 
@@ -778,7 +882,7 @@ export default {
     padding: 0px !important;
   }
 
-  .container {
+  .containerTask {
     width: $size-container;
     border-radius: 0px !important;
   }

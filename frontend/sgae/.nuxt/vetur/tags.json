@@ -1,4 +1,7 @@
 {
+  "CustomCarousel": {
+    "description": "Auto imported from components/CustomCarousel.vue"
+  },
   "Profile": {
     "description": "Auto imported from components/Profile.vue"
   }
