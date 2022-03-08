@@ -57,7 +57,7 @@ class Usuarios(models.Model):
 
 class Tarefas(models.Model):
     nome = models.CharField(max_length=80)
-    descricao = models.CharField(max_length=500)
+    descricao = models.CharField(max_length=1000)
     idSolicitanteFK = models.ForeignKey(Usuarios, on_delete=models.CASCADE)    
     idAmbienteFK = models.ForeignKey(Ambientes, on_delete=models.CASCADE)
     prazo = models.DateTimeField()

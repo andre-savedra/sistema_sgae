@@ -5,7 +5,7 @@
       class="carousel slide"
       data-bs-ride="carousel"
     >
-      <div class="btn-mov btn-prev">
+      <div class="btn-mov btn-prev" v-if="photos.length > 1">
         <button
           class="carousel-control-prev"
           type="button"
@@ -18,14 +18,25 @@
         </button>
       </div>
 
-      <div class="carousel-inner" v-if="photos">
-        <div v-for="(photo, index) in photos" :key="index">
-          <div :class="checkActive(index)">
-            <ImagePreview :src="url + photo.image" :alt="photo.nome" preview />
-          </div>
+      <div class="carousel-inner" v-if="photos.length > 0">
+        <div class="carousel-item active">
+          <ImagePreview            
+            :src="url + photos[0].image"
+            :alt="photos[0].nome"
+            preview
+          />          
         </div>
+        <div class="carousel-item" v-for="(photo, index) in photosCopy" :key="index">
+          <ImagePreview
+            v-if="photosCopy"
+            :src="url + photo.image"
+            :alt="photo.nome"
+            preview
+          />         
+        </div>
+        
       </div>
-      <div class="btn-mov btn-next">
+      <div class="btn-mov btn-next" v-if="photos.length > 1">
         <button
           class="carousel-control-next"
           type="button"
@@ -58,8 +69,7 @@ export default {
   props: ["photos", "background", "baseURL"],
   data() {
     return {
-      photosComponent: this.photos,
-      photosNumber: this.photos.length,
+      photosCopy: null,
       url: this.baseURL,
     };
   },
@@ -70,15 +80,13 @@ export default {
       };
     },
   },
-  methods: {
-    checkActive(id) {
-      if (id === 0) return "carousel-item active";
-      else return "carousel-item";
-    },
-  },
+  methods: {},
   mounted() {
-    console.log("FOTOS COMPONENTE");
-    console.log(this.photos);
+    if(this.photos.length > 0)
+    {
+      this.photosCopy = structuredClone(this.photos);
+      this.photosCopy.shift();      
+    }    
   },
 };
 </script>
@@ -111,7 +119,7 @@ export default {
       align-items: center;
       justify-content: center;
       width: 90%;
-      height: 90%;
+      height: 90%;      
 
       div .carousel-item {
         .p-image-preview-container {

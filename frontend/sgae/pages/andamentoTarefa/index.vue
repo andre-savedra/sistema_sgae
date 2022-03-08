@@ -122,11 +122,10 @@
                   p-d-flex p-flex-column p-jc-start p-ai-start
                 "
               >
-                <label class="lblBasic" for="description"
-                  ><i class="pi pi-info-circle" /><strong
-                    >Descrição da Tarefa</strong
-                  ></label
-                >
+                <label class="lblBasic p-ml-3" for="description">
+                  <i class="pi pi-info-circle" />
+                  <strong>Descrição da Tarefa</strong>
+                </label>
                 <textarea
                   class="textInput p-mb-3"
                   type="text"
@@ -140,50 +139,61 @@
 
             <!-- PHOTOS GALLERY -->
 
-            <div class="
-            frameGeneralInfo
-            p-d-flex p-flex-row p-jc-center p-ai-center
-            p-mt-3">
-              <div class="taskGallery p-d-flex p-flex-row p-jc-center p-ai-center">
-                <CustomCarousel
-                  v-if="photos"
-                  :photos="photos"
-                  background="white"
-                  :baseURL="BaseURL2"
-                />
+            <div
+              class="
+                frameGeneralInfo
+                p-d-flex p-flex-row p-jc-center p-ai-center p-mt-3
+              "
+            >
+              <div
+                class="
+                  taskGallery
+                  p-d-flex p-flex-column p-jc-center p-ai-center
+                "
+              >
+                <label class="lblBasic" for="description">
+                  <i class="pi pi-camera" />
+                  <strong>Fotos Anexadas</strong>
+                </label>
+                <div class="customContainer">
+                  <CustomCarousel
+                    v-if="photos.length > 0"
+                    :photos="photos"
+                    background="white"
+                    :baseURL="BaseURL2"
+                  />
+                </div>
               </div>
             </div>
 
-            <!-- :responsiveOptions="responsiveOptions" -->
+            <!-- TIMELINE -->
 
-            <!-- <Carousel
-              v-if="photos"
-              :value="photos"
-              :numVisible="3"
-              :numScroll="3"
+            <div
+              class="
+                frameGeneralInfo
+                p-d-flex p-flex-column p-jc-center p-ai-center p-mt-3
+              "
             >
-              <template #header>
-              </template>
-              <template #item="slotProps">
-                <div class="product-item">
-                  <div class="product-item-content">
-                    <div >
-                    <h4>{{slotProps.data.nome}}</h4>
-                      <img
-                        :src=" BaseURL2 + slotProps.data.image"
-                        :alt="slotProps.data.nome"
-                        class="product-image"
-                      />
-                    </div>
-                    <div>
-                      <h4 class="mb-1">{{ slotProps.data.nome }}</h4>
-                      <h6 class="mt-0 mb-3">${{ slotProps.data.id }}</h6>
-                      
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </Carousel> -->
+              <label class="lblBasic p-ml-3" for="description">
+                <i class="pi pi-clock" />
+                <strong>Progresso Tarefa</strong>
+              </label>
+
+              <Timeline
+                v-if="taskStatusArray"
+                class="p-d-flex p-flex-row p-jc-center p-ai-center"
+                :value="taskStatusArray"
+                layout="horizontal"
+                align="bottom"
+              >
+                <template #opposite> </template>
+                <template #content="slotProps">
+                  {{ slotProps.item.nome }}
+                </template>
+              </Timeline>
+            </div>
+
+            <!-- FOTOS UPLOAD -->
 
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
@@ -240,28 +250,21 @@ export default {
       deadline: null,
       photos: [],
       photosNumber: 1,
-      responsiveOptions: [
-        {
-          breakpoint: "1024px",
-          numVisible: 1,
-          numScroll: 1,
-        },
-        {
-          breakpoint: "600px",
-          numVisible: 1,
-          numScroll: 1,
-        },
-        {
-          breakpoint: "480px",
-          numVisible: 1,
-          numScroll: 1,
-        },
-      ],
       task: null,
       actualUser: {
         id: null,
         nome: null,
       },
+      taskStatus: null,
+      taskStatusArray: [],
+      iconArrayStatus: [
+        "pi-file",
+        "pi-users",
+        "pi-check-circle",
+        "pi-flag",
+        "pi-tags",
+        "pi-folder",
+      ],
     };
   },
   methods: {
@@ -362,74 +365,6 @@ export default {
         return val[0] + "T" + val[1] + ":00-03:00";
       } else return input;
     },
-    // getUsers: async function () {
-    //   this.allUsers.length = 0;
-
-    //   await this.$axios
-    //     .$get(this.BaseURL + "usuarios/")
-    //     .then((dataResponse) => {
-    //       dataResponse.data.forEach((user) => {
-    //         this.allUsers.push({
-    //           name: user.nome,
-    //           id: user.id,
-    //         });
-    //       });
-    //       console.log("this.allUsers");
-    //       console.log(this.allUsers);
-    //     })
-    //     .catch((response) => {
-    //       console.log("problema ao pegar usuarios");
-    //       console.log(response);
-    //     });
-    // },
-    // getEnviroments: async function () {
-    //   this.allUsers.length = 0;
-
-    //   await this.$axios
-    //     .$get(this.BaseURL + "ambientes/")
-    //     .then((dataResponse) => {
-    //       dataResponse.data.forEach((enviroment) => {
-    //         this.allEnviroments.push({
-    //           id: enviroment.id,
-    //           name: enviroment.nome,
-    //         });
-    //       });
-    //       console.log("this.allEnviroments");
-    //       console.log(this.allEnviroments);
-    //     })
-    //     .catch((response) => {
-    //       console.log("problema ao pegar ambientes");
-    //       console.log(response);
-    //     });
-    // },
-    // searchEmployee(event) {
-    //   setTimeout(() => {
-    //     if (!event.query.trim().length) {
-    //       this.filteredEmployees = [...this.allUsers];
-    //     } else {
-    //       this.filteredEmployees = this.allUsers.filter((user) => {
-    //         return user.name
-    //           .toLowerCase()
-    //           .startsWith(event.query.toLowerCase());
-    //       });
-    //     }
-    //   }, 250);
-    // },
-    // searchEnviroment(event) {
-    //   setTimeout(() => {
-    //     if (!event.query.trim().length) {
-    //       this.filteredEnviroments = [...this.allEnviroments];
-    //     } else {
-    //       this.filteredEnviroments = this.allEnviroments.filter(
-    //         (enviroment) => {
-    //           return enviroment.name
-    //             .toLowerCase()
-    //             .startsWith(event.query.toLowerCase());
-    //         }
-    //       );
-    //     }
-    //   }, 250);
-    // },
     virtualClickUpload: function (buttonText) {
       let el = document.querySelectorAll(".p-fileupload-buttonbar button");
       el.forEach((element, index) => {
@@ -526,6 +461,62 @@ export default {
       console.log("my custom uploader...");
       console.log(event);
     },
+    getTaskStatus: async function (task) {
+      this.$axios
+        .$get(this.BaseURL + ("tarefasStatus/?tarefa=" + task))
+        .then((response) => {
+          console.log(response);
+
+          //request ok
+          if (response.data !== null && response.data !== undefined) {
+            this.taskStatus = structuredClone(response.data);
+
+            this.taskStatus.map((status, index) => {
+              this.taskStatusArray[index].data = status.data;
+              this.taskStatusArray[index].color = "#4a9e29";
+            });
+            
+            console.log(this.taskStatus);
+            console.log("finalizado get task status");
+
+            console.log("array status completo");
+            console.log(this.taskStatusArray);
+          }
+        })
+        .catch((response) => {
+          alert("Problema ao tentar pegar status da tarefa " + task);
+          console.log(response);
+        });
+    },
+    getStatusType: async function () {
+      this.$axios
+        .$get(this.BaseURL + "status/")
+        .then((response) => {
+          console.log(response);
+
+          //request ok
+          if (response.data !== null && response.data !== undefined) {
+            response.data.map((typeSts, index) => {
+              this.taskStatusArray.push({
+                id: typeSts.id,
+                nome: typeSts.nome,
+                data: "",
+                color: "#99180f",
+                icon: this.iconArrayStatus[index],
+              });
+            });
+           
+            console.log(this.taskStatusArray);
+            console.log("finalizado get status TYPE");
+
+            this.getTaskStatus(this.taskID);
+          }
+        })
+        .catch((response) => {
+          alert("Problema ao tentar pegar status type");
+          console.log(response);
+        });
+    },
     getTaskUser: async function (task) {
       this.$axios
         .$get(this.BaseURL + ("tarefasUsuarios/?tarefaCompleta=" + task))
@@ -554,11 +545,11 @@ export default {
             this.photos = response.data;
             this.photosNumber = this.photos.length;
 
-            console.log("FOTOS CARREGADAS");
-            console.log(this.photos);
+            // console.log("FOTOS CARREGADAS");
+            // console.log(this.photos);
 
-            console.log("NÚMERO DE FOTOS CARREGADAS");
-            console.log(this.photosNumber);
+            // console.log("NÚMERO DE FOTOS CARREGADAS");
+            // console.log(this.photosNumber);
           }
         })
         .catch((response) => {
@@ -571,15 +562,13 @@ export default {
     this.actualUser.id = 7;
     this.actualUser.nome = "André Felipe Savedra Cruz";
 
-    if (this.$store.state.editTaskId > 0) {
+    if (this.$store.state.editTaskId > 0)
       this.taskID = this.$store.state.editTaskId;
-      this.getTaskUser(this.taskID);
-      this.getTaskPhotos(this.taskID);
-    } else {
-      this.taskID = 33;
-      this.getTaskUser(this.taskID);
-      this.getTaskPhotos(this.taskID);
-    }
+    else this.taskID = 33;
+
+    this.getTaskUser(this.taskID);
+    this.getTaskPhotos(this.taskID);
+    this.getStatusType();
   },
 };
 </script>
@@ -690,8 +679,12 @@ export default {
           .taskGallery {
             width: 95%;
             max-width: 95%;
-            height: 350px;
-            /* background-color:red; */
+            height: 360px;
+
+            .customContainer {
+              height: 310px;
+              width: 100%;
+            }
           }
         }
 

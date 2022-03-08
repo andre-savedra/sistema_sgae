@@ -57,7 +57,8 @@ export default {
       "DataView",
       "DataViewLayoutOptions",
       "Carousel",
-      "ImagePreview"
+      "ImagePreview",
+      "Timeline"
     ],
     locale: {
       firstDayOfWeek: 0,
