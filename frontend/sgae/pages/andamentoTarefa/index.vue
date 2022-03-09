@@ -176,19 +176,27 @@
             >
               <label class="lblBasic p-ml-3" for="description">
                 <i class="pi pi-clock" />
-                <strong>Progresso Tarefa</strong>
+                <strong>Progresso da Tarefa</strong>
               </label>
 
               <Timeline
                 v-if="taskStatusArray"
-                class="p-d-flex p-flex-row p-jc-center p-ai-center"
+                class="p-d-flex p-flex-row p-jc-center p-ai-center timeprogress"
                 :value="taskStatusArray"
                 layout="horizontal"
                 align="bottom"
               >
                 <template #opposite> </template>
                 <template #content="slotProps">
-                  {{ slotProps.item.nome }}
+                  <strong>{{ slotProps.item.nome }}</strong>
+                  <br>                  
+                  {{ formatDate(slotProps.item.data)}}                  
+                </template>
+                <template #marker="slotProps">
+                  <span
+                    class="custom-marker shadow-2 ">                    
+                    <i :style="{backgroundColor: slotProps.item.color}" :class="'timeicon pi ' + slotProps.item.icon"></i>
+                  </span>
                 </template>
               </Timeline>
             </div>
@@ -265,6 +273,8 @@ export default {
         "pi-tags",
         "pi-folder",
       ],
+      colorNotConcluded:"#d44f46",
+      colorConcluded: "#77c758",
     };
   },
   methods: {
@@ -473,9 +483,9 @@ export default {
 
             this.taskStatus.map((status, index) => {
               this.taskStatusArray[index].data = status.data;
-              this.taskStatusArray[index].color = "#4a9e29";
+              this.taskStatusArray[index].color = this.colorConcluded;
             });
-            
+
             console.log(this.taskStatus);
             console.log("finalizado get task status");
 
@@ -500,12 +510,12 @@ export default {
               this.taskStatusArray.push({
                 id: typeSts.id,
                 nome: typeSts.nome,
-                data: "",
-                color: "#99180f",
+                data: " ",
+                color: this.colorNotConcluded,
                 icon: this.iconArrayStatus[index],
               });
             });
-           
+
             console.log(this.taskStatusArray);
             console.log("finalizado get status TYPE");
 
@@ -684,6 +694,36 @@ export default {
             .customContainer {
               height: 310px;
               width: 100%;
+            }
+          }
+
+
+
+          .timeprogress {
+            width: 100%;
+
+            .p-timeline-event{
+              
+              .custom-marker{
+                width: auto !important;
+                height: auto !important;
+                
+                .timeicon{
+                  font-size: 23px;
+                  font-weight: bold;
+                  width: 46px;
+                  min-width:46px;
+                  height: 36px;
+                  min-height: 36px;
+                  border-radius:30px !important;
+                  display: table-cell;
+                  text-align: center;
+                  vertical-align:middle;
+                  color: black;
+                }
+              }
+              
+              
             }
           }
         }

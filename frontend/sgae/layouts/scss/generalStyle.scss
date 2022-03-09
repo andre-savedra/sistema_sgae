@@ -303,6 +303,7 @@
         background-color: #c22a1f !important;
         text-align: center !important;
         margin-bottom: 5px !important;
+
         i {
             color: white !important;
         }
@@ -316,4 +317,33 @@
 
 .p-image-preview-indicator i {
     display: none !important;
+}
+
+
+
+// PROGRESS PAGE
+
+.timeprogress {
+
+    .p-timeline-event {
+        flex: 1 !important;
+
+        .p-timeline-event-content{
+            min-height: 72px !important;
+          }   
+        .p-timeline-event-separator .p-timeline-event-connector {
+            background-color: #99180f !important;            
+            margin-right: 4px;
+            margin-left: 4px;
+            height: 6px;
+        }
+
+     
+        &:first-child {
+            margin-left: 9%;
+        }
+
+        
+
+    }
 }
