@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from .models import *
 from .serializers import *
-import datetime
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rest_framework.views import APIView
 from rest_framework.response import Response
