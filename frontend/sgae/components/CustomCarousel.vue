@@ -20,21 +20,24 @@
 
       <div class="carousel-inner" v-if="photos.length > 0">
         <div class="carousel-item active">
-          <ImagePreview            
+          <ImagePreview
             :src="url + photos[0].image"
             :alt="photos[0].nome"
             preview
-          />          
+          />
         </div>
-        <div class="carousel-item" v-for="(photo, index) in photosCopy" :key="index">
+        <div
+          class="carousel-item"
+          v-for="(photo, index) in photosCopy"
+          :key="index"
+        >
           <ImagePreview
             v-if="photosCopy"
             :src="url + photo.image"
             :alt="photo.nome"
             preview
-          />         
+          />
         </div>
-        
       </div>
       <div class="btn-mov btn-next" v-if="photos.length > 1">
         <button
@@ -82,11 +85,10 @@ export default {
   },
   methods: {},
   mounted() {
-    if(this.photos.length > 0)
-    {
+    if (this.photos.length > 0) {
       this.photosCopy = structuredClone(this.photos);
-      this.photosCopy.shift();      
-    }    
+      this.photosCopy.shift();
+    }
   },
 };
 </script>
@@ -119,7 +121,7 @@ export default {
       align-items: center;
       justify-content: center;
       width: 90%;
-      height: 90%;      
+      height: 90%;
 
       div .carousel-item {
         .p-image-preview-container {
@@ -167,6 +169,13 @@ export default {
           color: white !important;
         }
       }
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    .btn-mov {
+      height: 40px !important;
+      width: 30px !important;
     }
   }
 }

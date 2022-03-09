@@ -48,7 +48,9 @@
                 <label class="lblBasic" for="deadline"
                   ><i class="pi pi-calendar" /><strong>Prazo</strong></label
                 >
-                <p>{{ this.formatDate(this.task[0].idTarefaFK.prazo) }}</p>
+                <p class="pBasic">
+                  {{ this.formatDate(this.task[0].idTarefaFK.prazo) }}
+                </p>
               </div>
             </div>
 
@@ -189,15 +191,19 @@
                 <template #opposite> </template>
                 <template #content="slotProps">
                   <strong>
-                    <span>{{ slotProps.item.nome }}</span>
+                    <span class="timename">{{ slotProps.item.nome }}</span>
                   </strong>
                   <br />
-                  <span>{{ formatDate(slotProps.item.data) }}</span>
+                  <span class="timedate">{{
+                    formatDate(slotProps.item.data)
+                  }}</span>
                 </template>
                 <template #marker="slotProps">
                   <span class="custom-marker shadow-2">
                     <i
-                      v-on:click="slotProps.item.showDialog = !slotProps.item.showDialog"
+                      v-on:click="
+                        slotProps.item.showDialog = !slotProps.item.showDialog
+                      "
                       :style="{ backgroundColor: slotProps.item.color }"
                       :class="'timeicon pi ' + slotProps.item.icon"
                       v-tooltip.top="
@@ -212,18 +218,23 @@
             </div>
 
             <div v-if="taskStatusArray">
-              <div v-for="(dialog, index) in taskStatusArray"
-              :key="index">
-              <Dialog
-                class="dialogTimeline "
-                :header="'Progresso: ' + dialog.nome"
-                :visible.sync="dialog.showDialog"
-                :containerStyle="{ width: '50vw'}"
-              >
-                <strong><span class="m-0 "><i :class="'pi ' + dialog.icon"/>{{dialog.nome}}</span></strong>
-                <strong><p class="m-0">{{formatDate(dialog.data)}}</p></strong>
-              </Dialog>
-            </div>
+              <div v-for="(dialog, index) in taskStatusArray" :key="index">
+                <Dialog
+                  class="dialogTimeline"
+                  :header="'Progresso: ' + dialog.nome"
+                  :visible.sync="dialog.showDialog"
+                  :containerStyle="{ width: '50vw' }"
+                >
+                  <strong
+                    ><span class="m-0"
+                      ><i :class="'pi ' + dialog.icon" />{{ dialog.nome }}</span
+                    ></strong
+                  >
+                  <strong
+                    ><p class="m-0">{{ formatDate(dialog.data) }}</p></strong
+                  >
+                </Dialog>
+              </div>
             </div>
 
             <!-- FOTOS UPLOAD -->
@@ -299,10 +310,10 @@ export default {
         "pi-folder",
       ],
       colorNotConcluded: "#d44f46",
-      colorConcluded: "#77c758",      
+      colorConcluded: "#77c758",
     };
   },
-  methods: {    
+  methods: {
     limitText: function (data, limit) {
       if (data !== null && data !== undefined) {
         if (data.length > limit) return data.slice(0, limit) + "...";
@@ -626,6 +637,7 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
   background-image: url("@/static/postit.jpg");
+  
 
   $size-title: 15px;
   $size-topic: 15px;
@@ -699,6 +711,11 @@ export default {
           padding: 10px;
           box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px, rgb(0 0 0 / 17%) 0px 3px 6px;
 
+          .lblBasic .p-avatar-lg {
+            width: 4rem;
+            height: 3.5rem;
+          }
+
           .customAutocomplete {
             width: 48%;
             .lblBasic {
@@ -752,21 +769,6 @@ export default {
               }
             }
           }
-
-          .dialogTimeline{
-            .p-dialog-header{
-              background-color:red;
-              display:flex;
-              flex-direction: row;
-              align-items: center;
-              justify-content: center;
-              span{
-                width: auto;
-              }
-            }
-          }
-
-
         }
 
         .basicInputText {
@@ -948,6 +950,9 @@ export default {
 }
 
 @media screen and (max-width: 610px) {
+  .all .containerTask .divisor{
+    margin-top: 35px !important;
+  }
   $size-title: 11px;
   $size-topic: 13px;
   $size-container: 87vw !important;
@@ -984,7 +989,20 @@ export default {
   }
 }
 
-@media screen and (max-width: 545px) {
+@media screen and (max-width: 540px) {
+  .buttons button{
+    margin: 15px 0px !important;
+  }
+  .lblBasic .p-avatar-lg {
+    width: 3.5rem !important;
+    height: 3rem !important;
+  }
+  .frameGeneralInfo .lblBasic,
+  .frameGeneralInfo .pBasic,
+  .inputElement .lblBasic strong {
+    font-size: 13px !important;
+  }
+
   .taskGallery {
     height: 260px !important;
 
@@ -993,25 +1011,6 @@ export default {
     }
   }
 
-  .timeprogress {
-    .p-timeline-event {
-      .p-timeline-event-content span {
-        font-size: 11px !important;
-      }
-      .custom-marker {
-        .timeicon {
-          font-size: 17px !important;
-          width: 35px !important;
-          min-width: 35px !important;
-          height: 31px !important;
-          min-height: 31px !important;
-        }
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 400px) {
   $size-container: 100vw !important;
 
   .all {
@@ -1039,6 +1038,86 @@ export default {
   .customDatePicker {
     width: 60% !important;
     margin-left: 15px;
+  }
+
+  .timeprogress {
+    .p-timeline-event {
+      .timedate,
+      .timename {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .all{
+    background: white;
+  }
+  .taskGallery {
+    height: 240px !important;
+
+    .customContainer {
+      height: 230px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .buttons button{
+    margin: 0px !important;    
+  }
+  .lblBasic .p-avatar-lg {
+    width: 3rem !important;
+    height: 2.5rem !important;
+  }
+  .taskGallery {
+    height: 210px !important;
+
+    .customContainer {
+      height: 200px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 315px) {
+  .buttons button{
+    height: 20px !important;    
+  }
+
+  .lblBasic .p-avatar-lg {
+    width: 2.5rem !important;
+    height: 2rem !important;
+  }
+
+  .titulo,
+  .titulo1 {
+    font-size: 10px !important;
+    i {
+      font-size: 17px !important;
+    }
+  }
+
+  .titulo {
+    padding-left: 20px !important;
+  }
+
+  .taskGallery {
+    height: 180px !important;
+
+    .customContainer {
+      height: 170px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 275px) {
+  .taskGallery {
+    height: 160px !important;
+
+    .customContainer {
+      height: 150px !important;
+    }
   }
 }
 </style>
