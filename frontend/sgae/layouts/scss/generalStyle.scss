@@ -328,9 +328,9 @@
     .p-timeline-event {
         flex: 1 !important;
 
-        .p-timeline-event-content{
-            min-height: 72px !important;
-          }   
+        .p-timeline-event-opposite{
+            display: none !important;
+          }
         .p-timeline-event-separator .p-timeline-event-connector {
             background-color: #99180f !important;            
             margin-right: 4px;
@@ -347,3 +347,46 @@
 
     }
 }
+
+.dialogTimeline{
+    border-radius: 15px !important   ;
+    .p-dialog-header{
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        background-color:rgba(194, 42, 31, 0.84) !important;
+        color: white !important;        
+        padding: 10px 15px !important;
+
+        .p-dialog-header-icons button{
+            color: white !important;
+        }
+        
+        span,
+        .p-dialog-header-icons{
+            width: auto;
+        }
+    }
+    .p-dialog-content{
+        display:flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        i{
+            margin: 10px 0px;
+            width:25px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        strong, p{
+            width: auto;
+        }
+        p{
+            margin: 14px;
+        }
+
+    }
+  }

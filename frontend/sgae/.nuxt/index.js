@@ -14,6 +14,7 @@ import { createStore } from './store.js'
 /* Plugins */
 
 import nuxt_plugin_plugin_17a7e348 from 'nuxt_plugin_plugin_17a7e348' // Source: .\\components\\plugin.js (mode: 'all')
+import nuxt_plugin_dialogplugin3eae9774_32ee8fd3 from 'nuxt_plugin_dialogplugin3eae9774_32ee8fd3' // Source: .\\dialog.plugin.3eae9774.js (mode: 'all')
 import nuxt_plugin_timelineplugin6be9c27f_60a7466d from 'nuxt_plugin_timelineplugin6be9c27f_60a7466d' // Source: .\\timeline.plugin.6be9c27f.js (mode: 'all')
 import nuxt_plugin_imagepreviewplugin4dbf024b_18085d1b from 'nuxt_plugin_imagepreviewplugin4dbf024b_18085d1b' // Source: .\\imagepreview.plugin.4dbf024b.js (mode: 'all')
 import nuxt_plugin_carouselplugin5b7a9644_0c4a9598 from 'nuxt_plugin_carouselplugin5b7a9644_0c4a9598' // Source: .\\carousel.plugin.5b7a9644.js (mode: 'all')
@@ -232,6 +233,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_plugin_17a7e348 === 'function') {
     await nuxt_plugin_plugin_17a7e348(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_dialogplugin3eae9774_32ee8fd3 === 'function') {
+    await nuxt_plugin_dialogplugin3eae9774_32ee8fd3(app.context, inject)
   }
 
   if (typeof nuxt_plugin_timelineplugin6be9c27f_60a7466d === 'function') {

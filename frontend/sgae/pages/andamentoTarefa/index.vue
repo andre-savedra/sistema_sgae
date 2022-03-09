@@ -181,24 +181,49 @@
 
               <Timeline
                 v-if="taskStatusArray"
-                class="p-d-flex p-flex-row p-jc-center p-ai-center timeprogress"
+                class="p-d-flex p-flex-row p-jc-center p-ai-start timeprogress"
                 :value="taskStatusArray"
                 layout="horizontal"
-                align="bottom"
+                align="top"
               >
                 <template #opposite> </template>
                 <template #content="slotProps">
-                  <strong>{{ slotProps.item.nome }}</strong>
-                  <br>                  
-                  {{ formatDate(slotProps.item.data)}}                  
+                  <strong>
+                    <span>{{ slotProps.item.nome }}</span>
+                  </strong>
+                  <br />
+                  <span>{{ formatDate(slotProps.item.data) }}</span>
                 </template>
                 <template #marker="slotProps">
-                  <span
-                    class="custom-marker shadow-2 ">                    
-                    <i :style="{backgroundColor: slotProps.item.color}" :class="'timeicon pi ' + slotProps.item.icon"></i>
+                  <span class="custom-marker shadow-2">
+                    <i
+                      v-on:click="slotProps.item.showDialog = !slotProps.item.showDialog"
+                      :style="{ backgroundColor: slotProps.item.color }"
+                      :class="'timeicon pi ' + slotProps.item.icon"
+                      v-tooltip.top="
+                        slotProps.item.nome +
+                        ' - ' +
+                        formatDate(slotProps.item.data)
+                      "
+                    ></i>
                   </span>
                 </template>
               </Timeline>
+            </div>
+
+            <div v-if="taskStatusArray">
+              <div v-for="(dialog, index) in taskStatusArray"
+              :key="index">
+              <Dialog
+                class="dialogTimeline "
+                :header="'Progresso: ' + dialog.nome"
+                :visible.sync="dialog.showDialog"
+                :containerStyle="{ width: '50vw'}"
+              >
+                <strong><span class="m-0 "><i :class="'pi ' + dialog.icon"/>{{dialog.nome}}</span></strong>
+                <strong><p class="m-0">{{formatDate(dialog.data)}}</p></strong>
+              </Dialog>
+            </div>
             </div>
 
             <!-- FOTOS UPLOAD -->
@@ -273,11 +298,11 @@ export default {
         "pi-tags",
         "pi-folder",
       ],
-      colorNotConcluded:"#d44f46",
-      colorConcluded: "#77c758",
+      colorNotConcluded: "#d44f46",
+      colorConcluded: "#77c758",      
     };
   },
-  methods: {
+  methods: {    
     limitText: function (data, limit) {
       if (data !== null && data !== undefined) {
         if (data.length > limit) return data.slice(0, limit) + "...";
@@ -513,6 +538,7 @@ export default {
                 data: " ",
                 color: this.colorNotConcluded,
                 icon: this.iconArrayStatus[index],
+                showDialog: false,
               });
             });
 
@@ -697,35 +723,50 @@ export default {
             }
           }
 
-
-
           .timeprogress {
             width: 100%;
 
-            .p-timeline-event{
-              
-              .custom-marker{
+            .p-timeline-event {
+              .custom-marker {
                 width: auto !important;
                 height: auto !important;
-                
-                .timeicon{
+                cursor: pointer !important;
+
+                .timeicon {
                   font-size: 23px;
                   font-weight: bold;
                   width: 46px;
-                  min-width:46px;
+                  min-width: 46px;
                   height: 36px;
                   min-height: 36px;
-                  border-radius:30px !important;
+                  border-radius: 30px !important;
                   display: table-cell;
                   text-align: center;
-                  vertical-align:middle;
+                  vertical-align: middle;
                   color: black;
+
+                  &:hover {
+                    color: rgb(90, 80, 80);
+                  }
                 }
               }
-              
-              
             }
           }
+
+          .dialogTimeline{
+            .p-dialog-header{
+              background-color:red;
+              display:flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+              span{
+                width: auto;
+              }
+            }
+          }
+
+
         }
 
         .basicInputText {
@@ -879,10 +920,45 @@ export default {
   }
 }
 
+@media screen and (max-width: 760px) {
+  .taskGallery {
+    height: 320px !important;
+
+    .customContainer {
+      height: 280px !important;
+    }
+  }
+
+  .timeprogress {
+    .p-timeline-event {
+      .p-timeline-event-content span {
+        font-size: 13px !important;
+      }
+      .custom-marker {
+        .timeicon {
+          font-size: 18px !important;
+          width: 39px !important;
+          min-width: 39px !important;
+          height: 35px !important;
+          min-height: 35px !important;
+        }
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 610px) {
   $size-title: 11px;
   $size-topic: 13px;
   $size-container: 87vw !important;
+
+  .taskGallery {
+    height: 290px !important;
+
+    .customContainer {
+      height: 270px !important;
+    }
+  }
 
   .titulo,
   .titulo1 {
@@ -905,6 +981,33 @@ export default {
   .customDatePicker {
     width: 50% !important;
     margin-left: 15px;
+  }
+}
+
+@media screen and (max-width: 545px) {
+  .taskGallery {
+    height: 260px !important;
+
+    .customContainer {
+      height: 250px !important;
+    }
+  }
+
+  .timeprogress {
+    .p-timeline-event {
+      .p-timeline-event-content span {
+        font-size: 11px !important;
+      }
+      .custom-marker {
+        .timeicon {
+          font-size: 17px !important;
+          width: 35px !important;
+          min-width: 35px !important;
+          height: 31px !important;
+          min-height: 31px !important;
+        }
+      }
+    }
   }
 }
 
