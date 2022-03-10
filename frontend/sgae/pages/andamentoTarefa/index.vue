@@ -218,7 +218,7 @@
             </div>
 
             <div v-if="taskStatusArray">
-              <div v-for="(dialog, index) in taskStatusArray" :key="index">
+              <div class="timelineContainer" v-for="(dialog, index) in taskStatusArray" :key="index">
                 <Dialog
                   class="dialogTimeline"
                   :header="'Progresso: ' + dialog.nome"
@@ -810,33 +810,7 @@ export default {
           word-break: break-all;
           resize: none;
         }
-
-        /* .inputElement {
-          .lblBasic {
-            margin: 18px 0px;
-          }
-          .customDatePicker {
-            width: 30%;
-            margin-left: 15px;
-          }
-
-          .customFileUpload {
-            width: 95%;
-            margin-left: 15px;
-            border: 2px solid black;
-            border-radius: 15px;
-            padding: 10px;
-
-            .p-fileupload-buttonbar {
-              border: none !important;
-              border-color: white !important;
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              justify-content: center;
-            }
-          }
-        } */
+       
       }
     }
     .divisor {
@@ -1064,6 +1038,22 @@ export default {
 }
 
 @media screen and (max-width: 390px) {
+
+  
+  .timeprogress {
+    .p-timeline-event {      
+      .custom-marker {
+        .timeicon {
+          font-size: 16px !important;
+          width: 30px !important;
+          min-width: 30px !important;
+          height: 30px !important;
+          min-height: 30px !important;
+        }
+      }
+    }
+  }
+
   .buttons button{
     margin: 0px !important;    
   }
@@ -1082,7 +1072,8 @@ export default {
 
 @media screen and (max-width: 315px) {
   .buttons button{
-    height: 20px !important;    
+    height: 20px !important;
+    padding: 17px 7px !important;  
   }
 
   .lblBasic .p-avatar-lg {
@@ -1120,4 +1111,6 @@ export default {
     }
   }
 }
+
+
 </style>

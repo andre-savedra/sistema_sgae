@@ -299,25 +299,47 @@
     left: 15vw !important;
     top: 10vh !important;
 
-    .p-image-toolbar button {
-        background-color: #c22a1f !important;
-        text-align: center !important;
+    .p-image-toolbar {
         margin-bottom: 5px !important;
+        z-index: 1002;
 
-        i {
-            color: white !important;
+        button {
+            background-color: #c22a1f !important;
+            text-align: center !important;
+
+            i {
+                color: white !important;
+            }
         }
-    }
+    }    
 
-    div img {
+    div img {      
         width: 70vw !important;
         height: 70vh !important;
+        max-height: 70vw !important;
     }
 }
 
 .p-image-preview-indicator i {
     display: none !important;
 }
+
+@media screen and (max-width: 580px) {
+    .p-image-mask {
+        left: 10vw !important;
+        top: 5vh !important;
+        
+        div img {
+            width: 80vw !important;
+            height: 70vh !important;
+            max-height: 80vw !important;
+        }
+    }
+}
+
+
+
+
 
 
 
@@ -328,11 +350,12 @@
     .p-timeline-event {
         flex: 1 !important;
 
-        .p-timeline-event-opposite{
+        .p-timeline-event-opposite {
             display: none !important;
-          }
+        }
+
         .p-timeline-event-separator .p-timeline-event-connector {
-            background-color: #99180f !important;            
+            background-color: #99180f !important;
             margin-right: 4px;
             margin-left: 4px;
             height: 6px;
@@ -345,45 +368,82 @@
     }
 }
 
-.dialogTimeline{
-    border-radius: 15px !important   ;
-    .p-dialog-header{
-        display:flex;
+.timelineContainer .p-dialog-mask .p-dialog {
+    border-radius: 15px !important;
+
+    .p-dialog-header {
+        display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        background-color:rgba(194, 42, 31, 0.84) !important;
-        color: white !important;        
+        background-color: rgba(194, 42, 31, 0.84) !important;
+        color: white !important;
         padding: 10px 15px !important;
 
-        .p-dialog-header-icons button{
+        .p-dialog-header-icons button {
             color: white !important;
         }
-        
+
         span,
-        .p-dialog-header-icons{
+        .p-dialog-header-icons {
             width: auto;
         }
     }
-    .p-dialog-content{
-        display:flex;
+
+    .p-dialog-content {
+        display: flex;
         flex-direction: row;
         align-items: flex-start;
         justify-content: flex-start;
 
-        i{
+        i {
             margin: 10px 0px;
-            width:25px;
+            width: 25px;
             font-size: 20px;
             font-weight: bold;
         }
 
-        strong, p{
+        strong,
+        p {
             width: auto;
         }
-        p{
+
+        p {
             margin: 14px;
         }
-
     }
-  }
+}
+
+@media screen and (max-width: 550px) {
+    .timelineContainer .p-dialog-mask {
+        .p-dialog {
+            width: 80vw !important;
+
+            span,
+            p,
+            i {
+                font-size: 15px !important;
+            }
+
+            p {
+                margin: 10px 14px !important;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .timelineContainer .p-dialog-mask {
+        .p-dialog {
+            width: 90vw !important;
+        }
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .timelineContainer .p-dialog-mask {
+        .p-dialog {
+            width: 100vw !important;
+        }
+    }
+}
