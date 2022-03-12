@@ -154,10 +154,13 @@
 .allTasks {
     .dataTaskViewer .p-dataview-header {
         overflow-x: visible !important;
-        background-color: #e3e7eb;
-        border-bottom: 3px solid #dadada;
+        // background-color: #e3e7eb;
+        background-color: var(--task-background-invisible);
+        background-image: var(--task-background-invisible);
+        border-bottom: 3px solid var(--task-border-color);
+        border-top: none;
     }
-
+    
     /*********** LIST VIEW***********/
     .dataTaskViewer .p-dataview-content {
         display: flex;
@@ -165,9 +168,13 @@
         align-items: center;
         justify-content: center;
         width: 90vw;
+        background-color: var(--task-background-invisible);
+        background-image: var(--task-background-invisible);
 
         .p-nogutter {
-            background-color: #e3e7eb;
+            // background-color: #e3e7eb;
+            background-color: var(--task-background-invisible);
+            background-image: var(--task-background-invisible);
 
             // background-color: red;
             .listTaskDataView {
@@ -208,6 +215,7 @@
 
 
     .p-paginator-bottom {
+        border-bottom: 1px solid var(--task-border-color) !important;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -216,7 +224,9 @@
         height: 70px;
         margin: 0px 0px 20px 0px;
         overflow-y: hidden;
-        background-color: #e3e7eb;
+        // background-color: #e3e7eb;
+        background-color: var(--task-background-invisible);
+        background-image: var(--task-background-invisible);
 
         .p-paginator-first,
         .p-paginator-prev,
@@ -257,7 +267,6 @@
                 }
             }
 
-            // background-color: orchid;
         }
 
 

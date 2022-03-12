@@ -79,7 +79,10 @@
           >
             <div class="imgTaskContainer">
               <!-- <img src="@/static/clipboard.jpg" alt="Foto Tarefa" /> -->
-              <img :src='BaseURL2 + slotProps.data.fotos[0].image' alt="Foto Tarefa" />
+              <img
+                :src="BaseURL2 + slotProps.data.fotos[0].image"
+                alt="Foto Tarefa"
+              />
             </div>
             <div
               class="
@@ -113,7 +116,11 @@
                     "
                   >
                     <i class="pi pi-flag p-mr-2" />
-                    <span class="p-mr-3"><strong>{{limitText(slotProps.data.idStatusFK.nome,15)}}</strong></span>
+                    <span class="p-mr-3"
+                      ><strong>{{
+                        limitText(slotProps.data.idStatusFK.nome, 15)
+                      }}</strong></span
+                    >
                   </div>
                   <div
                     class="
@@ -123,7 +130,9 @@
                   >
                     <i class="pi pi-map-marker p-mr-2" />
                     <span class="p-mr-3"
-                      ><strong>{{limitText(slotProps.data.idAmbienteFK.nome,30)}}</strong></span
+                      ><strong>{{
+                        limitText(slotProps.data.idAmbienteFK.nome, 30)
+                      }}</strong></span
                     >
                   </div>
                   <div
@@ -133,7 +142,14 @@
                     "
                   >
                     <i class="pi pi-users p-mr-2" />
-                    <span class="p-mr-3"><strong>{{limitText(slotProps.data.responsaveis[0].idUsuarioFK.nome,12)}}</strong></span>
+                    <span class="p-mr-3"
+                      ><strong>{{
+                        limitText(
+                          slotProps.data.responsaveis[0].idUsuarioFK.nome,
+                          12
+                        )
+                      }}</strong></span
+                    >
                   </div>
                 </div>
                 <div
@@ -148,10 +164,16 @@
                     <div
                       class="container-up p-d-flex p-flex-row p-jc-end p-ai-end"
                     >
-                      <button class="progressTask" v-on:click="progressTask(slotProps.data.id)">
+                      <button
+                        class="progressTask"
+                        v-on:click="progressTask(slotProps.data.id)"
+                      >
                         <i class="pi pi-arrow-circle-right" />
                       </button>
-                      <button class="editTask" v-on:click="editTask(slotProps.data.id)">
+                      <button
+                        class="editTask"
+                        v-on:click="editTask(slotProps.data.id)"
+                      >
                         <i class="pi pi-pencil" />
                       </button>
                     </div>
@@ -161,7 +183,10 @@
                         p-d-flex p-flex-row p-jc-end p-ai-end
                       "
                     >
-                      <button class="deleteTask" v-on:click="deleteTask(slotProps.data.id)">
+                      <button
+                        class="deleteTask"
+                        v-on:click="deleteTask(slotProps.data.id)"
+                      >
                         <i class="pi pi-trash" />
                       </button>
                       <button class="printTask">
@@ -274,7 +299,7 @@ export default {
   mounted() {
     // this.productService.getProducts().then(data => this.products = data);
     this.getTask(1);
-    this.$store.dispatch("setEditTask",0);
+    this.$store.dispatch("setEditTask", 0);
   },
 
   methods: {
@@ -351,11 +376,9 @@ export default {
       }
     },
     getTasksUsers: function (task) {
-      
       return this.$axios
         .$get(this.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
         .then((response) => {
-         
           //request ok
           if (response.data !== null && response.data !== undefined) {
             return response.data;
@@ -368,22 +391,21 @@ export default {
         });
     },
     getAllTaskUsers: async function () {
-   
       if (this.tasks !== null) {
-        for(let i=0; i<this.tasks.length; i++) {
-          if(this.tasks[i].responsaveis === undefined) {
-              this.tasks[i].responsaveis = await this.getTasksUsers(this.tasks[i].id);              
-            }                     
-        }       
+        for (let i = 0; i < this.tasks.length; i++) {
+          if (this.tasks[i].responsaveis === undefined) {
+            this.tasks[i].responsaveis = await this.getTasksUsers(
+              this.tasks[i].id
+            );
+          }
+        }
         this.getAllTaskPhotos();
       }
     },
     getTaskPhotos: function (task) {
-
       return this.$axios
         .$get(this.BaseURL + ("fotos/?tarefa=" + task))
         .then((response) => {
-          
           //request ok
           if (response.data !== null && response.data !== undefined) {
             return response.data;
@@ -395,30 +417,26 @@ export default {
           return null;
         });
     },
-    getAllTaskPhotos: async function () {    
-   
+    getAllTaskPhotos: async function () {
       if (this.tasks !== null) {
-        for(let i=0; i<this.tasks.length; i++) {
-          if(this.tasks[i].fotos === undefined) {
-              this.tasks[i].fotos = await this.getTaskPhotos(this.tasks[i].id);              
-            }                     
-        }        
+        for (let i = 0; i < this.tasks.length; i++) {
+          if (this.tasks[i].fotos === undefined) {
+            this.tasks[i].fotos = await this.getTaskPhotos(this.tasks[i].id);
+          }
+        }
       }
     },
-    deleteTask: function(taskId){
-
-       if(taskId > 0)
-       {
-         this.$axios
+    deleteTask: function (taskId) {
+      if (taskId > 0) {
+        this.$axios
           .$delete(this.BaseURL + ("tarefas/" + taskId))
           .then((response) => {
             //request ok
             if (response !== null) {
               //remove
-              this.tasks.map((task,index)=>{
-                if(task.id === taskId)
-                  this.tasks.splice(index, 1);
-                  console.log("excluindo index" + index)
+              this.tasks.map((task, index) => {
+                if (task.id === taskId) this.tasks.splice(index, 1);
+                console.log("excluindo index" + index);
               });
             }
           })
@@ -426,27 +444,22 @@ export default {
             alert("Problema ao tentar deletar a tarefa");
             console.log(response);
           });
-       }
+      }
     },
-    editTask: function(taskId){
-      if(taskId > 0)
-      {
-        this.$store.dispatch("setEditTask",taskId)
-        .then((response) => {
+    editTask: function (taskId) {
+      if (taskId > 0) {
+        this.$store.dispatch("setEditTask", taskId).then((response) => {
           this.$router.push("/addTarefa");
-        })
+        });
       }
     },
-    progressTask: function(taskId){
-      if(taskId > 0)
-      {
-        this.$store.dispatch("setEditTask",taskId)
-        .then((response) => {
+    progressTask: function (taskId) {
+      if (taskId > 0) {
+        this.$store.dispatch("setEditTask", taskId).then((response) => {
           this.$router.push("/andamentoTarefa");
-        })
+        });
       }
-    }
-
+    },
   },
 };
 </script>
@@ -461,7 +474,10 @@ export default {
   min-height: calc(100vh - var(--height-default-header));
   width: 100vw;
   max-width: 100vw;
-  background-color: #e3e7eb;
+  /* background-color: #e3e7eb; */
+
+  background-color: var(--task-background-color);
+  background-image: var(--task-background-gradient);
 
   #titleTasks {
     overflow-x: visible !important;
@@ -478,8 +494,10 @@ export default {
   }
 
   .dataTaskViewer {
-    /* background-color: #f8f9fa; */
-    background-color: #e3e7eb;
+    /* background-color: #e3e7eb; */
+    background-color: var(--task-background-color);
+    background-image: var(--task-background-image);
+
     width: 100vw;
     /* background-color: yellowgreen; */
     display: flex;
@@ -587,7 +605,7 @@ export default {
           background: linear-gradient(
             135deg,
             rgba(243, 223, 223, 0.8),
-            rgba(226, 152, 152, 0.8)
+            rgba(221, 132, 132, 0.8)
           ) !important;
         }
         border-radius: 17px 17px 0px 0px;
@@ -707,10 +725,14 @@ export default {
             }
           }
         }
-        .statusTask {
+        .statusTask  {
           width: 100%;
           height: 10px;
-          background-color: yellowgreen;
+          /* background-color: yellowgreen; */
+          background: linear-gradient(-15deg, #538664, #38ac48, #89da69, #07830d);
+          background-size: 300% 300%;
+          animation: gradient 7s ease infinite;
+
           box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px, rgb(0 0 0 / 17%) 0px 3px 6px;
         }
       }

@@ -7,20 +7,24 @@
       </div>
 
       <div class="form" v-if="task">
-        <div class="titulo1 p-d-flex p-flex-row p-jc-start p-ai-start">
-          <h2 id="task">TAREFA: #{{ this.task[0].id }} -</h2>
-          <h2>&nbsp;{{ this.task[0].idTarefaFK.nome }}</h2>
+        <div class="titulo1 p-d-flex p-flex-column p-jc-start p-ai-start">
+          <div class="titulo1 p-d-flex p-flex-row p-jc-start p-ai-start">            
+            <h2 id="task">TAREFA: #{{ this.task[0].id }} -</h2>
+            <h2>&nbsp;{{ this.task[0].idTarefaFK.nome }}</h2>          
+          </div>          
+          <h4 class="p-d-flex p-flex-row p-jc-start p-ai-start"><i class="pi pi-exclamation-circle"/> Essas são as informações da tarefa atribuída à você</h4>
         </div>
         <main class="element p-d-flex p-jc-start p-ai-start">
           <div
             class="subelement p-d-flex p-flex-column p-jc-center p-ai-center"
           >
-            <!-- FIRST ELEMENT -->
+            <!-- ENVIROMENT AND DEADLINE (overview)-->
             <div
               class="
                 frameGeneralInfo
                 p-d-flex p-flex-row p-jc-center p-ai-start
               "
+              v-if="viewMode === 'overview'"
             >
               <div
                 class="
@@ -53,14 +57,16 @@
                 </p>
               </div>
             </div>
+            <!-- END ENVIROMENT AND DEADLINE -->
 
-            <!-- SECOND ELEMENT -->
+            <!-- REQUESTER AND RESPONSIBLES (overview) -->
 
             <div
               class="
                 frameGeneralInfo
                 p-d-flex p-flex-row p-jc-center p-ai-start p-mt-4
               "
+              v-if="viewMode === 'overview'"
             >
               <div
                 class="
@@ -109,14 +115,15 @@
                 </div>
               </div>
             </div>
+            <!-- END REQUESTER AND RESPONSIBLES -->
 
-            <!-- THIRD ELEMENT -->
-
+            <!-- ACTUAL TASK DESCRIPTION (overview) -->
             <div
               class="
                 frameGeneralInfo
                 p-d-flex p-flex-row p-jc-center p-ai-start p-mt-4
               "
+              v-if="viewMode === 'overview'"
             >
               <div
                 class="
@@ -138,14 +145,15 @@
                 ></textarea>
               </div>
             </div>
+            <!-- END ACTUAL DESCRIPTION -->
 
-            <!-- PHOTOS GALLERY -->
-
+            <!-- PHOTOS GALLERY (overview) -->
             <div
               class="
                 frameGeneralInfo
                 p-d-flex p-flex-row p-jc-center p-ai-center p-mt-3
               "
+              v-if="viewMode === 'overview'"
             >
               <div
                 class="
@@ -167,9 +175,9 @@
                 </div>
               </div>
             </div>
+            <!-- END GALLERY -->
 
-            <!-- TIMELINE -->
-
+            <!-- TIMELINE (overview and progress)-->
             <div
               class="
                 frameGeneralInfo
@@ -218,7 +226,11 @@
             </div>
 
             <div v-if="taskStatusArray">
-              <div class="timelineContainer" v-for="(dialog, index) in taskStatusArray" :key="index">
+              <div
+                class="timelineContainer"
+                v-for="(dialog, index) in taskStatusArray"
+                :key="index"
+              >
                 <Dialog
                   class="dialogTimeline"
                   :header="'Progresso: ' + dialog.nome"
@@ -236,11 +248,13 @@
                 </Dialog>
               </div>
             </div>
+            <!-- END TIMELINE -->
 
-            <!-- FOTOS UPLOAD -->
+            <!-- PHOTOS UPLOAD (progress) -->
 
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
+              v-if="viewMode === 'progress'"
             >
               <label class="lblBasic" for="imageUpload"
                 ><i class="pi pi-camera" /><strong
@@ -268,15 +282,39 @@
                 </template>
               </FileUpload>
             </div>
+            <!-- END PHOTOS UPLOAD -->
+
+            <div
+              class="
+                progressButtonsContainer
+                p-d-flex p-flex-row p-jc-center p-ai-center
+              "
+            >
+              <Button
+                class="btn-adv-progress"
+                label="Avançar Tarefa"
+                @click="progressTaskButton()"
+                v-if="viewMode === 'overview'"
+              />
+              <Button
+                class="btn-adv-progress"
+                label="Voltar à ver Tarefa"
+                @click="progressTaskButton()"
+                v-if="viewMode === 'progress'"
+              />
+            </div>
           </div>
         </main>
 
         <div class="divisor"></div>
       </div>
     </div>
-    <div class="buttons p-d-flex p-flex-row p-jc-evenly p-ai-center">
-      <Button class="btn-send" label="Enviar" @click="checkMode()" />
-      <Button class="btn-clean" label="Limpar" @click="cleanForm()" />
+    <div
+      v-if="viewMode === 'progress'"
+      class="buttons p-d-flex p-flex-row p-jc-evenly p-ai-center"
+    >
+      <Button class="btn-send" label="Salvar" @click="checkMode()" />
+      <Button class="btn-clean" label="Cancelar" @click="cleanForm()" />
     </div>
   </div>
 </template>
@@ -289,11 +327,11 @@ export default {
     return {
       BaseURL: "http://localhost:8003/",
       BaseURL2: "http://localhost:8003",
+      viewMode: "overview", //overview or progress
       taskID: 1,
       initialStatus: 1,
       deadline: null,
       photos: [],
-      photosNumber: 1,
       task: null,
       actualUser: {
         id: null,
@@ -301,6 +339,13 @@ export default {
       },
       taskStatus: null,
       taskStatusArray: [],
+      newTaskStatusName: "",
+      newTaskStatus: {
+        idStatusFK: 0,
+        data: "",
+        descricao: "",
+        idTarefaFK: 0,
+      },
       iconArrayStatus: [
         "pi-file",
         "pi-users",
@@ -590,19 +635,62 @@ export default {
           //request ok
           if (response.data !== null && response.data !== undefined) {
             this.photos = response.data;
-            this.photosNumber = this.photos.length;
 
             // console.log("FOTOS CARREGADAS");
             // console.log(this.photos);
-
-            // console.log("NÚMERO DE FOTOS CARREGADAS");
-            // console.log(this.photosNumber);
           }
         })
         .catch((response) => {
           alert("Problema ao tentar pegar FOTOS da tarefa " + task);
           console.log(response);
         });
+    },
+    progressTaskButton: function () {
+      
+      //first time
+      if (!this.newTaskStatus.idStatusFK) {
+        //get actual progress from task and increment
+        const actualProgressID = this.task[0].idTarefaFK.idStatusFK.id + 1;
+        let found = false;
+
+        //walk away all status type and find the next status
+        this.taskStatusArray.map((status) => {
+          if (actualProgressID === status.id) {
+            //get new status task
+            this.newTaskStatus.idStatusFK = status.id;
+            this.newTaskStatus.data = this.formatDate("backend");
+            this.newTaskStatus.idTarefaFK = this.task[0].id;
+            this.newTaskStatusName = status.nome;
+            
+            //actualize status timeline
+            status.data = this.newTaskStatus.data;
+            status.color = this.colorConcluded;
+            
+            this.viewMode = "progress";
+            found = true;
+          }
+        });
+
+        if (found === false) {
+          this.newTaskStatus.idStatusFK = 0;
+          this.newTaskStatus.data = "";
+          this.newTaskStatus.idTarefaFK = 0;
+          this.newTaskStatusName = "";
+        }
+      }
+      //already started
+      else {
+
+        this.taskStatusArray.map((status) => {
+            if(this.newTaskStatus.idStatusFK === status.id){
+
+              status.data = this.viewMode === "overview" ? this.newTaskStatus.data : '';
+              status.color = this.viewMode === "overview" ? this.colorConcluded : this.colorNotConcluded; 
+              this.viewMode = this.viewMode === "overview" ? "progress" : "overview";
+            }
+          });
+        
+      }
     },
   },
   mounted() {
@@ -622,6 +710,7 @@ export default {
 
 
 <style lang="scss" scoped>
+/* viewMode === overview */
 .all {
   * {
     overflow-x: visible;
@@ -637,7 +726,6 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
   background-image: url("@/static/postit.jpg");
-  
 
   $size-title: 15px;
   $size-topic: 15px;
@@ -810,11 +898,10 @@ export default {
           word-break: break-all;
           resize: none;
         }
-       
       }
     }
     .divisor {
-      margin-top: 80px;
+      margin-top: 30px;
       background-color: red;
       width: 96%;
       height: 2px;
@@ -856,6 +943,31 @@ export default {
       background-color: rgba(255, 255, 255, 1);
       border: 2px solid #c22a1f;
       color: #c22a1f;
+    }
+  }
+
+  .progressButtonsContainer {
+    width: 100%;
+    height: 45px;
+    margin: 20px 0px;
+
+    .btn-adv-progress {
+      width: 70%;
+      height: 100%;
+      border-radius: 5px;
+      padding: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: all 0.3s;
+      background-color: rgba(194, 42, 31, 1) !important;
+      border: none;
+      color: #fff;
+
+      &:hover {
+        transform: scale(1.03);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
     }
   }
 }
@@ -924,7 +1036,7 @@ export default {
 }
 
 @media screen and (max-width: 610px) {
-  .all .containerTask .divisor{
+  .all .containerTask .divisor {
     margin-top: 35px !important;
   }
   $size-title: 11px;
@@ -964,7 +1076,7 @@ export default {
 }
 
 @media screen and (max-width: 540px) {
-  .buttons button{
+  .buttons button {
     margin: 15px 0px !important;
   }
   .lblBasic .p-avatar-lg {
@@ -1025,7 +1137,7 @@ export default {
 }
 
 @media screen and (max-width: 450px) {
-  .all{
+  .all {
     background: white;
   }
   .taskGallery {
@@ -1038,10 +1150,8 @@ export default {
 }
 
 @media screen and (max-width: 390px) {
-
-  
   .timeprogress {
-    .p-timeline-event {      
+    .p-timeline-event {
       .custom-marker {
         .timeicon {
           font-size: 16px !important;
@@ -1054,8 +1164,8 @@ export default {
     }
   }
 
-  .buttons button{
-    margin: 0px !important;    
+  .buttons button {
+    margin: 0px !important;
   }
   .lblBasic .p-avatar-lg {
     width: 3rem !important;
@@ -1071,9 +1181,9 @@ export default {
 }
 
 @media screen and (max-width: 315px) {
-  .buttons button{
+  .buttons button {
     height: 20px !important;
-    padding: 17px 7px !important;  
+    padding: 17px 7px !important;
   }
 
   .lblBasic .p-avatar-lg {
@@ -1112,5 +1222,7 @@ export default {
   }
 }
 
-
+/* viewMode === 'progress' */
+.all .form .main {
+}
 </style>
