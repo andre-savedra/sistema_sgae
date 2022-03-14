@@ -317,7 +317,7 @@ class TarefasAPIView(APIView):
 
     def put(self, request, pk=''):
         tarefas = Tarefas.objects.get(id=pk)
-        serializer = TarefasSerializer(tarefas, data=request.data)
+        serializer = TarefasSerializerSimple(tarefas, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -546,7 +546,7 @@ class FotosAPIView(APIView):
 
     def post(self, request):
         serializer = FotosSerializer(data=request.data)
-        print(request.data);
+        # print(request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)

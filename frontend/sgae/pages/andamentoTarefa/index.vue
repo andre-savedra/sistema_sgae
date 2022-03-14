@@ -8,11 +8,35 @@
 
       <div class="form" v-if="task">
         <div class="titulo1 p-d-flex p-flex-column p-jc-start p-ai-start">
-          <div class="titulo1 p-d-flex p-flex-row p-jc-start p-ai-start">            
-            <h2 id="task">TAREFA: #{{ this.task[0].id }} -</h2>
-            <h2>&nbsp;{{ this.task[0].idTarefaFK.nome }}</h2>          
-          </div>          
-          <h4 class="p-d-flex p-flex-row p-jc-start p-ai-start"><i class="pi pi-exclamation-circle"/> Essas são as informações da tarefa atribuída à você</h4>
+          <div class="titulo1 p-d-flex p-flex-row p-jc-start p-ai-start">
+            <h2 id="task">TAREFA: #{{ this.task[0].idTarefaFK.id }} -</h2>
+            <h2>&nbsp;{{ this.task[0].idTarefaFK.nome }}</h2>
+          </div>
+          <h4
+            v-if="viewMode === 'overview'"
+            class="p-d-flex p-flex-row p-jc-start p-ai-start p-mt-3"
+          >
+            <i class="pi pi-exclamation-circle p-mr-2 p-ml-2" />
+            Essas são as informações da tarefa atribuída à você! &#128077;
+          </h4>
+          <h4
+            v-else-if="newTaskStatusName === 'Encerrada'"
+            class="p-d-flex p-flex-row p-jc-start p-ai-start p-mt-3"
+          >
+            <i class="pi pi-exclamation-circle p-mr-2 p-ml-2" />
+            Reveja e finalize esta tarefa! &#127942;
+          </h4>
+          <h4
+            v-else-if="newTaskStatusName === 'Em andamento'"
+            class="p-d-flex p-flex-row p-jc-start p-ai-start p-mt-3"
+          >
+            <i class="pi pi-exclamation-circle p-mr-2 p-ml-2" />
+            Sinalize que você está atuando nesta tarefa! &#128521;
+          </h4>
+          <h4 v-else class="p-d-flex p-flex-row p-jc-start p-ai-start p-mt-3">
+            <i class="pi pi-exclamation-circle p-mr-2 p-ml-2" />
+            Dê andamento em sua tarefa! &#129321;
+          </h4>
         </div>
         <main class="element p-d-flex p-jc-start p-ai-start">
           <div
@@ -237,28 +261,63 @@
                   :visible.sync="dialog.showDialog"
                   :containerStyle="{ width: '50vw' }"
                 >
-                  <strong
-                    ><span class="m-0"
-                      ><i :class="'pi ' + dialog.icon" />{{ dialog.nome }}</span
-                    ></strong
-                  >
-                  <strong
-                    ><p class="m-0">{{ formatDate(dialog.data) }}</p></strong
-                  >
+                  <div class="p-d-flex p-flex-column p-jc-start p-ai-start">
+                    <div class="p-d-flex p-flex-row p-jc-start p-ai-start">
+                      <strong
+                        ><span class="m-0"
+                          ><i :class="'pi ' + dialog.icon" />{{
+                            dialog.nome
+                          }}</span
+                        ></strong
+                      >
+                      <strong
+                        ><p class="m-0">
+                          {{ formatDate(dialog.data) }}
+                        </p></strong
+                      >
+                    </div>
+                    <div>
+                      {{ dialog.descricao }}
+                    </div>
+                  </div>
                 </Dialog>
               </div>
             </div>
             <!-- END TIMELINE -->
 
+            <div
+              v-if="viewMode === 'progress'"
+              class="
+                frameGeneralInfo
+                p-d-flex p-flex-column p-jc-center p-ai-center p-mt-3
+              "
+            >
+              <label class="lblBasic" for="description"
+                ><i class="pi pi-info-circle" /><strong
+                  >Adicione algum comentário sobre este processo</strong
+                ></label
+              >
+
+              <textarea
+                class="textInput"
+                type="text"
+                placeholder="Insira aqui a descrição da sua tarefa..."
+                id="description"
+                v-model="newTaskStatus.descricao"
+              ></textarea>
+            </div>
+
             <!-- PHOTOS UPLOAD (progress) -->
 
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
-              v-if="viewMode === 'progress'"
+              v-if="
+                viewMode === 'progress' && newTaskStatusName !== 'Em andamento'
+              "
             >
               <label class="lblBasic" for="imageUpload"
                 ><i class="pi pi-camera" /><strong
-                  >Fotos Anexadas</strong
+                  >Anexe fotos do seu trabalho</strong
                 ></label
               >
 
@@ -313,7 +372,7 @@
       v-if="viewMode === 'progress'"
       class="buttons p-d-flex p-flex-row p-jc-evenly p-ai-center"
     >
-      <Button class="btn-send" label="Salvar" @click="checkMode()" />
+      <Button class="btn-send" label="Salvar" @click="progressTaskSubmit()" />
       <Button class="btn-clean" label="Cancelar" @click="cleanForm()" />
     </div>
   </div>
@@ -342,9 +401,9 @@ export default {
       newTaskStatusName: "",
       newTaskStatus: {
         idStatusFK: 0,
+        idTarefaFK: 0,
         data: "",
         descricao: "",
-        idTarefaFK: 0,
       },
       iconArrayStatus: [
         "pi-file",
@@ -372,24 +431,6 @@ export default {
       } else return data;
     },
     cleanForm() {
-      this.task.map((task) => {
-        task.nome = null;
-        (task.descricao = null),
-          (task.idSolicitanteFK = null),
-          (task.idAmbienteFK = null),
-          (task.prazo = null),
-          (task.dataInicio = null),
-          (task.dataFim = null);
-      });
-
-      this.actualUser.id = null;
-      this.actualUser.nome = null;
-
-      this.selectedEmployees.length = 0;
-
-      this.deadline = null;
-      this.$store.dispatch("setEditTask", 0);
-      this.updateModeId = 0;
       this.virtualClickUpload("Cancelar");
     },
     formatNumber: function (input) {
@@ -457,14 +498,34 @@ export default {
       } else return input;
     },
     virtualClickUpload: function (buttonText) {
+      console.log("VIRTUAL CLICK");
       let el = document.querySelectorAll(".p-fileupload-buttonbar button");
+      console.log(el);
       el.forEach((element, index) => {
         if (element.textContent.includes(buttonText)) {
+          console.log("clicou!");
           element.click();
         }
       });
     },
-    checkMode: function () {},
+    progressTaskSubmit: async function () {
+      if (this.newTaskStatusName === "Em andamento") {
+        const endPosts = await Promise.all([
+          this.postTaskStatus(),
+          this.putTask(),
+        ]);
+        this.viewMode = "overview";
+        this.cleanNewStatus();
+        this.getTaskUser(this.taskID);
+        this.getStatusType();
+      } else if (this.newTaskStatusName === "Concluída") {
+        const endPosts = await Promise.all([
+          this.postTaskStatus(),
+          this.putTask(),
+          this.virtualClickUpload("Carregar"),
+        ]); 
+      }
+    },
     postTask: async function () {
       const index = 0;
       this.task[index].idSolicitanteFK = this.actualUser.id;
@@ -494,17 +555,53 @@ export default {
           console.log(response);
         });
     },
+    putTask: async function (end) {
+      const index = 0;
 
-    postTaskStatus: async function () {
-      let taskStatus = [
-        {
-          idStatusFK: this.initialStatus,
-          idTarefaFK: this.taskID,
-        },
-      ];
+      console.log("atualizando put task");
+
+      const body = {
+        idStatusFK: this.newTaskStatus.idStatusFK,
+        dataFim: end ? this.newTaskStatus.data : null,
+        dataInicio: this.task[index].idTarefaFK.dataInicio,
+        idAmbienteFK: this.task[index].idTarefaFK.idAmbienteFK.id,
+        idSolicitanteFK: this.task[index].idTarefaFK.idSolicitanteFK.id,
+        nome: this.task[index].idTarefaFK.nome,
+        descricao: this.task[index].idTarefaFK.descricao,
+        prazo: this.task[index].idTarefaFK.prazo,
+      };
+
+      console.log(body);
 
       await this.$axios
-        .$post(this.BaseURL + "tarefasStatus/", JSON.stringify(taskStatus), {
+        .$put(
+          this.BaseURL + "tarefas/" + this.task[index].idTarefaFK.id + "/",
+          JSON.stringify(body),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          //request ok
+
+          console.log("Atualizado com sucesso!!!");
+        })
+        .catch((response) => {
+          alert("Problema ao tentar cadastrar a tarefa");
+          console.log(response);
+        });
+    },
+
+    postTaskStatus: async function () {
+      console.log("tentando salvar taskSTATUS");
+      const body = [this.newTaskStatus];
+      console.log(body);
+
+      await this.$axios
+        .$post(this.BaseURL + "tarefasStatus/", JSON.stringify(body), {
           headers: {
             "Content-Type": "application/json",
           },
@@ -512,18 +609,19 @@ export default {
         .then((response) => {
           console.log(response);
           //request ok
-          this.virtualClickUpload("Carregar");
+          console.log("taskSTATUS OK");
         })
         .catch((response) => {
-          alert("Problema ao tentar cadastrar a tarefa");
+          alert("Problema ao tentar cadastrar status da tarefa");
           console.log(response);
         });
     },
     postPhoto: async function (event) {
-      // console.log(event);
+      console.log("postPhoto");
+      console.log(event);
       const files = event.files;
-      const taskID = this.taskID;
-      const initialStatus = this.initialStatus;
+      const taskID = this.task[0].idTarefaFK.id;
+      const initialStatus = this.newTaskStatus.idStatusFK;
 
       await files.forEach((file) => {
         let formData = new FormData();
@@ -540,7 +638,11 @@ export default {
           })
           .then((response) => {
             console.log(response);
-            this.cleanForm();
+
+            this.viewMode = "overview";
+            this.cleanNewStatus();
+            this.getTaskUser(this.taskID);
+            this.getStatusType();
           })
           .catch((response) => {
             alert("Problema ao tentar cadastrar  foto");
@@ -565,6 +667,8 @@ export default {
             this.taskStatus.map((status, index) => {
               this.taskStatusArray[index].data = status.data;
               this.taskStatusArray[index].color = this.colorConcluded;
+              this.taskStatusArray[index].descricao =
+                status.descricao === null ? "" : status.descricao;
             });
 
             console.log(this.taskStatus);
@@ -580,6 +684,7 @@ export default {
         });
     },
     getStatusType: async function () {
+      this.taskStatusArray.length = 0;
       this.$axios
         .$get(this.BaseURL + "status/")
         .then((response) => {
@@ -595,6 +700,7 @@ export default {
                 color: this.colorNotConcluded,
                 icon: this.iconArrayStatus[index],
                 showDialog: false,
+                descricao: "",
               });
             });
 
@@ -617,6 +723,7 @@ export default {
 
           //request ok
           if (response.data !== null && response.data !== undefined) {
+            this.task = null;
             this.task = structuredClone(response.data);
             console.log(this.task);
 
@@ -646,7 +753,6 @@ export default {
         });
     },
     progressTaskButton: function () {
-      
       //first time
       if (!this.newTaskStatus.idStatusFK) {
         //get actual progress from task and increment
@@ -659,13 +765,13 @@ export default {
             //get new status task
             this.newTaskStatus.idStatusFK = status.id;
             this.newTaskStatus.data = this.formatDate("backend");
-            this.newTaskStatus.idTarefaFK = this.task[0].id;
+            this.newTaskStatus.idTarefaFK = this.task[0].idTarefaFK.id;
             this.newTaskStatusName = status.nome;
-            
+
             //actualize status timeline
             status.data = this.newTaskStatus.data;
             status.color = this.colorConcluded;
-            
+
             this.viewMode = "progress";
             found = true;
           }
@@ -680,17 +786,28 @@ export default {
       }
       //already started
       else {
-
         this.taskStatusArray.map((status) => {
-            if(this.newTaskStatus.idStatusFK === status.id){
+          if (this.newTaskStatus.idStatusFK === status.id) {
+            this.newTaskStatus.data = this.formatDate("backend");
 
-              status.data = this.viewMode === "overview" ? this.newTaskStatus.data : '';
-              status.color = this.viewMode === "overview" ? this.colorConcluded : this.colorNotConcluded; 
-              this.viewMode = this.viewMode === "overview" ? "progress" : "overview";
-            }
-          });
-        
+            status.data =
+              this.viewMode === "overview" ? this.newTaskStatus.data : "";
+            status.color =
+              this.viewMode === "overview"
+                ? this.colorConcluded
+                : this.colorNotConcluded;
+            this.viewMode =
+              this.viewMode === "overview" ? "progress" : "overview";
+          }
+        });
       }
+    },
+    cleanNewStatus: function () {
+      this.newTaskStatusName = "";
+      this.newTaskStatus.idStatusFK = 0;
+      this.newTaskStatus.idTarefaFK = 0;
+      this.newTaskStatus.data = "";
+      this.newTaskStatus.descricao = "";
     },
   },
   mounted() {
@@ -699,7 +816,7 @@ export default {
 
     if (this.$store.state.editTaskId > 0)
       this.taskID = this.$store.state.editTaskId;
-    else this.taskID = 33;
+    else this.taskID = 40;
 
     this.getTaskUser(this.taskID);
     this.getTaskPhotos(this.taskID);
@@ -780,8 +897,12 @@ export default {
         #task {
           color: $red-strong;
         }
-        h2 {
+        h2,
+        i {
           width: auto;
+        }
+        i {
+          font-size: 18px;
         }
       }
 
@@ -1150,6 +1271,12 @@ export default {
 }
 
 @media screen and (max-width: 390px) {
+  .progressButtonsContainer .btn-adv-progress
+  {
+    font-size:15px !important;
+    padding: 10px;
+  }
+
   .timeprogress {
     .p-timeline-event {
       .custom-marker {

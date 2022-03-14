@@ -314,71 +314,12 @@ $sidebar_second_positions: 150px, 220px, 220px, 300px;
       height: 100%;
     } //default-header-right
 
-    @function box-shadow-stars($n) {
-      $star-shadows: "#{random(4000)-2000}px #{random(4000)-2000}px #fff";
-      @for $i from 2 through $n {
-        $star-color-num: random(3);
-        $star-color: #fff;
-        @if ($star-color-num == 1) {
-          $star-color: "#fff";
-        }
-        @if ($star-color-num == 2) {
-          $star-color: "#FF6666";
-        }
-        @if ($star-color-num == 3) {
-          $star-color: "#79bfea";
-        }
-        $star-shadows: "#{$star-shadows}, #{random(4000)-2000}px #{random(4000)-2000}px #{$star-color}";
-      }
-      @return unquote($star-shadows);
-    }
-    $stars1-shadows: box-shadow-stars(10000);
-    $stars2-shadows: box-shadow-stars(1000);
-    $stars3-shadows: box-shadow-stars(500);
 
-    html {
-      /* height: 100vh; */
-      /* overflow: hidden; */
-      /* background: #240f54; */
-      /* background: linear-gradient(180deg,#240f54,#240f54 5%,#440bc8); */
-    }
-    .stars1 {
-      width: 1px;
-      height: 1px;
-      box-shadow: $stars1-shadows;
-      border-radius: 50%;
-      animation: rotateEarth 200s linear infinite;
-      opacity: 0.9;
-      /* position: absolute; */
+    
+    .stars1,
+    .stars2,
+    .stars3 {      
       max-height: var(--height-default-header);
-    }
-    .stars2 {
-      max-height: var(--height-default-header);
-      width: 2px;
-      height: 2px;
-      box-shadow: $stars2-shadows;
-      border-radius: 50%;
-      animation: rotateEarth 190s linear infinite;
-      opacity: 0.9;
-      /* position: absolute; */
-    }
-    .stars3 {
-      max-height: var(--height-default-header);
-      /* position: absolute; */
-      width: 3px;
-      height: 3px;
-      box-shadow: $stars3-shadows;
-      border-radius: 50%;
-      animation: rotateEarth 180s linear infinite;
-      opacity: 0.9;
-    }
-    @keyframes rotateEarth {
-      from {
-        transform: translateY(0px);
-      }
-      to {
-        transform: translateY(2000px);
-      }
     }
 
     .default-sidebar {

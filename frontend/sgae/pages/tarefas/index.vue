@@ -15,6 +15,8 @@
         <div
           class="grid grid-nogutter p-d-flex p-flex-row p-jc-center p-ai-start"
         >
+       
+
           <div
             class="
               col-6
@@ -492,6 +494,8 @@ export default {
     text-align: center !important;
     height: 70px;
   }
+  
+
 
   .dataTaskViewer {
     /* background-color: #e3e7eb; */
@@ -504,8 +508,10 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+    
     .p-dataview-header {
+
+
       overflow-x: visible;
       width: 90vw;
       display: flex;
