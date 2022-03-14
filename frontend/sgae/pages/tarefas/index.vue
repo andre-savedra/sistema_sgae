@@ -80,7 +80,6 @@
             "
           >
             <div class="imgTaskContainer">
-              <!-- <img src="@/static/clipboard.jpg" alt="Foto Tarefa" /> -->
               <img
                 :src="BaseURL2 + slotProps.data.fotos[0].image"
                 alt="Foto Tarefa"
@@ -201,7 +200,7 @@
             </div>
           </div>
           <div
-            class="statusTask"
+            :class="'statusTask ' + slotProps.data.idStatusFK.nome"
             v-if="
               slotProps.data.nome !== null && slotProps.data.nome !== undefined
             "
@@ -479,7 +478,10 @@ export default {
   /* background-color: #e3e7eb; */
 
   background-color: var(--task-background-color);
-  background-image: var(--task-background-gradient);
+  background-image: url("@/static/clipboard.jpg");
+  background-size: cover;
+  background-position: left;
+  background-repeat: no-repeat;
 
   #titleTasks {
     overflow-x: visible !important;
@@ -498,10 +500,8 @@ export default {
 
 
   .dataTaskViewer {
-    /* background-color: #e3e7eb; */
-    background-color: var(--task-background-color);
-    background-image: var(--task-background-image);
-
+    /* andre */
+    
     width: 100vw;
     /* background-color: yellowgreen; */
     display: flex;
@@ -733,13 +733,28 @@ export default {
         }
         .statusTask  {
           width: 100%;
-          height: 10px;
-          /* background-color: yellowgreen; */
+          height: 10px;          
+          box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px, rgb(0 0 0 / 17%) 0px 3px 6px;
+        }
+        .Aberta{
+          background: linear-gradient(-15deg, #865360, #ac384b, #da6969, #830707);
+          background-size: 300% 300%;
+          animation: gradient 4s ease infinite;
+        }
+        .andamento{
+          background: linear-gradient(-15deg, #bd8d67, #ca722b, #ecb65e, #ffa007);
+          background-size: 300% 300%;
+          animation: gradient 4s ease infinite;
+        }
+        .Concluída{
+          background: linear-gradient(-15deg, #ada858, #c5c73f, #d3c940, #e8ec00);
+          background-size: 300% 300%;
+          animation: gradient 4s ease infinite;
+        }
+        .Encerrada{
           background: linear-gradient(-15deg, #538664, #38ac48, #89da69, #07830d);
           background-size: 300% 300%;
-          animation: gradient 7s ease infinite;
-
-          box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px, rgb(0 0 0 / 17%) 0px 3px 6px;
+          animation: gradient 4s ease infinite;
         }
       }
     }

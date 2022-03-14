@@ -9,10 +9,15 @@
     --height-default-header-mobile: 55px;
     --grey-text-color: #727272;
     
-    --task-background-color: -webkit-linear-gradient(to left, #d7d2cc, #e9c9d4);  /* Chrome 10-25, Safari 5.1-6 */
-    --task-background-gradient: linear-gradient(to left, #d7d2cc, #e9c9d4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    --task-background-color: white;
+    --task-background-gradient: url('@/static/clips1.jpg');
     --task-background-invisible: rgba(0,0,0,0);
-    --task-border-color: #afaba9;
+    --task-border-color: none;
+    
+    // --task-background-color: -webkit-linear-gradient(to left, #d7d2cc, #e9c9d4);  /* Chrome 10-25, Safari 5.1-6 */
+    // --task-background-gradient: linear-gradient(to left, #d7d2cc, #e9c9d4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    // --task-background-invisible: rgba(0,0,0,0);
+    // --task-border-color: #afaba9;
    
     
 
