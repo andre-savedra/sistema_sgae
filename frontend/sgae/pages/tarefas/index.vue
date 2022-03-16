@@ -72,7 +72,7 @@
       </template>
 
       <template #list="slotProps">
-        <div class="listTaskDataView">
+        <div :class="'listTaskDataView ' + slotProps.data.idStatusFK.nome + '-hover'">
           <div
             class="col-12 elementListTaskDataView"
             v-if="
@@ -190,7 +190,9 @@
                       >
                         <i class="pi pi-trash" />
                       </button>
-                      <button class="printTask">
+                      <button class="printTask"
+                      v-on:click="printTask(slotProps.data.id)"
+                      >
                         <i class="pi pi-print" />
                       </button>
                     </div>
@@ -427,6 +429,10 @@ export default {
         }
       }
     },
+    printTask: function(id){
+      console.log("imprimindo...");
+      this.$router.push('/pdf/' + id);
+    },
     deleteTask: function (taskId) {
       if (taskId > 0) {
         this.$axios
@@ -604,16 +610,46 @@ export default {
 
   .dataTaskViewer .p-dataview-content {
     .p-nogutter {
-      .listTaskDataView {
-        margin: 20px 0px;
-        background-color: white !important;
+      .Aberta-hover{
         &:hover {
           background: linear-gradient(
             135deg,
-            rgba(243, 223, 223, 0.8),
-            rgba(221, 132, 132, 0.8)
+            rgba(243, 223, 223, 0.85),
+            rgba(221, 132, 132, 0.85)
           ) !important;
         }
+      }
+      .andamento-hover{
+        &:hover {
+          background: linear-gradient(
+            135deg,
+            rgba(206, 189, 141, 0.85),
+            rgba(216, 180, 62, 0.85)
+          ) !important;
+        }
+      }
+      .Concluída-hover{
+        &:hover {
+          background: linear-gradient(
+            135deg,
+            rgba(230, 231, 162, 0.85),
+            rgba(226, 230, 40, 0.85)
+          ) !important;
+        }
+      }
+      .Encerrada-hover{
+        &:hover {
+          background: linear-gradient(
+            135deg,
+            rgba(172, 206, 141, 0.85),
+            rgba(59, 177, 55, 0.85)
+          ) !important;
+        }
+      }
+
+      .listTaskDataView {
+        margin: 20px 0px;
+        background-color: white !important;
         border-radius: 17px 17px 0px 0px;
 
         .elementListTaskDataView {
@@ -737,17 +773,17 @@ export default {
           box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px, rgb(0 0 0 / 17%) 0px 3px 6px;
         }
         .Aberta{
-          background: linear-gradient(-15deg, #865360, #ac384b, #da6969, #830707);
+          background: linear-gradient(-15deg, #f5c4d0, #ac384b, #da6969, #830707);
           background-size: 300% 300%;
           animation: gradient 4s ease infinite;
         }
         .andamento{
-          background: linear-gradient(-15deg, #bd8d67, #ca722b, #ecb65e, #ffa007);
+          background: linear-gradient(-15deg, #bd8d67, #ca722b, #e6bc7a, #ffa007);
           background-size: 300% 300%;
           animation: gradient 4s ease infinite;
         }
         .Concluída{
-          background: linear-gradient(-15deg, #ada858, #c5c73f, #d3c940, #e8ec00);
+          background: linear-gradient(-15deg, #ada858, #c5c73f, #fdf68b, #e8ec00);
           background-size: 300% 300%;
           animation: gradient 4s ease infinite;
         }

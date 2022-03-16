@@ -191,8 +191,8 @@
                 </label>
                 <div class="customContainer">
                   <CustomCarousel
-                    v-if="photos.length > 0"
-                    :photos="photos"
+                    v-if="photos[0].length > 0"
+                    :photos="photos[0]"
                     background="white"
                     :baseURL="BaseURL2"
                   />
@@ -285,6 +285,76 @@
             </div>
             <!-- END TIMELINE -->
 
+            <!-- PHOTOS GALLERY (progress) -->
+            <div
+              class="
+                frameGeneralInfo
+                p-d-flex p-flex-row p-jc-center p-ai-center p-mt-3
+              "
+              v-if="
+                viewMode === 'progress' && newTaskStatusName === 'Encerrada'
+              "
+            >
+              <div
+                class="
+                  taskGallery
+                  p-d-flex p-flex-column p-jc-center p-ai-center
+                "
+              >
+                <label class="lblBasic" for="description">
+                  <i class="pi pi-camera" />
+                  <strong
+                    >DIAGNÓSTICO: Fotos Antes da Execução da Tarefa</strong
+                  >
+                </label>
+                <div class="customContainer">
+                  <CustomCarousel
+                    v-if="photos[0].length > 0"
+                    :photos="photos[0]"
+                    background="white"
+                    :baseURL="BaseURL2"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- END GALLERY -->
+
+            <!-- PHOTOS GALLERY (progress) -->
+            <div
+              class="
+                frameGeneralInfo
+                p-d-flex p-flex-row p-jc-center p-ai-center p-mt-3
+              "
+              v-if="
+                viewMode === 'progress' && newTaskStatusName === 'Encerrada'
+              "
+            >
+              <div
+                class="
+                  taskGallery
+                  p-d-flex p-flex-column p-jc-center p-ai-center
+                "
+              >
+                <label class="lblBasic" for="description">
+                  <i class="pi pi-camera" />
+                  <strong>RESULTADO: Fotos Depois da Execução da Tarefa</strong>
+                </label>
+                <div class="customContainer">
+                  <CustomCarousel
+                    v-if="photos[1].length > 0"
+                    :photos="photos[1]"
+                    background="white"
+                    :baseURL="BaseURL2"
+                  />
+                  <div v-else>
+                    <h2>Fotos não anexadas...</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END GALLERY -->
+
+            <!-- DESCRIPTION TEXT AREA -->
             <div
               v-if="viewMode === 'progress'"
               class="
@@ -306,13 +376,14 @@
                 v-model="newTaskStatus.descricao"
               ></textarea>
             </div>
+            <!-- END DESCRIPTION TEXT AREA -->
 
             <!-- PHOTOS UPLOAD (progress) -->
 
             <div
               class="inputElement p-d-flex p-flex-column p-jc-start p-ai-start"
               v-if="
-                viewMode === 'progress' && newTaskStatusName !== 'Em andamento'
+                viewMode === 'progress' && newTaskStatusName === 'Concluída'
               "
             >
               <label class="lblBasic" for="imageUpload"
@@ -348,6 +419,7 @@
                 progressButtonsContainer
                 p-d-flex p-flex-row p-jc-center p-ai-center
               "
+              v-if="this.task[0] !== null && this.task[0].idTarefaFK.dataFim === null"
             >
               <Button
                 class="btn-adv-progress"
@@ -372,8 +444,26 @@
       v-if="viewMode === 'progress'"
       class="buttons p-d-flex p-flex-row p-jc-evenly p-ai-center"
     >
-      <Button class="btn-send" label="Salvar" @click="progressTaskSubmit()" />
-      <Button class="btn-clean" label="Cancelar" @click="cleanForm()" />
+      <Button
+        v-if="newTaskStatusName === 'Encerrada'"
+        class="btn-send"
+        label="Aprovar"
+        @click="progressTaskSubmit()"
+      />
+      <Button
+        v-else
+        class="btn-send"
+        label="Salvar"
+        @click="progressTaskSubmit()"
+      />
+
+      <Button
+        v-if="newTaskStatusName === 'Encerrada'"
+        class="btn-clean"
+        label="Declinar"
+        
+      />
+      <Button v-else class="btn-clean" label="Cancelar" @click="cleanForm()" />
     </div>
   </div>
 </template>
@@ -390,7 +480,7 @@ export default {
       taskID: 1,
       initialStatus: 1,
       deadline: null,
-      photos: [],
+      photos: [[], []],
       task: null,
       actualUser: {
         id: null,
@@ -509,22 +599,39 @@ export default {
       });
     },
     progressTaskSubmit: async function () {
-      if (this.newTaskStatusName === "Em andamento") {
-        const endPosts = await Promise.all([
-          this.postTaskStatus(),
-          this.putTask(),
-        ]);
-        this.viewMode = "overview";
-        this.cleanNewStatus();
-        this.getTaskUser(this.taskID);
-        this.getStatusType();
-      } else if (this.newTaskStatusName === "Concluída") {
-        const endPosts = await Promise.all([
-          this.postTaskStatus(),
-          this.putTask(),
-          this.virtualClickUpload("Carregar"),
-        ]); 
+      switch (this.newTaskStatusName) {
+        case "Em andamento":
+          const anda = await Promise.all([
+            this.postTaskStatus(),
+            this.putTask(),
+          ]);
+          this.viewMode = "overview";
+          this.cleanNewStatus();
+          this.getTaskUser(this.taskID);
+          this.getStatusType();
+          break;
+
+        case "Concluída":
+          const conc = await Promise.all([
+            this.postTaskStatus(),
+            this.putTask(),
+            this.virtualClickUpload("Carregar"),
+          ]);
+          break;
+
+        case "Encerrada":
+          const enc = await Promise.all([
+            this.postTaskStatus(),
+            this.putTask(true),
+          ]);
+          this.viewMode = "overview";
+          this.cleanNewStatus();
+          this.getTaskUser(this.taskID);
+          this.getStatusType();
+          break;
       }
+
+   
     },
     postTask: async function () {
       const index = 0;
@@ -642,6 +749,7 @@ export default {
             this.viewMode = "overview";
             this.cleanNewStatus();
             this.getTaskUser(this.taskID);
+            this.getTaskPhotos(this.taskID);
             this.getStatusType();
           })
           .catch((response) => {
@@ -741,7 +849,10 @@ export default {
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
-            this.photos = response.data;
+            response.data.map((photo) => {
+              if (photo.idStatusFK === 1) this.photos[0].push(photo);
+              else this.photos[1].push(photo);
+            });
 
             // console.log("FOTOS CARREGADAS");
             // console.log(this.photos);
@@ -816,7 +927,7 @@ export default {
 
     if (this.$store.state.editTaskId > 0)
       this.taskID = this.$store.state.editTaskId;
-    else this.taskID = 40;
+    else this.taskID = 43;
 
     this.getTaskUser(this.taskID);
     this.getTaskPhotos(this.taskID);
@@ -1271,9 +1382,8 @@ export default {
 }
 
 @media screen and (max-width: 390px) {
-  .progressButtonsContainer .btn-adv-progress
-  {
-    font-size:15px !important;
+  .progressButtonsContainer .btn-adv-progress {
+    font-size: 15px !important;
     padding: 10px;
   }
 
