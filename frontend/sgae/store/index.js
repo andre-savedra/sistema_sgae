@@ -1,3 +1,4 @@
 export const state = () => ({    
-    editTaskId: 0,    
+    editTaskId: 0,
+    tasksToPrint: [],
 });

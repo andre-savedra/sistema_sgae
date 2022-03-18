@@ -1,4 +1,7 @@
 export { default as CustomCarousel } from '../..\\components\\CustomCarousel.vue'
+export { default as PdfCover } from '../..\\components\\PdfCover.vue'
+export { default as PdfHeader } from '../..\\components\\PdfHeader.vue'
+export { default as PdfTaskComponent } from '../..\\components\\PdfTaskComponent.vue'
 export { default as Profile } from '../..\\components\\Profile.vue'
 
 // nuxt/nuxt.js#8607

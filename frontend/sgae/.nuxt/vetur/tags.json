@@ -2,6 +2,15 @@
   "CustomCarousel": {
     "description": "Auto imported from components/CustomCarousel.vue"
   },
+  "PdfCover": {
+    "description": "Auto imported from components/PdfCover.vue"
+  },
+  "PdfHeader": {
+    "description": "Auto imported from components/PdfHeader.vue"
+  },
+  "PdfTaskComponent": {
+    "description": "Auto imported from components/PdfTaskComponent.vue"
+  },
   "Profile": {
     "description": "Auto imported from components/Profile.vue"
   }

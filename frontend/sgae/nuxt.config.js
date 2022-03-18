@@ -26,14 +26,15 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [],
+  buildModules: [
+    
+  ],
 
   primevue: {
     theme: "saga-blue",
@@ -116,6 +117,8 @@ export default {
     },
   },
 
+ 
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
@@ -123,6 +126,7 @@ export default {
     "@nuxtjs/auth",
     "@nuxtjs/google-fonts",
     "primevue/nuxt",
+    "pdfmake"
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

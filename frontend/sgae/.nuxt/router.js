@@ -9,6 +9,7 @@ const _25fc8521 = () => interopDefault(import('..\\pages\\andamentoTarefa\\index
 const _9864a2f2 = () => interopDefault(import('..\\pages\\erro\\index.vue' /* webpackChunkName: "pages/erro/index" */))
 const _2646fa32 = () => interopDefault(import('..\\pages\\home\\index.vue' /* webpackChunkName: "pages/home/index" */))
 const _9fb5f98c = () => interopDefault(import('..\\pages\\meuAcesso\\index.vue' /* webpackChunkName: "pages/meuAcesso/index" */))
+const _41b6f75e = () => interopDefault(import('..\\pages\\pdf\\index.vue' /* webpackChunkName: "pages/pdf/index" */))
 const _444f6294 = () => interopDefault(import('..\\pages\\registrar\\index.vue' /* webpackChunkName: "pages/registrar/index" */))
 const _63eda994 = () => interopDefault(import('..\\pages\\reset\\index.vue' /* webpackChunkName: "pages/reset/index" */))
 const _02b33c50 = () => interopDefault(import('..\\pages\\sucesso\\index.vue' /* webpackChunkName: "pages/sucesso/index" */))
@@ -47,6 +48,10 @@ export const routerOptions = {
     path: "/meuAcesso",
     component: _9fb5f98c,
     name: "meuAcesso"
+  }, {
+    path: "/pdf",
+    component: _41b6f75e,
+    name: "pdf"
   }, {
     path: "/registrar",
     component: _444f6294,
