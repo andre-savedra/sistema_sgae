@@ -432,10 +432,14 @@ export default {
     },
     printTask: function(id){
       console.log("imprimindo...");
+<<<<<<< HEAD
       const prints = [id];
       this.$store.dispatch("setTaskToPrint", prints);
       this.$router.push('/pdf');     
 
+=======
+      this.$router.push('/pdf/' + id);
+>>>>>>> c1293a3f0f920381119a38320ebdb6ec30ba2598
     },
     deleteTask: function (taskId) {
       if (taskId > 0) {
