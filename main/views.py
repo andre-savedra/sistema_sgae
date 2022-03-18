@@ -358,6 +358,29 @@ class TarefasUsuariosAPIView(APIView):
                     'total': resp[1],
                     'pages': resp[2]
                 }
+            )        
+        elif 'tarefaCompletaStatusPhoto' in request.GET:
+            tarefa = request.GET['tarefaCompletaStatusPhoto']
+            tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)         
+            resp = getPagination(request, tarefasUsuarios)
+            serializer = TarefasUsuariosSerializer(resp[0], many=True)
+
+            tarefasStatus = TarefasStatus.objects.filter(idTarefaFK=tarefa)
+            resp = getPagination(request, tarefasStatus)
+            serializerStatus = TarefasStatusSerializer(resp[0], many=True)
+
+            fotos = Fotos.objects.filter(idTarefaFK=tarefa)
+            resp = getPagination(request, fotos)
+            serializerPhotos = FotosSerializer(resp[0], many=True)
+
+            return Response(
+                {
+                    'data': serializer.data,
+                    'status': serializerStatus.data,
+                    'photos': serializerPhotos.data,
+                    'total': resp[1],
+                    'pages': resp[2]
+                }
             )
         elif 'tarefaCompleta' in request.GET:
             tarefa = request.GET['tarefaCompleta']
@@ -366,7 +389,7 @@ class TarefasUsuariosAPIView(APIView):
             serializer = TarefasUsuariosSerializer(resp[0], many=True)
             return Response(
                 {
-                    'data': serializer.data,
+                    'data': serializer.data,                    
                     'total': resp[1],
                     'pages': resp[2]
                 }

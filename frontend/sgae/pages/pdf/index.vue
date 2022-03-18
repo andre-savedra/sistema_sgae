@@ -48,6 +48,76 @@ export default {
     };
   },
   methods: {
+    formatNumber: function (input) {
+      if (input >= 0 && input <= 9) return "0" + input.toString();
+      else return input.toString();
+    },
+    formatDate: function (input) {
+      let dt = new Date();
+
+      if (input === null) return input;
+
+      if (input === "frontend")
+        //new datetime to show in front
+        return (
+          this.formatNumber(dt.getDate()) +
+          "/" +
+          this.formatNumber(dt.getMonth() + 1) +
+          "/" +
+          dt.getFullYear() +
+          " - " +
+          this.formatNumber(dt.getHours()) +
+          ":" +
+          this.formatNumber(dt.getMinutes())
+        );
+      else if (input === "backend")
+        //new datetime to show in front
+        return (
+          dt.getFullYear() +
+          "-" +
+          this.formatNumber(dt.getMonth() + 1) +
+          "-" +
+          this.formatNumber(dt.getDate()) +
+          "T" +
+          this.formatNumber(dt.getHours()) +
+          ":" +
+          this.formatNumber(dt.getMinutes()) +
+          ":00.000000-03:00"
+        );
+      else if (input.includes("GMT")) {
+        //convert frontend date to backend date
+        let dt = new Date(input).toISOString();
+        return dt.replaceAll("Z", "-03:00");
+      } else if (input.includes("T")) {
+        let val = input.split("T"); //val[0] date, val[1] time
+
+        const separator = val[0].split("-");
+        if (separator.length === 3)
+          val[0] = separator[2] + "/" + separator[1] + "/" + separator[0];
+
+        const separator2 = val[1].split(":");
+        if (separator2.length >= 2)
+          val[1] = separator2[0] + ":" + separator2[1];
+
+        return val[0] + " - " + val[1];
+      } else if (input.includes("/")) {
+        let val = input.split("-");
+        val[0] = val[0].trim().replaceAll("/", "-"); //date
+        val[1] = val[1].trim().replaceAll("/", "-"); //time
+        //invert date position
+        const separator = val[0].split("-");
+        if (separator.length === 3)
+          val[0] = separator[2] + "-" + separator[1] + "-" + separator[0];
+
+        return val[0] + "T" + val[1] + ":00-03:00";
+      } else return input;
+    },
+    limitName: function (data) {
+      if (data !== null && data !== undefined) {
+        let val = data.split(" ");
+        return val[0] + " " + val[val.length - 1];
+      } else return data;
+    },
     printPdf: function () {
       console.log(this.printMode);
       const school = this.schoolCode;
@@ -60,6 +130,19 @@ export default {
         var pdfFonts = require("pdfmake/build/vfs_fonts.js");
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
       }
+
+      // SVGS
+      const timelineSvgs = 
+      [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M384 0v128h128L384 0zM352 128L352 0H176C149.5 0 128 21.49 128 48V288h174.1l-39.03-39.03c-9.375-9.375-9.375-24.56 0-33.94s24.56-9.375 33.94 0l80 80c9.375 9.375 9.375 24.56 0 33.94l-80 80c-9.375 9.375-24.56 9.375-33.94 0C258.3 404.3 256 398.2 256 392s2.344-12.28 7.031-16.97L302.1 336H128v128C128 490.5 149.5 512 176 512h288c26.51 0 48-21.49 48-48V160h-127.1C366.3 160 352 145.7 352 128zM24 288C10.75 288 0 298.7 0 312c0 13.25 10.75 24 24 24H128V288H24z"/></svg>',
+
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Pro 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M224 256c70.7 0 128-57.31 128-128S294.7 0 224 0C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3c-95.73 0-173.3 77.6-173.3 173.3C0 496.5 15.52 512 34.66 512H413.3C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304zM479.1 320h-73.85C451.2 357.7 480 414.1 480 477.3C480 490.1 476.2 501.9 470 512h138C625.7 512 640 497.6 640 479.1C640 391.6 568.4 320 479.1 320zM432 256C493.9 256 544 205.9 544 144S493.9 32 432 32c-25.11 0-48.04 8.555-66.72 22.51C376.8 76.63 384 101.4 384 128c0 35.52-11.93 68.14-31.59 94.71C372.7 243.2 400.8 256 432 256z"/></svg>',
+
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M384 32C419.3 32 448 60.65 448 96V416C448 451.3 419.3 480 384 480H64C28.65 480 0 451.3 0 416V96C0 60.65 28.65 32 64 32H384zM339.8 211.8C350.7 200.9 350.7 183.1 339.8 172.2C328.9 161.3 311.1 161.3 300.2 172.2L192 280.4L147.8 236.2C136.9 225.3 119.1 225.3 108.2 236.2C97.27 247.1 97.27 264.9 108.2 275.8L172.2 339.8C183.1 350.7 200.9 350.7 211.8 339.8L339.8 211.8z"/></svg>',
+
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M509.5 .0234c-6.145 0-12.53 1.344-18.64 4.227c-44.11 20.86-76.81 27.94-104.1 27.94c-57.89 0-91.53-31.86-158.2-31.87C195 .3203 153.3 8.324 96 32.38V32c0-17.75-14.25-32-32-32S32 14.25 32 32L31.96 496c0 8.75 7.25 16 16 16H80C88.75 512 96 504.8 96 496V384c51.74-23.86 92.71-31.82 128.3-31.82c71.09 0 120.6 31.78 191.7 31.78c30.81 0 65.67-5.969 108.1-23.09C536.3 355.9 544 344.4 544 332.1V30.74C544 12.01 527.8 .0234 509.5 .0234zM480 141.8c-31.99 14.04-57.81 20.59-80 22.49v80.21c25.44-1.477 51.59-6.953 80-17.34V308.9c-22.83 7.441-43.93 11.08-64.03 11.08c-5.447 0-10.71-.4258-15.97-.8906V244.5c-4.436 .2578-8.893 .6523-13.29 .6523c-25.82 0-47.35-4.547-66.71-10.08v66.91c-23.81-6.055-50.17-11.41-80-12.98V213.1C236.2 213.7 232.5 213.3 228.5 213.3C208.8 213.3 185.1 217.7 160 225.1v69.1C139.2 299.4 117.9 305.8 96 314.4V250.7l24.77-10.39C134.8 234.5 147.6 229.9 160 225.1V143.4C140.9 148.5 120.1 155.2 96 165.3V101.8l24.77-10.39C134.8 85.52 147.6 80.97 160 77.02v66.41c26.39-6.953 49.09-10.17 68.48-10.16c4.072 0 7.676 .4453 11.52 .668V65.03C258.6 66.6 274.4 71.55 293.2 77.83C301.7 80.63 310.7 83.45 320 86.12v66.07c20.79 6.84 41.45 12.96 66.71 12.96c4.207 0 8.781-.4766 13.29-.8594V95.54c25.44-1.477 51.59-6.953 80-17.34V141.8zM240 133.9v80.04c18.61 1.57 34.37 6.523 53.23 12.8C301.7 229.6 310.7 232.4 320 235.1V152.2C296.1 144.3 271.6 135.8 240 133.9z"/></svg>'
+
+      ]
 
       var docDefinition = {
         pageSize: "A4",
@@ -124,17 +207,123 @@ export default {
           },
           {
             pageBreak: "before",
-            text: `TAREFA: # ${this.tasksPrint[0][0].idTarefaFK.id} - ${this.tasksPrint[0][0].idTarefaFK.nome}`,
+            text: `TAREFA: # ${this.tasksPrint[0].data[0].idTarefaFK.id} - ${this.tasksPrint[0].data[0].idTarefaFK.nome}`,
             style: ["pdfTitleTask", "defaultColor2"],
-            alignment: "left",            
-          },         
-          {
-            text: `Ambiente: ${this.tasksPrint[0][0].idTarefaFK.idAmbienteFK.nome}`,
-            style: ["pdfSubTitle"],
-            alignment: "left",            
+            alignment: "left",
           },
           {
-            text: "This is an sample PDF printed with pdfMake",
+            text: `Ambiente: ${this.tasksPrint[0].data[0].idTarefaFK.idAmbienteFK.nome}`,
+            style: ["pdfSubTitle"],
+            alignment: "left",
+          },
+          {
+            text: `Status: ${this.tasksPrint[0].data[0].idTarefaFK.idStatusFK.nome}`,
+            style: ["pdfSubTitle"],
+            alignment: "left",
+          },
+          {
+            text: [
+              { text: "-Solicitante: ", bold: true },
+              `${this.limitName(
+                this.tasksPrint[0].data[0].idTarefaFK.idSolicitanteFK.nome
+              )}`,
+              { text: "                           ", bold: true },
+              { text: "-Prazo: ", bold: true },
+              `${this.formatDate(this.tasksPrint[0].data[0].idTarefaFK.prazo)}`,
+            ],
+            style: ["pdfLabel"],
+            alignment: "left",
+          },
+          {
+            text: [
+              { text: "-Data início: ", bold: true },
+              `${this.formatDate(this.tasksPrint[0].data[0].idTarefaFK.dataInicio)}`
+            ],
+            style: ["pdfLabel"],
+            alignment: "left",
+          },
+          {
+            text: [
+              { text: "-Data fim: ", bold: true },
+              `${(this.tasksPrint[0].data[0].idTarefaFK.dataFim === null)? '(N/A)' : this.formatDate(this.tasksPrint[0].data[0].idTarefaFK.dataFim)}`
+            ],
+            style: ["pdfLabel"],
+            alignment: "left",
+          },
+          {
+            text: ' ',            
+            alignment: "center",
+          },
+          {
+            text: 'Progresso da Tarefa',
+            style: ["pdfSubTitle"],
+            alignment: "center",
+          },
+          {
+            text: 'Aberta',
+            style: ["pdfMiniLabel", "defaultColor2"],
+            absolutePosition: { x: 90, y: 270 },
+          },          
+          {
+            svg: timelineSvgs[0],
+            width: 25,
+            height: 25,
+            absolutePosition: { x: 90, y: 290 },
+          },
+          {
+            text: `${this.formatDate(this.tasksPrint[0].status[0].data)}`,
+            style: ["pdfMiniLabel"],
+            absolutePosition: { x: 65, y: 325 },
+          },
+          
+          {
+            text: 'Em andamento',
+            style: ["pdfMiniLabel", "defaultColor2"],
+            absolutePosition: { x: 195, y: 270 },
+          },
+          {
+            svg: timelineSvgs[1],
+            width: 25,
+            height: 25,
+            absolutePosition: { x: 210, y: 290 },
+          },
+          {
+            text: `${(this.tasksPrint[0].status.length > 1)? this.formatDate(this.tasksPrint[0].status[1].data) : ''}`,
+            style: ["pdfMiniLabel"],
+            absolutePosition: { x: 185, y: 325 },
+          },
+
+          {
+            text: 'Concluída',
+            style: ["pdfMiniLabel", "defaultColor2"],
+            absolutePosition: { x: 320, y: 270 },
+          },
+          {
+            svg: timelineSvgs[2],
+            width: 25,
+            height: 25,
+            absolutePosition: { x: 330, y: 290 },
+          },
+          {
+            text: `${(this.tasksPrint[0].status.length > 2)? this.formatDate(this.tasksPrint[0].status[2].data) : ''}`,
+            style: ["pdfMiniLabel"],
+            absolutePosition: { x: 305, y: 325 },
+          },
+          {
+            text: 'Encerrada',
+            style: ["pdfMiniLabel", "defaultColor2"],
+            absolutePosition: { x: 430, y: 270 },
+          },
+          {
+            svg: timelineSvgs[3],
+            width: 25,
+            height: 25,
+            absolutePosition: { x: 440, y: 290 },
+          },
+          {
+            text: `${(this.tasksPrint[0].status.length > 3)? this.formatDate(this.tasksPrint[0].status[3].data) : ''}`,
+            style: ["pdfMiniLabel"],
+            absolutePosition: { x: 415, y: 325 },
           },
         ],
         images: {
@@ -150,11 +339,20 @@ export default {
           pdfTitleTask: {
             bold: true,
             fontSize: 18,
+            margin: [0, 0, 0, 10]
           },
           pdfSubTitle: {
             bold: true,
             fontSize: 14,
-            margin: 10
+            margin: [10, 0, 0, 5]
+          },
+          pdfLabel: {
+            fontSize: 13,
+            margin: [20, 5, 0, 0],
+          },
+          pdfMiniLabel: {
+            bold: true,    
+            fontSize: 10,  
           },
           defaultColor1: {
             color: "white",
@@ -173,12 +371,27 @@ export default {
       await Promise.all(
         tasks.map(async (id) => {
           await this.$axios
-            .$get(this.BaseURL + ("tarefasUsuarios/?tarefaCompleta=" + id))
+            .$get(
+              this.BaseURL +
+                ("tarefasUsuarios/?tarefaCompletaStatusPhoto=" + id)
+            )
             .then((response) => {
+              let photosArray = [[], []];
+
               //request ok
               if (response.data !== null && response.data !== undefined) {
-                this.tasksPrint.push(structuredClone(response.data));
-                return response.data;
+                this.tasksPrint.push(structuredClone(response));
+
+                response.photos.forEach((photo) => {
+                  if (photo.idStatusFK !== 3)
+                    photosArray[0].push(structuredClone(photo));
+                  else photosArray[1].push(structuredClone(photo));
+
+                  // console.log("imprimindo as fotos individuais...");
+                  // console.log(photo);
+                });
+                this.photos.push(photosArray);
+                return response;
               }
             })
             .catch((response) => {
@@ -190,51 +403,20 @@ export default {
 
       console.log("final get task user");
       console.log(this.tasksPrint);
-    },
-    getTasksPhotos: async function (tasks) {
-      await Promise.all(
-        tasks.map(async (id) => {
-          await this.$axios
-            .$get(this.BaseURL + ("fotos/?tarefa=" + id))
-            .then((response) => {
-              let photosArray = [[], []];
-
-              if (response.data !== null && response.data !== undefined) {
-                response.data.forEach((photo) => {
-                  if (photo.idStatusFK === 1)
-                    photosArray[0].push(structuredClone(photo));
-                  else photosArray[1].push(structuredClone(photo));
-
-                  // console.log("imprimindo as fotos individuais...");
-                  // console.log(photo);
-                });
-                this.photos.push(photosArray);
-                return response.data;
-              }
-            })
-            .catch((response) => {
-              alert("Problema ao tentar pegar FOTOS da tarefa " + id);
-              console.log(response);
-            });
-        })
-      );
-      console.log("Finalizou task photos");
+      console.log("photos");
       console.log(this.photos);
-    },
+    },   
   },
   mounted() {
     if (!this.$store.state.tasksToPrint.length) {
+      this.tasksPrintID.push(40);
       this.tasksPrintID.push(41);
       this.tasksPrintID.push(42);
-      this.tasksPrintID.push(43);
     } else this.tasksPrintID = this.$store.state.tasksToPrint;
 
     console.log("this.tasksPrintID");
     console.log(this.tasksPrintID);
     this.getTasksUser(this.tasksPrintID);
-    this.getTasksPhotos(this.tasksPrintID);
-
-    
   },
 };
 </script>
