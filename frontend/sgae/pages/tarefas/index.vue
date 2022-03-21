@@ -15,8 +15,6 @@
         <div
           class="grid grid-nogutter p-d-flex p-flex-row p-jc-center p-ai-start"
         >
-       
-
           <div
             class="
               col-6
@@ -72,7 +70,11 @@
       </template>
 
       <template #list="slotProps">
-        <div :class="'listTaskDataView ' + slotProps.data.idStatusFK.nome + '-hover'">
+        <div
+          :class="
+            'listTaskDataView ' + slotProps.data.idStatusFK.nome + '-hover'
+          "
+        >
           <div
             class="col-12 elementListTaskDataView"
             v-if="
@@ -81,6 +83,7 @@
           >
             <div class="imgTaskContainer">
               <img
+                v-if="slotProps.data.fotos[0]"
                 :src="BaseURL2 + slotProps.data.fotos[0].image"
                 alt="Foto Tarefa"
               />
@@ -190,8 +193,9 @@
                       >
                         <i class="pi pi-trash" />
                       </button>
-                      <button class="printTask"
-                      v-on:click="printTask(slotProps.data.id)"
+                      <button
+                        class="printTask"
+                        v-on:click="printTask(slotProps.data.id)"
                       >
                         <i class="pi pi-print" />
                       </button>
@@ -430,12 +434,11 @@ export default {
         }
       }
     },
-    printTask: function(id){
+    printTask: function (id) {
       console.log("imprimindo...");
       const prints = [id];
       this.$store.dispatch("setTaskToPrint", prints);
-      this.$router.push('/pdf');     
-
+      this.$router.push("/pdf");
     },
     deleteTask: function (taskId) {
       if (taskId > 0) {
@@ -506,21 +509,16 @@ export default {
     text-align: center !important;
     height: 70px;
   }
-  
-
 
   .dataTaskViewer {
-    
     width: 100vw;
     /* background-color: yellowgreen; */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
+
     .p-dataview-header {
-
-
       overflow-x: visible;
       width: 90vw;
       display: flex;
@@ -597,13 +595,11 @@ export default {
         }
       }
     }
-
-    
   }
 
   .dataTaskViewer .p-dataview-content {
     .p-nogutter {
-      .Aberta-hover{
+      .Aberta-hover {
         &:hover {
           background: linear-gradient(
             135deg,
@@ -612,7 +608,7 @@ export default {
           ) !important;
         }
       }
-      .andamento-hover{
+      .andamento-hover {
         &:hover {
           background: linear-gradient(
             135deg,
@@ -621,7 +617,7 @@ export default {
           ) !important;
         }
       }
-      .Concluída-hover{
+      .Concluída-hover {
         &:hover {
           background: linear-gradient(
             135deg,
@@ -630,7 +626,7 @@ export default {
           ) !important;
         }
       }
-      .Encerrada-hover{
+      .Encerrada-hover {
         &:hover {
           background: linear-gradient(
             135deg,
@@ -760,28 +756,52 @@ export default {
             }
           }
         }
-        .statusTask  {
+        .statusTask {
           width: 100%;
-          height: 10px;          
+          height: 10px;
           box-shadow: rgb(0 0 0 / 10%) 0px 3px 6px, rgb(0 0 0 / 17%) 0px 3px 6px;
         }
-        .Aberta{
-          background: linear-gradient(-15deg, #f5c4d0, #ac384b, #da6969, #830707);
+        .Aberta {
+          background: linear-gradient(
+            -15deg,
+            #f5c4d0,
+            #ac384b,
+            #da6969,
+            #830707
+          );
           background-size: 300% 300%;
           animation: gradient 4s ease infinite;
         }
-        .andamento{
-          background: linear-gradient(-15deg, #bd8d67, #ca722b, #e6bc7a, #ffa007);
+        .andamento {
+          background: linear-gradient(
+            -15deg,
+            #bd8d67,
+            #ca722b,
+            #e6bc7a,
+            #ffa007
+          );
           background-size: 300% 300%;
           animation: gradient 4s ease infinite;
         }
-        .Concluída{
-          background: linear-gradient(-15deg, #ada858, #c5c73f, #fdf68b, #e8ec00);
+        .Concluída {
+          background: linear-gradient(
+            -15deg,
+            #ada858,
+            #c5c73f,
+            #fdf68b,
+            #e8ec00
+          );
           background-size: 300% 300%;
           animation: gradient 4s ease infinite;
         }
-        .Encerrada{
-          background: linear-gradient(-15deg, #538664, #38ac48, #89da69, #07830d);
+        .Encerrada {
+          background: linear-gradient(
+            -15deg,
+            #538664,
+            #38ac48,
+            #89da69,
+            #07830d
+          );
           background-size: 300% 300%;
           animation: gradient 4s ease infinite;
         }

@@ -3,78 +3,91 @@
     "name": "addTarefa",
     "path": "/addTarefa",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\addTarefa\\\\index.vue",
-    "chunkName": "pages/addTarefa/index"
+    "chunkName": "pages/addTarefa/index",
+    "_name": "_3f5d63b2"
   },
   {
     "name": "andamentoTarefa",
     "path": "/andamentoTarefa",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\andamentoTarefa\\\\index.vue",
-    "chunkName": "pages/andamentoTarefa/index"
+    "chunkName": "pages/andamentoTarefa/index",
+    "_name": "_25fc8521"
   },
   {
     "name": "erro",
     "path": "/erro",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\erro\\\\index.vue",
-    "chunkName": "pages/erro/index"
+    "chunkName": "pages/erro/index",
+    "_name": "_9864a2f2"
   },
   {
     "name": "home",
     "path": "/home",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\home\\\\index.vue",
-    "chunkName": "pages/home/index"
+    "chunkName": "pages/home/index",
+    "_name": "_2646fa32"
   },
   {
     "name": "meuAcesso",
     "path": "/meuAcesso",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\meuAcesso\\\\index.vue",
-    "chunkName": "pages/meuAcesso/index"
+    "chunkName": "pages/meuAcesso/index",
+    "_name": "_9fb5f98c"
   },
   {
     "name": "pdf",
     "path": "/pdf",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\pdf\\\\index.vue",
-    "chunkName": "pages/pdf/index"
+    "chunkName": "pages/pdf/index",
+    "_name": "_41b6f75e"
   },
   {
     "name": "registrar",
     "path": "/registrar",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\registrar\\\\index.vue",
-    "chunkName": "pages/registrar/index"
+    "chunkName": "pages/registrar/index",
+    "_name": "_444f6294"
   },
   {
     "name": "reset",
     "path": "/reset",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\reset\\\\index.vue",
-    "chunkName": "pages/reset/index"
+    "chunkName": "pages/reset/index",
+    "_name": "_63eda994"
   },
   {
     "name": "sucesso",
     "path": "/sucesso",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\sucesso\\\\index.vue",
-    "chunkName": "pages/sucesso/index"
+    "chunkName": "pages/sucesso/index",
+    "_name": "_02b33c50"
   },
   {
     "name": "tarefas",
     "path": "/tarefas",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\tarefas\\\\index.vue",
-    "chunkName": "pages/tarefas/index"
+    "chunkName": "pages/tarefas/index",
+    "_name": "_e268616a"
   },
   {
     "name": "usuarios",
     "path": "/usuarios",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\usuarios\\\\index.vue",
-    "chunkName": "pages/usuarios/index"
+    "chunkName": "pages/usuarios/index",
+    "_name": "_02cc2ccc"
   },
   {
     "name": "pdf-teste",
     "path": "/pdf/teste",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\pdf\\\\teste.js",
-    "chunkName": "pages/pdf/teste"
+    "chunkName": "pages/pdf/teste",
+    "_name": "_067d943d"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_1f4bed31"
   }
 ]
