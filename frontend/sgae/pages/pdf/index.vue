@@ -621,17 +621,9 @@ export default {
     },
   },
   mounted() {
-    if (!this.$store.state.tasksToPrint.length) {
-      // this.tasksPrintID.push(41);
-      // this.tasksPrintID.push(42);
-      // this.tasksPrintID.push(45);
-      // this.tasksPrintID.push(46);
-      // this.tasksPrintID.push(47);
-      // this.tasksPrintID.push(48);
-      // this.tasksPrintID.push(49);
-      // this.tasksPrintID.push(50);
-      this.tasksPrintID.push(51);
-      this.tasksPrintID.push(52);
+    if (!this.$store.state.tasksToPrint.length) {      
+      this.tasksPrintID.push(42);
+      this.tasksPrintID.push(43);
     } else this.tasksPrintID = this.$store.state.tasksToPrint;
 
     console.log("this.tasksPrintID");

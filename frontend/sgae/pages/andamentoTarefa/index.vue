@@ -313,6 +313,7 @@
                     :photos="photos[0]"
                     background="white"
                     :baseURL="BaseURL2"
+                    targetID="CarouselDiagnostic"
                   />
                 </div>
               </div>
@@ -345,6 +346,7 @@
                     :photos="photos[1]"
                     background="white"
                     :baseURL="BaseURL2"
+                    targetID="CarouselResult"
                   />
                   <div v-else>
                     <h2>Fotos não anexadas...</h2>
@@ -770,6 +772,7 @@ export default {
 
           //request ok
           if (response.data !== null && response.data !== undefined) {
+            
             this.taskStatus = structuredClone(response.data);
 
             this.taskStatus.map((status, index) => {
@@ -800,6 +803,7 @@ export default {
 
           //request ok
           if (response.data !== null && response.data !== undefined) {
+            this.taskStatusArray.length = 0;
             response.data.map((typeSts, index) => {
               this.taskStatusArray.push({
                 id: typeSts.id,

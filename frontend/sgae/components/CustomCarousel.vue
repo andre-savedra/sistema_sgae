@@ -1,7 +1,7 @@
 <template>
   <div class="customCarousel-main" :style="cssCustom">
     <div
-      id="customCarouselElement"
+      :id="targetID"
       class="carousel slide"
       data-bs-ride="carousel"
     >
@@ -9,7 +9,7 @@
         <button
           class="carousel-control-prev"
           type="button"
-          data-bs-target="#customCarouselElement"
+          :data-bs-target="'#' + targetID"
           data-bs-slide="prev"
         >
           <span class="visually-hidden"
@@ -43,7 +43,7 @@
         <button
           class="carousel-control-next"
           type="button"
-          data-bs-target="#customCarouselElement"
+          :data-bs-target="'#' + targetID"
           data-bs-slide="next"
         >
           <span class="visually-hidden"
@@ -69,7 +69,7 @@
 <script>
 export default {
   name: "CustomCarousel",
-  props: ["photos", "background", "baseURL"],
+  props: ["photos", "background", "baseURL", "targetID"],
   data() {
     return {
       photosCopy: null,
@@ -88,6 +88,8 @@ export default {
     if (this.photos.length > 0) {
       this.photosCopy = structuredClone(this.photos);
       this.photosCopy.shift();
+      console.log("PHOTOS");
+      console.log(this.photosCopy);
     }
   },
 };
@@ -107,7 +109,7 @@ export default {
   align-items: center;
   justify-content: center;
 
-  #customCarouselElement {
+  .carousel {
     width: 100%;
     height: 100%;
     display: flex;
