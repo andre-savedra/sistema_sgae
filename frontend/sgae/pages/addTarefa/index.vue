@@ -130,13 +130,12 @@
                 :multiple="true"
                 accept="image/*"
                 :maxFileSize="10000000"
-                @upload="postPhoto"
+                @upload="postPhoto($event)"
                 class="customFileUpload"
                 id="imageUpload"
                 chooseLabel="Adicionar fotos"
                 uploadLabel="Carregar fotos"
-                cancelLabel="Cancelar"
-                @uploader="myUploader"
+                cancelLabel="Cancelar"                
               >
                 <template #empty>
                   <p>
@@ -222,6 +221,7 @@ export default {
       },
       deadline: null,
       photos: [],
+      uploadPhotoStarted: false,
       task: [
         {
           nome: null,
@@ -243,6 +243,7 @@ export default {
   },
   methods: {
     cleanForm() {
+      this.uploadPhotoStarted = false;
       this.task.map((task) => {
         task.nome = null;
         (task.descricao = null),
@@ -400,6 +401,7 @@ export default {
       el.forEach((element, index) => {
         if (element.textContent.includes(buttonText)) {
           element.click();
+          console.log("clicou")
         }
       });
     },
@@ -526,6 +528,12 @@ export default {
           console.log(response);
           //request ok
           this.virtualClickUpload("Carregar");
+          //clean form if there is no photo added
+          const checkUpload = setTimeout(() => {
+            if(!this.uploadPhotoStarted)
+              this.cleanForm();
+          },2000);
+
         })
         .catch((response) => {
           alert("Problema ao tentar cadastrar a tarefa");
@@ -537,7 +545,8 @@ export default {
       const files = event.files;
       const taskID = this.taskID;
       const initialStatus = this.initialStatus;
-
+      this.uploadPhotoStarted = true;
+  
       await files.forEach((file) => {
         let formData = new FormData();
         formData.append("nome", file.name);
@@ -560,11 +569,8 @@ export default {
             console.log(response);
           });
       });
-    },
-    myUploader: async function (event) {
-      console.log("my custom uploader...");
-      console.log(event);
-    },
+
+    },  
     getTaskUser: async function (task) {
       this.$axios
         .$get(this.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
