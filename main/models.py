@@ -41,7 +41,7 @@ def upload_image_teste(instance, filename):
 def upload_image_user(instance, filename):
     return f"{instance.idUserFK}-{filename}"
 
-
+# users copy
 class Usuarios(models.Model):
     nome = models.CharField(max_length=55)
     idUserFK = models.BigIntegerField(blank=True, null=True)
