@@ -12,19 +12,38 @@ from rest_framework.permissions import IsAuthenticated
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.pagination import PageNumberPagination
 
+from djoser.utils import decode_uid
+
+class RequestActivateUser(APIView):
+
+    def get(self, request, uid, token, format = None):
+        # payload = {'uid': uid, 'token': token}
+        userId = decode_uid(uid)
+        if userId:
+            usuario = Usuarios.objects.get(idUserFK=userId)
+            usuario.token = token
+            usuario.uid = uid
+            usuario.save()
+            print("novo usuario:")
+            print(usuario)
+        return HttpResponseRedirect('http://localhost:3003/sucesso/')
+            
 class ActivateUser(APIView):
 
     def get(self, request, uid, token, format = None):
         payload = {'uid': uid, 'token': token}
+        teste = decode_uid(uid)
+        print("teste")
+        print(teste)
 
-        url = "http://localhost:8003/api/v1/users/activation/"
-        response = requests.post(url, data = payload)
+        # url = "http://localhost:8003/api/v1/users/activation/"
+        # response = requests.post(url, data = payload)
 
-        if response.status_code == 204:
-            return HttpResponseRedirect('http://localhost:3000/sucesso/')            
-        else:       
-            return HttpResponseRedirect('http://localhost:3000/erro/')
-            
+        # if response.status_code == 204:
+        #     return HttpResponseRedirect('http://localhost:3000/sucesso/')            
+        # else:       
+        #     return HttpResponseRedirect('http://localhost:3000/erro/')
+        return Response({"msg": "teste"})
 
 
 def getPagination(request, listItems):
@@ -222,6 +241,27 @@ class UsuariosAPIView(APIView):
                     'pages': 0
                 }
             )            
+        elif 'token' in request.GET:
+            usuarios = Usuarios.objects.filter(uid<>'')
+            serializer = UsuariosSerializer(usuarios, many=True)            
+            return Response(
+                {
+                    'data': serializer.data,
+                    'total': 0,
+                    'pages': 0
+                }
+            )            
+        elif 'uid' in request.GET:
+            usuarios = Usuarios.objects.all()
+            resp = getPagination(request, usuarios)
+            serializer = UsuariosSerializerUidToken(resp[0], many=True)            
+            return Response(
+                {
+                    'data': serializer.data,
+                    'total': resp[1],
+                    'pages': resp[2]
+                }
+            )  
         elif pk == '':
             usuarios = Usuarios.objects.all()
             resp = getPagination(request, usuarios)

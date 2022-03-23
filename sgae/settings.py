@@ -84,9 +84,8 @@ DJOSER = {
     # "USER_ID_FIELD": "username",
     # "LOGIN_FIELD": "email",
     "SEND_ACTIVATION_EMAIL": True,
-    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "ACTIVATION_URL": "requestActivate/{uid}/{token}",
     'SERIALIZERS': {
-        # 'token_create': 'apps.accounts.serializers.CustomTokenCreateSerializer',
         'token_create': 'main.serializers.CustomTokenCreateSerializer',
     },
 }
@@ -98,8 +97,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = 'sgae.mange@gmail.com'
+EMAIL_HOST_PASSWORD = '@senaimange501'
 
 
 # Database

@@ -49,10 +49,35 @@ class UsuariosSerializer(serializers.ModelSerializer):
     class Meta:
         many = True
         model = Usuarios
-        fields = '__all__'
+        fields = [
+            'id',
+            'nome',
+            'idUserFK',
+            'email',
+            'fone',
+            'ativo',
+            'idNivelAcessoFK',
+            'image'
+        ]
 
 
 class UsuariosSerializerSimple(serializers.ModelSerializer):
+
+    class Meta:
+        many = True
+        model = Usuarios
+        fields = [
+            'id',
+            'nome',
+            'idUserFK',
+            'email',
+            'fone',
+            'ativo',
+            'idNivelAcessoFK',
+            'image'
+        ]
+
+class UsuariosSerializerUidToken(serializers.ModelSerializer):
 
     class Meta:
         many = True

@@ -231,16 +231,17 @@ export default {
 
       //User register:
       if (this.userAuth.password === this.passwordConfirm) {
-        this.userAuth.username = this.userAuth.username.toString();
-        this.userSec[0].email = this.userAuth.email;
-        this.userSec[0].idNivelAcessoFK = this.jobSelected.id;
-        this.userSec[0].idUserFK = 0;
-        this.userSec[0].fone = this.phoneFormated
-          .replaceAll("(", "")
-          .replaceAll(")", "")
-          .replaceAll(" ", "")
-          .replaceAll("-", "");
-        this.postUsuario();
+        // this.userAuth.username = this.userAuth.username.toString();
+        // this.userSec[0].email = this.userAuth.email;
+        // this.userSec[0].idNivelAcessoFK = this.jobSelected.id;
+        // this.userSec[0].idUserFK = 0;
+        // this.userSec[0].fone = this.phoneFormated
+        //   .replaceAll("(", "")
+        //   .replaceAll(")", "")
+        //   .replaceAll(" ", "")
+        //   .replaceAll("-", "");
+        // this.postUsuario();
+        this.postUser();
         
       } else {
         alert("Campos Senha e Confirmação de Senha não estão iguais");
