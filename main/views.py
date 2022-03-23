@@ -211,7 +211,18 @@ class UsuariosAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        if pk == '':
+        if 'ativo' in request.GET:
+            ativo = request.GET['ativo']
+            usuarios = Usuarios.objects.filter(ativo=ativo)
+            serializer = UsuariosSerializer(usuarios, many=True)            
+            return Response(
+                {
+                    'data': serializer.data,
+                    'total': 0,
+                    'pages': 0
+                }
+            )            
+        elif pk == '':
             usuarios = Usuarios.objects.all()
             resp = getPagination(request, usuarios)
             serializer = UsuariosSerializer(resp[0], many=True)

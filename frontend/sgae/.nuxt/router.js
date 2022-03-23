@@ -6,6 +6,7 @@ import scrollBehavior from './router.scrollBehavior.js'
 
 const _3f5d63b2 = () => interopDefault(import('..\\pages\\addTarefa\\index.vue' /* webpackChunkName: "pages/addTarefa/index" */))
 const _25fc8521 = () => interopDefault(import('..\\pages\\andamentoTarefa\\index.vue' /* webpackChunkName: "pages/andamentoTarefa/index" */))
+const _2f1cd7af = () => interopDefault(import('..\\pages\\backup\\index.vue' /* webpackChunkName: "pages/backup/index" */))
 const _9864a2f2 = () => interopDefault(import('..\\pages\\erro\\index.vue' /* webpackChunkName: "pages/erro/index" */))
 const _2646fa32 = () => interopDefault(import('..\\pages\\home\\index.vue' /* webpackChunkName: "pages/home/index" */))
 const _9fb5f98c = () => interopDefault(import('..\\pages\\meuAcesso\\index.vue' /* webpackChunkName: "pages/meuAcesso/index" */))
@@ -36,6 +37,10 @@ export const routerOptions = {
     path: "/andamentoTarefa",
     component: _25fc8521,
     name: "andamentoTarefa"
+  }, {
+    path: "/backup",
+    component: _2f1cd7af,
+    name: "backup"
   }, {
     path: "/erro",
     component: _9864a2f2,
