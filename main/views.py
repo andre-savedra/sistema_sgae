@@ -285,6 +285,14 @@ class TarefasAPIView(APIView):
                     'pages': resp[2]
                 }
             )
+        elif 'ids' in request.GET:
+            tarefas = Tarefas.objects.all()
+            serializer = TarefasSerializerJustId(tarefas, many=True)
+            return Response({
+                'data': serializer.data,
+                'total': 0,
+                'pages': 0
+            }) 
         elif pk != '':
             tarefas = Tarefas.objects.get(id=pk)            
             serializer = TarefasSerializer(tarefas)            

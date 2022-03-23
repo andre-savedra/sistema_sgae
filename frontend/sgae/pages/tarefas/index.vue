@@ -65,6 +65,7 @@
           </div>
           <div class="col-6 viewSwitch">
             <DataViewLayoutOptions v-model="layout" />
+            <button class="btnPrintAllTasks" v-on:click="printManyTasks()"><i class="pi pi-print" /></button>
           </div>
         </div>
       </template>
@@ -438,6 +439,12 @@ export default {
       console.log("imprimindo...");
       const prints = [id];
       this.$store.dispatch("setTaskToPrint", prints);
+      this.$store.dispatch("setPrintMode", "");
+      this.$router.push("/pdf");
+    },
+    printManyTasks: function(){
+      this.$store.dispatch("setTaskToPrint", []);
+      this.$store.dispatch("setPrintMode", "tasks");
       this.$router.push("/pdf");
     },
     deleteTask: function (taskId) {
@@ -591,6 +598,18 @@ export default {
             flex-direction: column;
             align-items: flex-start;
             justify-content: flex-start;
+          }
+          .btnPrintAllTasks{             
+             height: 32px;
+             margin: 4px 0px 5px 0px;             
+             border-radius: 5px; 
+             border: 1px solid #ffff;
+             background-color: #ffff;
+             &:hover{
+               border: 1px solid #c22a1f;
+               background-color: #c22a1f;
+               cursor: pointer;
+             }
           }
         }
       }

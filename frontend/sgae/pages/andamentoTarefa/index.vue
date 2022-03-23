@@ -396,7 +396,7 @@
 
               <FileUpload
                 :multiple="true"
-                accept="image/*"
+                accept="image/jpeg,image/png"
                 :maxFileSize="10000000"
                 @upload="postPhoto"
                 class="customFileUpload"
@@ -405,6 +405,10 @@
                 uploadLabel="Carregar fotos"
                 cancelLabel="Cancelar"
                 @uploader="myUploader"
+                :fileLimit="10"
+                invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
+                invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"
+                invalidFileLimitMessage	="Máximo de imagens anexadas é 10, diminua a quantidade de imagens!"
               >
                 <template #empty>
                   <p>

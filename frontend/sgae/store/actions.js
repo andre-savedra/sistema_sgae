@@ -9,4 +9,9 @@ export default {
     console.log(payload);
     context.commit("TASKS_TO_PRINT", payload);
   },
+  setPrintMode(context, payload) {
+    console.log("payload PRINT MODE");
+    console.log(payload);
+    context.commit("PRINT_MODE", payload);
+  },
 };

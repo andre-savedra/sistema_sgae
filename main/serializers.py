@@ -77,6 +77,13 @@ class TarefasSerializerSimple(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TarefasSerializerJustId(serializers.ModelSerializer):   
+   
+    class Meta:        
+        model = Tarefas
+        fields = ['id']
+
+
 class TarefasUsuariosSerializer(serializers.ModelSerializer):
     idUsuarioFK = UsuariosSerializer(read_only=True)
     idTarefaFK = TarefasSerializer(read_only=True)

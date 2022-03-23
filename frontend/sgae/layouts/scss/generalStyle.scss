@@ -14,74 +14,88 @@
 
 @keyframes gradient {
     0% {
-      background-position: 0% 50%;
+        background-position: 0% 50%;
     }
+
     50% {
-      background-position: 100% 50%;
+        background-position: 100% 50%;
     }
+
     100% {
-      background-position: 0% 50%;
+        background-position: 0% 50%;
     }
-  }
+}
 
 
 // STARS EFFECTS
 @function box-shadow-stars($n) {
     $star-shadows: '#{random(4000)-2000}px #{random(4000)-2000}px #fff';
+
     @for $i from 2 through $n {
-      $star-color-num: random(3);
-      $star-color: #fff;
-      @if ($star-color-num == 1) {
-        $star-color: '#fff';
-      }
-      @if ($star-color-num == 2) {
-        $star-color: '#FF6666';
-      }
-      @if ($star-color-num == 3) {
-        $star-color: '#79bfea';
-      }
-      $star-shadows: '#{$star-shadows}, #{random(4000)-2000}px #{random(4000)-2000}px #{$star-color}';
+        $star-color-num: random(3);
+        $star-color: #fff;
+
+        @if ($star-color-num==1) {
+            $star-color: '#fff';
+        }
+
+        @if ($star-color-num==2) {
+            $star-color: '#FF6666';
+        }
+
+        @if ($star-color-num==3) {
+            $star-color: '#79bfea';
+        }
+
+        $star-shadows: '#{$star-shadows}, #{random(4000)-2000}px #{random(4000)-2000}px #{$star-color}';
     }
+
     @return unquote($star-shadows);
-  }
-  $stars1-shadows: box-shadow-stars(10000);
-  $stars2-shadows: box-shadow-stars(1000);
-  $stars3-shadows: box-shadow-stars(500);
+}
 
-  @keyframes rotateEarth {
+$stars1-shadows: box-shadow-stars(10000);
+$stars2-shadows: box-shadow-stars(1000);
+$stars3-shadows: box-shadow-stars(500);
+
+@keyframes rotateEarth {
     from {
-      transform: translateY(0px);
+        transform: translateY(0px);
     }
-    to {
-      transform: translateY(2000px);
-    }
-  };
 
-  .stars1 {
+    to {
+        transform: translateY(2000px);
+    }
+}
+
+;
+
+.stars1 {
     width: 1px;
     height: 1px;
     box-shadow: $stars1-shadows;
     border-radius: 50%;
     animation: rotateEarth 200s linear infinite;
     opacity: 0.9;
-  }
-  .stars2 {
+}
+
+.stars2 {
     width: 2px;
     height: 2px;
     box-shadow: $stars2-shadows;
     border-radius: 50%;
     animation: rotateEarth 190s linear infinite;
     opacity: 0.9;
-  }
-  .stars3 {
+}
+
+.stars3 {
     width: 3px;
     height: 3px;
     box-shadow: $stars3-shadows;
     border-radius: 50%;
     animation: rotateEarth 180s linear infinite;
     opacity: 0.9;
-  }
-  
+}
+
 
 
 .normal-dark-btn {
@@ -232,7 +246,7 @@
         border-bottom: 3px solid var(--task-border-color);
         border-top: none;
     }
-    
+
     /*********** LIST VIEW***********/
     .dataTaskViewer .p-dataview-content {
         display: flex;
@@ -392,9 +406,9 @@
                 color: white !important;
             }
         }
-    }    
+    }
 
-    div img {      
+    div img {
         width: 70vw !important;
         height: 70vh !important;
         max-height: 70vw !important;
@@ -409,7 +423,7 @@
     .p-image-mask {
         left: 10vw !important;
         top: 5vh !important;
-        
+
         div img {
             width: 80vw !important;
             height: 70vh !important;
@@ -525,6 +539,58 @@
     .timelineContainer .p-dialog-mask {
         .p-dialog {
             width: 100vw !important;
+        }
+    }
+}
+
+
+// PDF PAGE
+.p-autocomplete .p-autocomplete-multiple-container:not(.p-disabled):hover {
+    border-color: none !important;
+}
+.p-autocomplete .p-autocomplete-multiple-container:not(.p-disabled).p-focus {
+    border-color: none !important;
+    box-shadow: none !important;
+}
+.p-autocomplete .p-autocomplete-multiple-container:not(.p-disabled):hover{
+    border-color: none !important;
+}
+
+.pdf-elementMode {
+
+    .p-autocomplete-multiple {
+
+       
+        .p-autocomplete-multiple-container {
+            outline: 0;
+            box-shadow: none;
+            border-color: none;
+            border: none;
+            border-bottom: 2px solid black;
+            border-radius: 0;
+
+            display: flex;
+            align-items: flex-start;
+            flex-wrap: wrap;
+
+           
+            .p-autocomplete-token {
+                background-color: rgb(228, 150, 144);
+                width: auto;
+                min-width: 85px;
+                margin: 5px 2px;
+                color: black;
+                font-weight: bold;
+
+                .p-autocomplete-token-icon {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: flex-end;
+                    width: 27px;
+                    font-weight: bold;
+                }
+            }
         }
     }
 }

@@ -77,13 +77,6 @@
     "_name": "_02cc2ccc"
   },
   {
-    "name": "pdf-teste",
-    "path": "/pdf/teste",
-    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\pdf\\\\teste.js",
-    "chunkName": "pages/pdf/teste",
-    "_name": "_067d943d"
-  },
-  {
     "name": "index",
     "path": "/",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\index.vue",

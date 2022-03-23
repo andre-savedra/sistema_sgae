@@ -15,7 +15,6 @@ const _63eda994 = () => interopDefault(import('..\\pages\\reset\\index.vue' /* w
 const _02b33c50 = () => interopDefault(import('..\\pages\\sucesso\\index.vue' /* webpackChunkName: "pages/sucesso/index" */))
 const _e268616a = () => interopDefault(import('..\\pages\\tarefas\\index.vue' /* webpackChunkName: "pages/tarefas/index" */))
 const _02cc2ccc = () => interopDefault(import('..\\pages\\usuarios\\index.vue' /* webpackChunkName: "pages/usuarios/index" */))
-const _067d943d = () => interopDefault(import('..\\pages\\pdf\\teste.js' /* webpackChunkName: "pages/pdf/teste" */))
 const _1f4bed31 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
@@ -73,10 +72,6 @@ export const routerOptions = {
     path: "/usuarios",
     component: _02cc2ccc,
     name: "usuarios"
-  }, {
-    path: "/pdf/teste",
-    component: _067d943d,
-    name: "pdf-teste"
   }, {
     path: "/",
     component: _1f4bed31,
