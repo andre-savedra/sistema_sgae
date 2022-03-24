@@ -11,14 +11,46 @@ from django.http import HttpResponseRedirect
 from rest_framework.permissions import IsAuthenticated
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.pagination import PageNumberPagination
-
 from djoser.utils import decode_uid
-
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 
 #niveis de acesso
 can_deleteUser = 20
 can_approveUser = 20
+
+
+class EmailSenderAPIView(APIView):
+
+ def get(self, request, type, payload):
+    if type != None:
+        
+        if type == 'newTask':
+
+            sendTo = []
+            tarefa = None
+
+            for taskUser in payload:
+                usuario = Usuarios.objects.get(id=taskUser['idUsuarioFK'])
+                sendTo.append(usuario.email)                
+                
+            tarefa = Tarefas.objects.get(id=taskUser['idTarefaFK'])
+
+            sendTo.append('apiza@sp.senai.br')
+
+            messageBody = ('A tarefa de número #' 
+            + str(tarefa.id) + ' - ' + str(tarefa.nome) + ', solicitada por '
+            + str(tarefa.idSolicitanteFK.nome) + ','
+            + ' foi atribuída à você! \n\n Vá até o sistema SGAE - Sistema de Gestão de Ambientes e Localize-a!'
+            + '\n\n Acesse nosso sistema em: http://localhost:8003/')
+          
+            send_mail(
+            'SGAE - Uma nova tarefa foi atribuída à você!',
+            messageBody,
+            None,
+            sendTo,
+            fail_silently=False,
+            )
 
 
 class RequestActivateUser(APIView):
@@ -416,7 +448,7 @@ class TarefasAPIView(APIView):
     def post(self, request):
         serializer = TarefasSerializerSimple(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save()        
         # return Response({"msg": "Inserido com sucesso"})
         # return Response({"id": serializer.data['id']})
         return Response(serializer.data)
@@ -541,6 +573,9 @@ class TarefasUsuariosAPIView(APIView):
         serializer = TarefasUsuariosSerializerSimple(data=request.data,  many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        print("request.data")
+        print(request.data)
+        emailSender(None,'newTask',request.data)
         return Response({"msg": "Inserido com sucesso"})
         #return Response({"id": serializer.data['id']})
 

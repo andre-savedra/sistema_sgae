@@ -52,6 +52,7 @@ class detFotos(admin.ModelAdmin):
 
 
 
+
 admin.site.register(Cargos, detCargos)
 admin.site.register(Ambientes, detAmbientes)
 admin.site.register(Status, detStatus)

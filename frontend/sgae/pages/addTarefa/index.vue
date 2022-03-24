@@ -635,7 +635,7 @@ export default {
     },
   },
   mounted() {
-    this.actualUser.id = 28;
+    this.actualUser.id = 38; //id usuarios not idUserFK
     this.actualUser.nome = "André Felipe Savedra Cruz";
 
     if (this.$store.state.editTaskId > 0) {
