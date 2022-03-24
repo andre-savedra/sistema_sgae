@@ -29,9 +29,7 @@
               v-for="(user, index) in activationUsers"
               :key="index"
             >
-              <h3 class="p-ml-3 userId">
-                &#127891; Usuário #{{ user.id }}
-              </h3>
+              <h3 class="p-ml-3 userId">&#127891; Usuário #{{ user.id }}</h3>
               <div
                 class="
                   frameGeneralInfo
@@ -60,12 +58,10 @@
                     "
                   >
                     <p class="p-m-2">
-                      &#128100; <strong>Nome: </strong
-                      >{{ user.nome }}
+                      &#128100; <strong>Nome: </strong>{{ user.nome }}
                     </p>
                     <p class="p-m-2">
-                      &#128240; <strong>Email: </strong
-                      >{{ user.email }}
+                      &#128240; <strong>Email: </strong>{{ user.email }}
                     </p>
                   </div>
 
@@ -80,8 +76,7 @@
                       >{{ user.idNivelAcessoFK.nome }}
                     </p>
                     <p class="p-m-2">
-                      &#128222; <strong>Tel.: </strong
-                      >{{ user.fone }}
+                      &#128222; <strong>Tel.: </strong>{{ user.fone }}
                     </p>
                   </div>
                 </div>
@@ -92,9 +87,17 @@
                     p-d-flex p-flex-row p-jc-evenly p-ai-center
                   "
                 >
-                  <Button class="btn-send" label="Aprovar" @click="approveUser(user)"/>
+                  <Button
+                    class="btn-send"
+                    label="Aprovar"
+                    @click="approveUser(user)"
+                  />
 
-                  <Button class="btn-clean" label="Declinar" @click="reproveUser(user)"/>
+                  <Button
+                    class="btn-clean"
+                    label="Declinar"
+                    @click="reproveUser(user)"
+                  />
                 </div>
               </div>
               <div class="divisor"></div>
@@ -102,8 +105,6 @@
             </div>
           </div>
         </main>
-
-        
       </div>
     </div>
   </div>
@@ -121,53 +122,9 @@ export default {
     };
   },
   methods: {
-    putTask: async function (end) {
-      const index = 0;
-
-      console.log("atualizando put task");
-
-      const body = {
-        idStatusFK: this.newTaskStatus.idStatusFK,
-        dataFim: end ? this.newTaskStatus.data : null,
-        dataInicio: this.task[index].idTarefaFK.dataInicio,
-        idAmbienteFK: this.task[index].idTarefaFK.idAmbienteFK.id,
-        idSolicitanteFK: this.task[index].idTarefaFK.idSolicitanteFK.id,
-        nome: this.task[index].idTarefaFK.nome,
-        descricao: this.task[index].idTarefaFK.descricao,
-        prazo: this.task[index].idTarefaFK.prazo,
-      };
-
-      console.log(body);
-
-      await this.$axios
-        .$put(
-          this.BaseURL + "tarefas/" + this.task[index].idTarefaFK.id + "/",
-          JSON.stringify(body),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response);
-          //request ok
-
-          console.log("Atualizado com sucesso!!!");
-        })
-        .catch((response) => {
-          alert("Problema ao tentar cadastrar a tarefa");
-          console.log(response);
-        });
-    },
-
-    getActivationUsers: async function (activationStatus) {
-      let status = "False";
-      if (activationStatus === false) status = "False";
-      else if (activationStatus === true) status = "True";
-
+    getActivationUsers: async function () {
       this.$axios
-        .$get(this.BaseURL + ("usuarios/?ativo=" + status))
+        .$get(this.BaseURL + "usuarios/?token")
         .then((response) => {
           console.log(response);
 
@@ -184,26 +141,60 @@ export default {
           console.log(response);
         });
     },
-    approveUser: function(user){
-
+    approveUser: function (user) {
+      if (user) this.modifyUser(user.id, true);
     },
-
-    reproveUser: function(user){
-      if(user)
-      this.deleteTask(user.id);
+    reproveUser: function (user) {
+      if (user) this.modifyUser(user.id, false);
     },
-    deleteTask: function (userId) {
+    modifyUser: function (userId, status) {
+      const body = {
+        id: 37,
+        status: status,
+      };
       if (userId > 0) {
         this.$axios
-          .$delete(this.BaseURL + ("usuarios/" + userId))
+          .$put(
+            this.BaseURL + ("usuarios/" + userId + "/?activation"),
+            JSON.stringify(body),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
           .then((response) => {
+            console.log("response modify");
+            console.log(response);
             //request ok
             if (response !== null) {
-              //remove
-              this.activationUsers.map((user, index) => {
-                if (user.id === userId) this.activationUsers.splice(index, 1);
-                console.log("excluindo index" + index);
-              });
+              //remove user of array
+
+              switch (response.msg) {
+                case "approved":
+
+                  this.activationUsers.map((user, index) => {
+                    if (user.id === userId)
+                      this.activationUsers.splice(index, 1);
+                    console.log("excluindo index" + index);
+                  });
+
+                  alert("Usuário aprovado com sucesso!");
+                  
+                  break;
+                case "already approved":
+                  alert("Erro: Usuário não precisa de aprovação!");
+                  break;
+                case "error":
+                  alert("Erro na aprovação!");
+                  break;
+                case "disapproved":
+                  alert("Usuário reprovado com sucesso!");
+                  break;
+                case "no permission":
+                  alert("Você não tem permissão para esta ação!");
+                  break;
+              }
             }
           })
           .catch((response) => {
@@ -214,8 +205,8 @@ export default {
     },
   },
   mounted() {
-    //get users with activation false
-    this.getActivationUsers(false);
+    //get users with activation token to be valid
+    this.getActivationUsers();
   },
 };
 </script>

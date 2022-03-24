@@ -195,6 +195,7 @@
                     :photos="photos[0]"
                     background="white"
                     :baseURL="BaseURL2"
+                    targetID="CarouselAddTask"
                   />
                 </div>
               </div>
@@ -862,8 +863,8 @@ export default {
               else this.photos[1].push(photo);
             });
 
-            // console.log("FOTOS CARREGADAS");
-            // console.log(this.photos);
+            console.log("FOTOS CARREGADAS");
+            console.log(this.photos);
           }
         })
         .catch((response) => {
@@ -935,7 +936,7 @@ export default {
 
     if (this.$store.state.editTaskId > 0)
       this.taskID = this.$store.state.editTaskId;
-    else this.taskID = 43;
+    else this.taskID = 62;
 
     this.getTaskUser(this.taskID);
     this.getTaskPhotos(this.taskID);

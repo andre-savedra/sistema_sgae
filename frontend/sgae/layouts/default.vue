@@ -262,7 +262,7 @@ export default {
     },
   },
   mounted() {
-    (this.actualUser = null), this.getUsuarios(7);
+    (this.actualUser = null), this.getUsuarios(28);
   },
 };
 </script>

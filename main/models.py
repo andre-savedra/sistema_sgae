@@ -50,8 +50,8 @@ class Usuarios(models.Model):
     ativo = models.BooleanField(default=False)
     idNivelAcessoFK = models.ForeignKey(Cargos, related_name="cargo", blank=True, null=True, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=upload_image_user, blank=True, null=True)
-    uid = models.CharField(max_length=55, default='', blank=True, null=True)
-    token = models.CharField(max_length=1000, default='', blank=True, null=True)
+    uid = models.CharField(max_length=55, blank=True, null=True)
+    token = models.CharField(max_length=1000, blank=True, null=True)
     
     def __str__(self):
         return self.nome

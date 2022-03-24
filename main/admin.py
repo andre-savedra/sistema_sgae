@@ -20,7 +20,7 @@ class detStatus(admin.ModelAdmin):
     list_per_page = 10
 
 class detUsuarios(admin.ModelAdmin):
-    list_display = ('id','nome', 'email', 'fone', 'ativo', 'idNivelAcessoFK')
+    list_display = ('id','nome', 'email', 'fone', 'ativo', 'idNivelAcessoFK', 'idUserFK')
     list_display_links = ('id',)
     search_fields = ('nome',)
     list_per_page = 10

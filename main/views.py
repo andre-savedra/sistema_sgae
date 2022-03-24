@@ -1,4 +1,4 @@
-from django.shortcuts import render
+
 from .models import *
 from .serializers import *
 import datetime
@@ -14,10 +14,16 @@ from rest_framework.pagination import PageNumberPagination
 
 from djoser.utils import decode_uid
 
+from django.contrib.auth.models import User
+
+#niveis de acesso
+can_deleteUser = 20
+can_approveUser = 20
+
+
 class RequestActivateUser(APIView):
 
     def get(self, request, uid, token, format = None):
-        # payload = {'uid': uid, 'token': token}
         userId = decode_uid(uid)
         if userId:
             usuario = Usuarios.objects.get(idUserFK=userId)
@@ -26,25 +32,10 @@ class RequestActivateUser(APIView):
             usuario.save()
             print("novo usuario:")
             print(usuario)
-        return HttpResponseRedirect('http://localhost:3003/sucesso/')
+            return HttpResponseRedirect('http://localhost:3003/sucesso/')
+        else:
+            return HttpResponseRedirect('http://localhost:3003/erro/')
             
-class ActivateUser(APIView):
-
-    def get(self, request, uid, token, format = None):
-        payload = {'uid': uid, 'token': token}
-        teste = decode_uid(uid)
-        print("teste")
-        print(teste)
-
-        # url = "http://localhost:8003/api/v1/users/activation/"
-        # response = requests.post(url, data = payload)
-
-        # if response.status_code == 204:
-        #     return HttpResponseRedirect('http://localhost:3000/sucesso/')            
-        # else:       
-        #     return HttpResponseRedirect('http://localhost:3000/erro/')
-        return Response({"msg": "teste"})
-
 
 def getPagination(request, listItems):
 
@@ -230,6 +221,7 @@ class UsuariosAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
+        
         if 'ativo' in request.GET:
             ativo = request.GET['ativo']
             usuarios = Usuarios.objects.filter(ativo=ativo)
@@ -242,7 +234,7 @@ class UsuariosAPIView(APIView):
                 }
             )            
         elif 'token' in request.GET:
-            usuarios = Usuarios.objects.filter(uid<>'')
+            usuarios = Usuarios.objects.exclude(uid__isnull=True)
             serializer = UsuariosSerializer(usuarios, many=True)            
             return Response(
                 {
@@ -293,16 +285,71 @@ class UsuariosAPIView(APIView):
         #return Response({"id": serializer.data['id']})
 
     def put(self, request, pk=''):
-        usuarios = Usuarios.objects.get(id=pk)
-        serializer = UsuariosSerializer(usuarios, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
 
-    def delete(self, request, pk=''):
-        usuarios = Usuarios.objects.get(id=pk)
-        usuarios.delete()
-        return Response({"msg": "Apagado com sucesso"})
+        if 'change' in request.GET:
+            usuarios = Usuarios.objects.get(id=pk)
+            serializer = UsuariosSerializer(usuarios, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        elif 'activation' in request.GET:
+            # check user level
+            message = ""
+            if "id" in request.data:
+                usuarioRequest = Usuarios.objects.get(id=request.data["id"])
+                if usuarioRequest.idNivelAcessoFK.nivelAcesso >= can_deleteUser and usuarioRequest.ativo == True:
+                    
+                    if "status" in request.data:
+                        # approve user
+                        if request.data["status"] == True:
+                            # get user to allow or deny
+                            usuarios = Usuarios.objects.get(id=pk)
+                            if usuarios.uid != '' and usuarios.token != '': 
+
+                                djangoHost = request.get_host()
+                                payload = {'uid': usuarios.uid, 'token': usuarios.token}
+                                
+                                url = "http://" + djangoHost +"/api/v1/users/activation/"
+                                response = requests.post(url, data = payload)
+                                print("url")
+                                print(url)
+                                print("payload")
+                                print(payload)
+
+                                if response.status_code == 204:
+                                    message = "approved"
+
+                                    usuarios.ativo = True
+                                    usuarios.uid = None
+                                    usuarios.token = None
+                                    usuarios.save()
+                                else:       
+                                    message = "error"
+                            else:
+                                message = "already approved"                                
+                                
+                        # reprove user
+                        else:
+                            usuarios = Usuarios.objects.get(id=pk)
+                            usuarios.ativo = False
+                            usuarios.uid = None
+                            usuarios.token = None
+                            usuarios.save()
+                            
+                            user = User.objects.filter(id=usuarios.idUserFK)
+                            user.delete()
+                            message = "disapproved"
+                else:
+                    message = "no permission"
+            else:
+                message = "request unrecognized"               
+        
+        print(message)            
+        return Response({"msg": message})
+
+    def delete(self, request, pk=''):        
+              
+        return Response({"msg": "Inativo"})
 
 
 class TarefasAPIView(APIView):
@@ -312,6 +359,7 @@ class TarefasAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
     
     def get(self, request, pk=''):
+        
         if 'solicitante' in request.GET:  
             solicitante = request.GET['solicitante']
             tarefas = Tarefas.objects.filter(idSolicitanteFK=solicitante)
@@ -391,10 +439,11 @@ class TarefasUsuariosAPIView(APIView):
     """
     API tarefas
     """
-
+    
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
+
         if 'tarefa' in request.GET:            
             tarefa = request.GET['tarefa']
             tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)
@@ -515,6 +564,7 @@ class TarefasStatusAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
+        
         if 'tarefa' in request.GET:
             tarefa = request.GET['tarefa']
             tarefasStatus = TarefasStatus.objects.filter(idTarefaFK=tarefa)

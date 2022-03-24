@@ -347,6 +347,7 @@ export default {
         await this.$axios
           .$get(this.BaseURL + ("tarefas/?page=" + page))
           .then((response) => {
+            console.log("getTask");
             console.log(response);
             //request ok
             if (response.total > 0) {
