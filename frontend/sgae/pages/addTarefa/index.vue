@@ -166,6 +166,7 @@
 export default {
   name: "addTarefa",
   layout: "default",
+  middleware: 'auth',
   data() {
     return {
       BaseURL: "http://localhost:8003/",

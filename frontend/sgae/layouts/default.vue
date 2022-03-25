@@ -16,7 +16,7 @@
           alt="Logo Senai"
         />
       </div>
-       <div class="stars1"></div>
+      <div class="stars1"></div>
       <div class="stars2"></div>
       <div class="stars3"></div>
 
@@ -30,7 +30,6 @@
           back_color="#313131"
         />
       </div>
-     
 
       <Sidebar
         :visible.sync="visibleLeft"
@@ -193,7 +192,7 @@ export default {
         //this.resetSidebarMenu();
       }
     },
-    checkSecondSideBarVisibility(element) {
+    checkSecondSideBarVisibility: async function (element) {
       const el = element.target;
       let buttonNumber = parseInt(el.parentElement.getAttribute("el"));
 
@@ -227,7 +226,7 @@ export default {
 
         case 3: //button "ad. Tarefa"
           this.$router.push("/addTarefa");
-          this.$store.dispatch("setEditTask",0);
+          this.$store.dispatch("setEditTask", 0);
           this.checkSideBarVisibility();
           break;
 
@@ -242,6 +241,7 @@ export default {
           break;
 
         case 6: //button "logout"
+          await this.$auth.logout();
           this.$router.push("/");
           this.checkSideBarVisibility();
           break;
@@ -249,20 +249,44 @@ export default {
     },
     getUsuarios: async function (userId) {
       await this.$axios
-        .get("http://localhost:8003/usuarios/" + userId)
-        .then((dataResponse) => {
-          // console.log(dataResponse.data);
-          this.actualUser = dataResponse.data.data;
-          this.actualUser.image = "userimg-1.jpg";
-          this.profileLoaded = true;
+        .get(this.$store.state.BASE_URL + "usuarios/" + userId)
+        .then((response) => {
+          console.log(response);
+          if (response.data.data !== null && response.data.data !== undefined) {             
+             this.$store.dispatch("setActualUser", structuredClone(response.data.data));
+             this.actualUser = structuredClone(response.data.data);
+             this.profileLoaded = true;
+          }
+          
         })
         .catch((error) => {
           console.log(error);
         });
     },
+    getUser: async function () {
+      console.log("get User");
+      await this.$axios
+        .get(this.$store.state.BASE_URL + "api/v1/users/me/")
+        .then((response) => {
+          console.log("response");
+          console.log(response);
+
+          if (response.data !== null && response.data !== undefined) {
+            this.getUsuarios(response.data.id);
+          }
+          
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("erro ao pegar user");
+        });
+    },
   },
   mounted() {
-    (this.actualUser = null), this.getUsuarios(28);
+    console.log("MOUNTED DEFAULT");
+    if (this.$store.state.actualUser === null) {
+      this.getUser();
+    }
   },
 };
 </script>
@@ -288,7 +312,7 @@ $sidebar_second_positions: 150px, 220px, 220px, 300px;
       min-width: 190px;
       max-width: 250px;
       height: 100%;
-      
+
       .btn-leftbar {
         font-size: 25px;
         height: 100%;
@@ -314,11 +338,9 @@ $sidebar_second_positions: 150px, 220px, 220px, 300px;
       height: 100%;
     } //default-header-right
 
-
-    
     .stars1,
     .stars2,
-    .stars3 {      
+    .stars3 {
       max-height: var(--height-default-header);
     }
 

@@ -85,7 +85,7 @@
             <div class="imgTaskContainer">
               <img
                 v-if="slotProps.data.fotos[0]"
-                :src="BaseURL2 + slotProps.data.fotos[0].image"
+                :src="this.$store.state.BaseURL2 + slotProps.data.fotos[0].image"
                 alt="Foto Tarefa"
               />
             </div>
@@ -215,48 +215,7 @@
         </div>
       </template>
       <!--
-    <template #grid="slotProps">
-      <div class="col-12 md:col-4">
-        <div class="product-grid-item card">
-          <div class="product-grid-item-top">
-            <div>
-              <i class="pi pi-tag product-category-icon"></i>
-              <span class="product-category">{{
-                slotProps.data.category
-              }}</span>
-            </div>
-            <span
-              :class="
-                'product-badge status-' +
-                slotProps.data.inventoryStatus.toLowerCase()
-              "
-              >{{ slotProps.data.inventoryStatus }}</span
-            >
-          </div>
-          <div class="product-grid-item-content">
-            <img
-              :src="'demo/images/product/' + slotProps.data.image"
-              :alt="slotProps.data.name"
-            />
-            <div class="product-name">{{ slotProps.data.name }}</div>
-            <div class="product-description">
-              {{ slotProps.data.description }}
-            </div>
-            <Rating
-              :value="slotProps.data.rating"
-              :readonly="true"
-              :cancel="false"
-            ></Rating>
-          </div>
-          <div class="product-grid-item-bottom">
-            <span class="product-price">${{ slotProps.data.price }}</span>
-            <Button
-              icon="pi pi-shopping-cart"
-              :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"
-            ></Button>
-          </div>
-        </div>
-      </div>
+    <template #grid="slotProps">     
     </template>-->
     </DataView>
   </div>
@@ -266,10 +225,9 @@
 export default {
   name: "tarefas",
   layout: "default",
-  // middleware: 'auth',
+  middleware: 'auth',
   data() {
-    return {
-      products: null,
+    return {      
       sortKey: null,
       sortOrder: null,
       sortField: null,
@@ -279,9 +237,7 @@ export default {
         { label: "Em Andamento", value: "price" },
         { label: "Concluídas", value: "price" },
       ],
-      //useful
-      BaseURL: "http://localhost:8003/",
-      BaseURL2: "http://localhost:8003",
+      //useful      
       layout: "grid",
       tasks: null,
       totalTasks: null,
@@ -299,14 +255,11 @@ export default {
       selectedFilter: null,
       filteredSuggestions: null,
     };
-  },
-  productService: null,
-  created() {
-    // this.productService = new ProductService();
-  },
+  },  
+ 
   mounted() {
-    // this.productService.getProducts().then(data => this.products = data);
-    this.getTask(1);
+    
+    this.getTask(1);//page 1
     this.$store.dispatch("setEditTask", 0);
     this.$store.dispatch("setTaskToPrint", 0);
   },
@@ -345,7 +298,7 @@ export default {
     getTask: async function (page) {
       if (!this.taskPagesLoaded.includes(page)) {
         await this.$axios
-          .$get(this.BaseURL + ("tarefas/?page=" + page))
+          .$get(this.$store.state.BaseURL + ("tarefas/?page=" + page))
           .then((response) => {
             console.log("getTask");
             console.log(response);
@@ -387,7 +340,7 @@ export default {
     },
     getTasksUsers: function (task) {
       return this.$axios
-        .$get(this.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
+        .$get(this.$store.state.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
@@ -414,7 +367,7 @@ export default {
     },
     getTaskPhotos: function (task) {
       return this.$axios
-        .$get(this.BaseURL + ("fotos/?tarefa=" + task))
+        .$get(this.$store.state.BaseURL + ("fotos/?tarefa=" + task))
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
@@ -451,7 +404,7 @@ export default {
     deleteTask: function (taskId) {
       if (taskId > 0) {
         this.$axios
-          .$delete(this.BaseURL + ("tarefas/" + taskId))
+          .$delete(this.$store.state.BaseURL + ("tarefas/" + taskId))
           .then((response) => {
             //request ok
             if (response !== null) {

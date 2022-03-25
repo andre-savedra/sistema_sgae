@@ -6,6 +6,6 @@
 export default {
   name: 'meuAcesso',
   layout: 'default',
-  // middleware: 'auth',
+  middleware: 'auth',
 }
 </script>

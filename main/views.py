@@ -307,6 +307,8 @@ class UsuariosAPIView(APIView):
     # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
+        print("request usuarios")
+        print(request.user)
         
         if 'ativo' in request.GET:
             ativo = request.GET['ativo']

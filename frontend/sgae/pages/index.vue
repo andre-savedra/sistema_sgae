@@ -34,8 +34,7 @@
             </div>
 
             <div class="links p-d-flex p-d-row p-jc-between">
-              
-               <Button
+              <Button
                 icon="pi pi-user-plus"
                 label="Registrar?"
                 class="registerBtn p-button-text p-button-danger"
@@ -49,7 +48,9 @@
               />
             </div>
 
-            <button type="submit" class="btn_enviar">ENTRAR</button>
+            <button type="submit" class="btn_enviar" :disabled="btnDisabled">
+              ENTRAR
+            </button>
           </div>
         </form>
       </div>
@@ -67,11 +68,12 @@ export default {
         username: null,
         password: null,
       },
+      btnDisabled: false,
     };
   },
   methods: {
     registerPage() {
-      this.$router.push("registrar");      
+      this.$router.push("registrar");
     },
     resetPage() {
       this.$router.push("reset");
@@ -79,10 +81,12 @@ export default {
     sendlogin() {
       console.log("tentando autenticar....");
       console.log(this.login);
+      this.btnDisabled = true;
 
       this.$auth
         .loginWith("local", { data: this.login })
         .then(() => {
+          
           console.log("DEU CERTO O LOGIN");
         })
         .catch((erro) => {
@@ -90,13 +94,13 @@ export default {
           this.login.password = null;
           console.log("erro");
           console.log(erro);
+          this.btnDisabled = false;
         });
     },
   },
 };
 </script>
 <style lang="scss">
-
 .loginForm {
   width: 55%;
   height: auto;
@@ -177,6 +181,10 @@ img {
   &:hover {
     background-color: #e05e5e;
   }
+
+  &:disabled {
+    background-color: #d38f8f;
+  }
 }
 
 .links {
@@ -234,8 +242,6 @@ img {
   border-color: crimson;
 }
 
-
-
 html {
   height: 100vh;
   overflow: hidden;
@@ -243,11 +249,10 @@ html {
   /* background: linear-gradient(180deg,#240f54,#240f54 5%,#440bc8); */
 }
 
-
 @media screen and (max-width: 990px) {
   .logo_panel {
     h1 {
-      max-width:80%;
+      max-width: 80%;
       font-size: 18px;
     }
     p {
@@ -295,10 +300,9 @@ html {
 }
 
 @media screen and (max-width: 700px) {
-
-  .logo_panel{
+  .logo_panel {
     h1 {
-      max-width:80%;
+      max-width: 80%;
       font-size: 16px;
     }
     p {

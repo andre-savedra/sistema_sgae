@@ -8,4 +8,7 @@ export default {
     PRINT_MODE(state, payload) {
         state.printMode = payload;
     },
+    ACTUAL_USER(state, payload) {
+        state.actualUser = payload;
+    },
 }

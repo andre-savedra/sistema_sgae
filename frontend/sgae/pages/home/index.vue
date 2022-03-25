@@ -6,7 +6,7 @@
 export default {
   name: 'home',
   layout: 'default',
-  // middleware: 'auth',
+  middleware: 'auth',
 
 
   //todas tarefas

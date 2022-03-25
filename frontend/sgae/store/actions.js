@@ -14,4 +14,9 @@ export default {
     console.log(payload);
     context.commit("PRINT_MODE", payload);
   },
+  setActualUser(context, payload) {
+    console.log("payload ACTUAL USER");
+    console.log(payload);
+    context.commit("ACTUAL_USER", payload);
+  },
 };

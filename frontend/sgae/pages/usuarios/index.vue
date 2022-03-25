@@ -114,6 +114,7 @@
 export default {
   name: "usuarios",
   layout: "default",
+  middleware: 'auth',
   data() {
     return {
       BaseURL: "http://localhost:8003/",

@@ -140,17 +140,17 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: "http://localhost:8000/api/v1/auth/token/login/",
+            url: "http://localhost:8003/api/v1/auth/token/login/",
             method: "post",
             propertyName: "auth_token",
           },
           logout: {
-            url: "http://localhost:8000/api/v1/auth/token/logout/",
+            url: "http://localhost:8003/api/v1/auth/token/logout/",
             method: "post",
             propertyName: "auth_token",
           },
           user: {
-            url: "http://localhost:8000/cargos/",
+            url: "http://localhost:8003/cargos/",
             method: "get",
             propertyName: false,
           },
