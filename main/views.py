@@ -22,21 +22,25 @@ can_approveUser = 20
 
 class EmailSenderAPIView(APIView):
 
- def get(self, request, type, payload):
-    if type != None:
-        
-        if type == 'newTask':
+ def post(self, request, type):
+    
+    messageResponse = ''
+    if type != None and type != '':
+        # NEW TASK
+        if type == 'newTask' and request.data:
+
+            payload = request.data
 
             sendTo = []
-            tarefa = None
+            tarefa = Tarefas.objects.get(id=payload[0]['idTarefaFK'])
 
-            for taskUser in payload:
-                usuario = Usuarios.objects.get(id=taskUser['idUsuarioFK'])
-                sendTo.append(usuario.email)                
-                
-            tarefa = Tarefas.objects.get(id=taskUser['idTarefaFK'])
+            for task in payload:
+                usuario = Usuarios.objects.get(id=task['idUsuarioFK'])
+                if usuario.email != None and usuario.email != '':
+                    sendTo.append(usuario.email)
+                 
 
-            sendTo.append('apiza@sp.senai.br')
+            # sendTo.append('apiza@sp.senai.br')
 
             messageBody = ('A tarefa de número #' 
             + str(tarefa.id) + ' - ' + str(tarefa.nome) + ', solicitada por '
@@ -51,6 +55,56 @@ class EmailSenderAPIView(APIView):
             sendTo,
             fail_silently=False,
             )
+
+            messageResponse = 'sent'
+
+        # NEW TASK STATUS
+        if type == 'newTaskStatus' and request.data:
+
+            payload = request.data
+            print("payload")
+            print(payload)
+
+            sendTo = []
+            tarefa = Tarefas.objects.get(id=payload[0]['idTarefaFK'])
+            status = Status.objects.get(id=payload[0]['idStatusFK'])
+
+            # requester email
+            requester = tarefa.idSolicitanteFK.email
+
+            if requester != None and requester != '':
+                sendTo.append(tarefa.idSolicitanteFK.email)
+
+            tarefaUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa.id)
+                        
+            # employees email
+            for taskUser in tarefaUsuarios:
+                if taskUser.idUsuarioFK.email != None and taskUser.idUsuarioFK.email != '':
+                    if sendTo.count(taskUser.idUsuarioFK.email) == 0:
+                        sendTo.append(taskUser.idUsuarioFK.email)            
+
+            # sendTo.append('apiza@sp.senai.br')
+
+            print("Enviando para os emails:")
+            print(sendTo)
+
+            messageBody = ('A tarefa de número #' 
+            + str(tarefa.id) + ' - ' + str(tarefa.nome) + ', solicitada por '
+            + str(tarefa.idSolicitanteFK.nome) + ','
+            + ' está em um novo Status: ' + str(status.nome) + '.\n\n Vá até o sistema SGAE - Sistema de Gestão de Ambientes e Localize-a!'
+            + '\n\n Acesse nosso sistema em: http://localhost:8003/')
+          
+            send_mail(
+            'SGAE - Novo Status da Tarefa #' + str(tarefa.id),
+            messageBody,
+            None,
+            sendTo,
+            fail_silently=False,
+            )
+
+            messageResponse = 'sent'
+
+    return Response({"msg": messageResponse})
 
 
 class RequestActivateUser(APIView):
@@ -572,10 +626,7 @@ class TarefasUsuariosAPIView(APIView):
     def post(self, request):
         serializer = TarefasUsuariosSerializerSimple(data=request.data,  many=True)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        print("request.data")
-        print(request.data)
-        emailSender(None,'newTask',request.data)
+        serializer.save()       
         return Response({"msg": "Inserido com sucesso"})
         #return Response({"id": serializer.data['id']})
 

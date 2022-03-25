@@ -483,6 +483,7 @@ export default {
     return {
       BaseURL: "http://localhost:8003/",
       BaseURL2: "http://localhost:8003",
+      emailPayload: null,
       viewMode: "overview", //overview or progress
       taskID: 1,
       initialStatus: 1,
@@ -612,10 +613,12 @@ export default {
             this.postTaskStatus(),
             this.putTask(),
           ]);
+          this.emailPayload = [structuredClone(this.newTaskStatus)];          
           this.viewMode = "overview";
           this.cleanNewStatus();
           this.getTaskUser(this.taskID);
           this.getStatusType();
+          this.postMail(this.emailPayload);
           break;
 
         case "Concluída":
@@ -624,6 +627,8 @@ export default {
             this.putTask(),
             this.virtualClickUpload("Carregar"),
           ]);
+          this.emailPayload = [structuredClone(this.newTaskStatus)];
+          this.postMail(this.emailPayload);
           break;
 
         case "Encerrada":
@@ -631,13 +636,16 @@ export default {
             this.postTaskStatus(),
             this.putTask(true),
           ]);
+          this.emailPayload = [structuredClone(this.newTaskStatus)];
           this.viewMode = "overview";
           this.cleanNewStatus();
           this.getTaskUser(this.taskID);
           this.getStatusType();
+          this.postMail(this.emailPayload);
           break;
       }
 
+     
    
     },
     postTask: async function () {
@@ -922,6 +930,32 @@ export default {
         });
       }
     },
+    postMail: async function (payload) {
+
+      if (payload)      
+      await this.$axios
+        .$post(this.BaseURL + "emailSender/newTaskStatus/", 
+          JSON.stringify(payload), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response);          
+          //request ok
+          if (response.msg !== null && response.msg !== undefined) {
+            if(response.msg === 'sent')
+              console.log("EMAIL ENVIADO COM SUCESSO");
+            else
+              console.log("EMAIL NÃO ENVIADO");
+          }
+
+        })
+        .catch((response) => {
+          alert("Problema ao tentar enviar email!");
+          console.log(response);
+        });
+    },
     cleanNewStatus: function () {
       this.newTaskStatusName = "";
       this.newTaskStatus.idStatusFK = 0;
@@ -936,7 +970,8 @@ export default {
 
     if (this.$store.state.editTaskId > 0)
       this.taskID = this.$store.state.editTaskId;
-    else this.taskID = 62;
+    else this.$router.push("/tarefas");
+    // else this.taskID = 62;
 
     this.getTaskUser(this.taskID);
     this.getTaskPhotos(this.taskID);

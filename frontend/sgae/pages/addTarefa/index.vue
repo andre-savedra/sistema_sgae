@@ -139,7 +139,7 @@
                 :fileLimit="10"
                 invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
                 invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"
-                invalidFileLimitMessage	="Máximo de imagens anexadas é 10, diminua a quantidade de imagens!"
+                invalidFileLimitMessage="Máximo de imagens anexadas é 10, diminua a quantidade de imagens!"
               >
                 <template #empty>
                   <p>
@@ -169,6 +169,7 @@ export default {
   data() {
     return {
       BaseURL: "http://localhost:8003/",
+      emailPayload: null,
       selectedEmployees: [],
       filteredEmployees: null,
       allUsers: [],
@@ -508,6 +509,7 @@ export default {
           console.log(response);
           //request ok
           this.postTaskStatus();
+          this.emailPayload = taskUsers;
         })
         .catch((response) => {
           alert("Problema ao tentar cadastrar os usuários na tarefa");
@@ -529,8 +531,9 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
+          console.log(response);          
           //request ok
+          this.postMail(this.emailPayload);
           this.virtualClickUpload("Carregar");
           //clean form if there is no photo added
           const checkUpload = setTimeout(() => {
@@ -541,6 +544,32 @@ export default {
         })
         .catch((response) => {
           alert("Problema ao tentar cadastrar a tarefa");
+          console.log(response);
+        });
+    },
+    postMail: async function (payload) {
+
+      if (payload)      
+      await this.$axios
+        .$post(this.BaseURL + "emailSender/newTask/", 
+          JSON.stringify(payload), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response);          
+          //request ok
+          if (response.msg !== null && response.msg !== undefined) {
+            if(response.msg === 'sent')
+              console.log("EMAIL ENVIADO COM SUCESSO");
+            else
+              console.log("EMAIL NÃO ENVIADO");
+          }
+
+        })
+        .catch((response) => {
+          alert("Problema ao tentar enviar email!");
           console.log(response);
         });
     },
@@ -693,7 +722,7 @@ export default {
 
       background: linear-gradient(-15deg, #313131, #525d69, #c22a1f, #bd244a);
       background-size: 300% 300%;
-      animation: gradientPosition 7s ease infinite;      
+      animation: gradientPosition 7s ease infinite;
 
       i {
         font-size: 25px;
@@ -842,17 +871,17 @@ export default {
   }
 }
 
-  @keyframes gradientPosition {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
+@keyframes gradientPosition {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 @media screen and (max-width: 945px) {
   $size-title: 13px;
@@ -936,10 +965,5 @@ export default {
     width: 60% !important;
     margin-left: 15px;
   }
-
-
 }
-
-
-
 </style>
