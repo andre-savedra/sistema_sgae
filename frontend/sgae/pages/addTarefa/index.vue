@@ -55,7 +55,7 @@
                 class="basicInputText"
                 :disabled="true"
                 placeholder="Preencha..."
-                v-model="actualUser.nome"
+                v-model="this.$store.state.actualUser.nome"
                 required
               />
             </div>
@@ -113,7 +113,6 @@
                 class="customDatePicker"
                 id="deadline"
                 :showIcon="true"
-                :locale="pt"
                 v-model="deadline"
                 dateFormat="dd/mm/yy"
                 :showTime="true"
@@ -168,8 +167,7 @@ export default {
   layout: "default",
   middleware: 'auth',
   data() {
-    return {
-      BaseURL: "http://localhost:8003/",
+    return {      
       emailPayload: null,
       selectedEmployees: [],
       filteredEmployees: null,
@@ -178,53 +176,7 @@ export default {
       filteredEnviroments: null,
       allEnviroments: [],
       taskID: 1,
-      initialStatus: 1,
-      pt: {
-        firstDayOfWeek: 0,
-        dayNames: [
-          "Domingo",
-          "Segunda",
-          "Terça",
-          "Quarta",
-          "Quinta",
-          "Sexta",
-          "Sábado",
-        ],
-        dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-        dayNamesMin: ["Do", "Seg", "Te", "Qua", "Qui", "Sex", "Sa"],
-        monthNames: [
-          "Janeiro",
-          "Fevereiro",
-          "Março",
-          "Abril",
-          "Maio",
-          "Junho",
-          "Julho",
-          "Agosto",
-          "Setembro",
-          "Outubro",
-          "Novembro",
-          "Dezembro",
-        ],
-        monthNamesShort: [
-          "Jan",
-          "Fev",
-          "Mar",
-          "Abr",
-          "Mai",
-          "Jun",
-          "Jul",
-          "Ago",
-          "Set",
-          "Out",
-          "Nov",
-          "Dez",
-        ],
-        today: "Hoje",
-        clear: "Limpar",
-        dateFormat: "mm/dd/yy",
-        weekHeader: "Semana",
-      },
+      initialStatus: 1,      
       deadline: null,
       photos: [],
       uploadPhotoStarted: false,
@@ -239,11 +191,7 @@ export default {
           dataInicio: null,
           dataFim: null,
         },
-      ],
-      actualUser: {
-        id: null,
-        nome: null,
-      },
+      ], 
       updateModeId: 0,
     };
   },
@@ -259,10 +207,7 @@ export default {
           (task.dataInicio = null),
           (task.dataFim = null);
       });
-
-      this.actualUser.id = null;
-      this.actualUser.nome = null;
-
+      
       this.selectedEmployees.length = 0;
       this.selectedEnviroment.length = 0;
       this.deadline = null;
@@ -338,7 +283,7 @@ export default {
       this.allUsers.length = 0;
 
       await this.$axios
-        .$get(this.BaseURL + "usuarios/")
+        .$get(this.$store.state.BaseURL + "usuarios/?ativo=True")
         .then((dataResponse) => {
           dataResponse.data.forEach((user) => {
             this.allUsers.push({
@@ -358,7 +303,7 @@ export default {
       this.allUsers.length = 0;
 
       await this.$axios
-        .$get(this.BaseURL + "ambientes/")
+        .$get(this.$store.state.BaseURL + "ambientes/")
         .then((dataResponse) => {
           dataResponse.data.forEach((enviroment) => {
             this.allEnviroments.push({
@@ -417,13 +362,13 @@ export default {
     },
     postTask: async function () {
       const index = 0;
-      this.task[index].idSolicitanteFK = this.actualUser.id;
+      this.task[index].idSolicitanteFK = this.$store.state.actualUser.id;
       this.task[index].idAmbienteFK = this.selectedEnviroment.id;
       this.task[index].prazo = this.formatDate(this.deadline.toString());
       this.task[index].dataInicio = this.formatDate("backend");
       this.task[index].idStatusFK = 1;
       await this.$axios
-        .$post(this.BaseURL + "tarefas/", JSON.stringify(this.task), {
+        .$post(this.$store.state.BaseURL + "tarefas/", JSON.stringify(this.task), {
           headers: {
             "Content-Type": "application/json",
           },
@@ -454,7 +399,7 @@ export default {
       console.log(p);
 
       const body = {
-        idSolicitanteFK: this.actualUser.id,
+        idSolicitanteFK: this.$store.state.actualUser.id,
         idAmbienteFK: this.selectedEnviroment.id,
         idStatusFK: this.task[index].idStatusFK,
         nome: this.task[index].nome,
@@ -467,7 +412,7 @@ export default {
 
       await this.$axios
         .$put(
-          this.BaseURL + "tarefas/" + this.updateModeId + "/",
+          this.$store.state.BaseURL + "tarefas/" + this.updateModeId + "/",
           JSON.stringify(body),
           {
             headers: {
@@ -501,7 +446,7 @@ export default {
       console.log(JSON.stringify(taskUsers));
 
       await this.$axios
-        .$post(this.BaseURL + "tarefasUsuarios/", JSON.stringify(taskUsers), {
+        .$post(this.$store.state.BaseURL + "tarefasUsuarios/", JSON.stringify(taskUsers), {
           headers: {
             "Content-Type": "application/json",
           },
@@ -526,7 +471,7 @@ export default {
       ];
 
       await this.$axios
-        .$post(this.BaseURL + "tarefasStatus/", JSON.stringify(taskStatus), {
+        .$post(this.$store.state.BaseURL + "tarefasStatus/", JSON.stringify(taskStatus), {
           headers: {
             "Content-Type": "application/json",
           },
@@ -552,7 +497,7 @@ export default {
 
       if (payload)      
       await this.$axios
-        .$post(this.BaseURL + "emailSender/newTask/", 
+        .$post(this.$store.state.BaseURL + "emailSender/newTask/", 
           JSON.stringify(payload), {
           headers: {
             "Content-Type": "application/json",
@@ -589,7 +534,7 @@ export default {
         formData.append("image", file);
 
         this.$axios
-          .$post(this.BaseURL + "fotos/", formData, {
+          .$post(this.$store.state.BaseURL + "fotos/", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -607,7 +552,7 @@ export default {
     },  
     getTaskUser: async function (task) {
       this.$axios
-        .$get(this.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
+        .$get(this.$store.state.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
@@ -639,7 +584,7 @@ export default {
       }
 
       this.$axios
-        .$get(this.BaseURL + ("tarefas/" + task))
+        .$get(this.$store.state.BaseURL + ("tarefas/" + task))
         .then((response) => {
           console.log(response);
           console.log(this.allEnviroments);
@@ -665,9 +610,7 @@ export default {
     },
   },
   mounted() {
-    this.actualUser.id = 38; //id usuarios not idUserFK
-    this.actualUser.nome = "André Felipe Savedra Cruz";
-
+    
     if (this.$store.state.editTaskId > 0) {
       this.updateModeId = this.$store.state.editTaskId;
       this.getTask(this.updateModeId);

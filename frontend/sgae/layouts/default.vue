@@ -256,6 +256,10 @@ export default {
              this.$store.dispatch("setActualUser", structuredClone(response.data.data));
              this.actualUser = structuredClone(response.data.data);
              this.profileLoaded = true;
+
+             console.log("USUARIO ATUALMENTE LOGADO!");
+             console.log(this.$store.state.actualUser);             
+
           }
           
         })

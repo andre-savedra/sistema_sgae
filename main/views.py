@@ -8,7 +8,7 @@ from rest_framework.response import Response
 import requests
 from django.http import HttpResponseRedirect
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.pagination import PageNumberPagination
 from djoser.utils import decode_uid
@@ -19,8 +19,26 @@ from django.core.mail import send_mail
 can_deleteUser = 20
 can_approveUser = 20
 
+def managePermissions(username, activity):
+    resp = {'approvement': False, 'usuario': None}
+    if username != None and activity != None:
+      user = User.objects.get(username=username)
+      usuario = Usuarios.objects.get(idUserFK=user.id)
+      print("usuario encontrado:")
+      print(usuario)
+
+      if usuario.idNivelAcessoFK.nivelAcesso:
+          resp['usuario'] = usuario
+          
+          if activity == 'getUsers':
+              if usuario.idNivelAcessoFK.nivelAcesso > 1:
+                resp['approvement'] = True     
+      
+    return resp
 
 class EmailSenderAPIView(APIView):
+
+ permission_classes = (IsAuthenticated,)
 
  def post(self, request, type):
     
@@ -109,6 +127,8 @@ class EmailSenderAPIView(APIView):
 
 class RequestActivateUser(APIView):
 
+    permission_classes = (AllowAny,)
+
     def get(self, request, uid, token, format = None):
         userId = decode_uid(uid)
         if userId:
@@ -143,8 +163,8 @@ class CargosAPIView(APIView):
     """
     API Cargos
     """
-    # permission_classes = (IsAuthenticated,)
-
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    
     def get(self, request, pk=''):
         if 'nivel' in request.GET:            
             nivel = request.GET['nivel']
@@ -204,7 +224,7 @@ class AmbientesAPIView(APIView):
     """
     API Ambientes
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -253,7 +273,7 @@ class StatusAPIView(APIView):
     """
     API Status
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -304,23 +324,38 @@ class UsuariosAPIView(APIView):
     API Usuarios
     """
 
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        print("request usuarios")
-        print(request.user)
+        # print("request usuarios")
+        # print(request.user)
         
+        
+        # GET USER WITH ACTIVATION STATUS
         if 'ativo' in request.GET:
             ativo = request.GET['ativo']
-            usuarios = Usuarios.objects.filter(ativo=ativo)
-            serializer = UsuariosSerializer(usuarios, many=True)            
-            return Response(
-                {
-                    'data': serializer.data,
-                    'total': 0,
-                    'pages': 0
-                }
-            )            
+
+            permission = managePermissions(request.user, 'getUsers')
+
+            if permission['approvement']:
+                cargo = Cargos.objects.get(nivelAcesso=permission['usuario'].idNivelAcessoFK.nivelAcesso)
+                otherUsers = Usuarios.objects.filter(ativo=ativo).filter(idNivelAcessoFK__lt=cargo.id)
+                actualUser = Usuarios.objects.filter(id=permission['usuario'].id)
+                # union users
+                usuarios = actualUser | otherUsers
+                serializer = UsuariosSerializer(usuarios, many=True)            
+                return Response(
+                    {
+                        'data': serializer.data,
+                        'total': 0,
+                        'pages': 0
+                    }
+                )
+            else:
+                return Response({"msg": "no permission"})
+
+            
+        # GET USERS TO BE APPROVED (TOKEN EXISTS)  
         elif 'token' in request.GET:
             usuarios = Usuarios.objects.exclude(uid__isnull=True)
             serializer = UsuariosSerializer(usuarios, many=True)            
@@ -330,7 +365,8 @@ class UsuariosAPIView(APIView):
                     'total': 0,
                     'pages': 0
                 }
-            )            
+            )
+        # GET USERS WITH TOKEN AND UID  
         elif 'uid' in request.GET:
             usuarios = Usuarios.objects.all()
             resp = getPagination(request, usuarios)
@@ -341,7 +377,8 @@ class UsuariosAPIView(APIView):
                     'total': resp[1],
                     'pages': resp[2]
                 }
-            )  
+            ) 
+        #GET ALL USERS
         elif pk == '':
             usuarios = Usuarios.objects.all()
             resp = getPagination(request, usuarios)
@@ -444,7 +481,7 @@ class TarefasAPIView(APIView):
     """
     API tarefas
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     
     def get(self, request, pk=''):
         
@@ -649,7 +686,7 @@ class TarefasStatusAPIView(APIView):
     """
     API tarefasStatus
     """
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         
@@ -726,7 +763,7 @@ class FotosAPIView(APIView):
     API Fotos
     """
 
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if 'tarefa' in request.GET:   

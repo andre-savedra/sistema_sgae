@@ -128,7 +128,7 @@
               />
             </div>
 
-            <button type="submit" class="btn_enviar">CADASTRAR</button>
+            <button type="submit" class="btn_enviar" :disabled="btnDisabled">CADASTRAR</button>
           </div>
         </form>
       </div>
@@ -143,7 +143,7 @@ export default {
   name: "register",
   data() {
     return {
-      btnDisabled: true,
+      btnDisabled: false,
       passwordConfirm: null,
       phoneFormated: null,
       userAuth: {
@@ -203,6 +203,7 @@ export default {
         })
         .catch((response) => {
           alert("Problema ao tentar registrar usuário");
+          this.btnDisabled = false;
           console.log(response);
         });
     },
@@ -218,10 +219,12 @@ export default {
           }
         )
         .then((response) => {
+          this.btnDisabled = false;
           this.$router.push("/");
         })
         .catch((response) => {
           alert("Problema ao tentar registrar usuário");
+          this.btnDisabled = false;
           console.log(response);
         });
     },
@@ -231,20 +234,12 @@ export default {
 
       //User register:
       if (this.userAuth.password === this.passwordConfirm) {
-        // this.userAuth.username = this.userAuth.username.toString();
-        // this.userSec[0].email = this.userAuth.email;
-        // this.userSec[0].idNivelAcessoFK = this.jobSelected.id;
-        // this.userSec[0].idUserFK = 0;
-        // this.userSec[0].fone = this.phoneFormated
-        //   .replaceAll("(", "")
-        //   .replaceAll(")", "")
-        //   .replaceAll(" ", "")
-        //   .replaceAll("-", "");
-        // this.postUsuario();
+        this.btnDisabled = true;         
         this.postUser();
         
       } else {
         alert("Campos Senha e Confirmação de Senha não estão iguais");
+        this.btnDisabled = false;
       }
     },
     getJobs: async function () {
@@ -378,6 +373,9 @@ img {
 
   &:hover {
     background-color: #e05e5e;
+  }
+  &:disabled {
+    background-color: #d38f8f;
   }
 }
 
