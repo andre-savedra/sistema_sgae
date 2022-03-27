@@ -8,7 +8,8 @@ const _3f5d63b2 = () => interopDefault(import('..\\pages\\addTarefa\\index.vue' 
 const _25fc8521 = () => interopDefault(import('..\\pages\\andamentoTarefa\\index.vue' /* webpackChunkName: "pages/andamentoTarefa/index" */))
 const _2f1cd7af = () => interopDefault(import('..\\pages\\backup\\index.vue' /* webpackChunkName: "pages/backup/index" */))
 const _9864a2f2 = () => interopDefault(import('..\\pages\\erro\\index.vue' /* webpackChunkName: "pages/erro/index" */))
-const _2646fa32 = () => interopDefault(import('..\\pages\\home\\index.vue' /* webpackChunkName: "pages/home/index" */))
+const _0ac0bb82 = () => interopDefault(import('..\\pages\\initial\\index.vue' /* webpackChunkName: "pages/initial/index" */))
+const _0f6d3ea6 = () => interopDefault(import('..\\pages\\lobby\\index.vue' /* webpackChunkName: "pages/lobby/index" */))
 const _9fb5f98c = () => interopDefault(import('..\\pages\\meuAcesso\\index.vue' /* webpackChunkName: "pages/meuAcesso/index" */))
 const _41b6f75e = () => interopDefault(import('..\\pages\\pdf\\index.vue' /* webpackChunkName: "pages/pdf/index" */))
 const _444f6294 = () => interopDefault(import('..\\pages\\registrar\\index.vue' /* webpackChunkName: "pages/registrar/index" */))
@@ -46,9 +47,13 @@ export const routerOptions = {
     component: _9864a2f2,
     name: "erro"
   }, {
-    path: "/home",
-    component: _2646fa32,
-    name: "home"
+    path: "/initial",
+    component: _0ac0bb82,
+    name: "initial"
+  }, {
+    path: "/lobby",
+    component: _0f6d3ea6,
+    name: "lobby"
   }, {
     path: "/meuAcesso",
     component: _9fb5f98c,

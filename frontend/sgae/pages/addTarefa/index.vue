@@ -1,12 +1,15 @@
 <template>
-  <div class="all p-d-flex p-flex-column p-jc-center p-ai-center">
-    <div class="container p-d-flex p-flex-column p-jc-top p-ai-center">
+  <div class="allAdd p-d-flex p-flex-column p-jc-center p-ai-center">
+    <div class="addContainer p-d-flex p-flex-column p-jc-top p-ai-center">
       <div class="titulo p-d-flex p-flex-row p-jc-start p-ai-center">
         <i class="pi pi-check-square" />
         <h1>Crie sua Tarefa!</h1>
       </div>
 
-      <div class="form">
+      <div
+        class="form"
+        v-if="actualUser && allUsers.length > 0 && allEnviroments.length > 0"
+      >
         <div class="titulo1">
           <h2>TAREFA:</h2>
         </div>
@@ -55,7 +58,7 @@
                 class="basicInputText"
                 :disabled="true"
                 placeholder="Preencha..."
-                v-model="this.$store.state.actualUser.nome"
+                v-model="this.actualUser.nome"
                 required
               />
             </div>
@@ -162,12 +165,15 @@
 </template>
 
 <script>
+import AsyncUserStoraged from "@/assets/scripts/asyncUserStoraged";
+
 export default {
+  extends: AsyncUserStoraged,
   name: "addTarefa",
-  layout: "default",
-  middleware: 'auth',
+  layout: "standard",
+  middleware: "auth",
   data() {
-    return {      
+    return {
       emailPayload: null,
       selectedEmployees: [],
       filteredEmployees: null,
@@ -176,7 +182,7 @@ export default {
       filteredEnviroments: null,
       allEnviroments: [],
       taskID: 1,
-      initialStatus: 1,      
+      initialStatus: 1,
       deadline: null,
       photos: [],
       uploadPhotoStarted: false,
@@ -191,7 +197,7 @@ export default {
           dataInicio: null,
           dataFim: null,
         },
-      ], 
+      ],
       updateModeId: 0,
     };
   },
@@ -207,7 +213,7 @@ export default {
           (task.dataInicio = null),
           (task.dataFim = null);
       });
-      
+
       this.selectedEmployees.length = 0;
       this.selectedEnviroment.length = 0;
       this.deadline = null;
@@ -283,7 +289,7 @@ export default {
       this.allUsers.length = 0;
 
       await this.$axios
-        .$get(this.$store.state.BaseURL + "usuarios/?ativo=True")
+        .$get(this.$store.state.BASE_URL + "usuarios/?ativo=True")
         .then((dataResponse) => {
           dataResponse.data.forEach((user) => {
             this.allUsers.push({
@@ -303,7 +309,7 @@ export default {
       this.allUsers.length = 0;
 
       await this.$axios
-        .$get(this.$store.state.BaseURL + "ambientes/")
+        .$get(this.$store.state.BASE_URL + "ambientes/")
         .then((dataResponse) => {
           dataResponse.data.forEach((enviroment) => {
             this.allEnviroments.push({
@@ -352,7 +358,7 @@ export default {
       el.forEach((element, index) => {
         if (element.textContent.includes(buttonText)) {
           element.click();
-          console.log("clicou")
+          console.log("clicou");
         }
       });
     },
@@ -362,17 +368,21 @@ export default {
     },
     postTask: async function () {
       const index = 0;
-      this.task[index].idSolicitanteFK = this.$store.state.actualUser.id;
+      this.task[index].idSolicitanteFK = this.actualUser.id;
       this.task[index].idAmbienteFK = this.selectedEnviroment.id;
       this.task[index].prazo = this.formatDate(this.deadline.toString());
       this.task[index].dataInicio = this.formatDate("backend");
       this.task[index].idStatusFK = 1;
       await this.$axios
-        .$post(this.$store.state.BaseURL + "tarefas/", JSON.stringify(this.task), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .$post(
+          this.$store.state.BASE_URL + "tarefas/",
+          JSON.stringify(this.task),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((response) => {
           console.log(response);
           //request ok
@@ -399,7 +409,7 @@ export default {
       console.log(p);
 
       const body = {
-        idSolicitanteFK: this.$store.state.actualUser.id,
+        idSolicitanteFK: this.actualUser.id,
         idAmbienteFK: this.selectedEnviroment.id,
         idStatusFK: this.task[index].idStatusFK,
         nome: this.task[index].nome,
@@ -412,7 +422,7 @@ export default {
 
       await this.$axios
         .$put(
-          this.$store.state.BaseURL + "tarefas/" + this.updateModeId + "/",
+          this.$store.state.BASE_URL + "tarefas/" + this.updateModeId + "/",
           JSON.stringify(body),
           {
             headers: {
@@ -446,11 +456,15 @@ export default {
       console.log(JSON.stringify(taskUsers));
 
       await this.$axios
-        .$post(this.$store.state.BaseURL + "tarefasUsuarios/", JSON.stringify(taskUsers), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .$post(
+          this.$store.state.BASE_URL + "tarefasUsuarios/",
+          JSON.stringify(taskUsers),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((response) => {
           console.log(response);
           //request ok
@@ -471,22 +485,24 @@ export default {
       ];
 
       await this.$axios
-        .$post(this.$store.state.BaseURL + "tarefasStatus/", JSON.stringify(taskStatus), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .$post(
+          this.$store.state.BASE_URL + "tarefasStatus/",
+          JSON.stringify(taskStatus),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((response) => {
-          console.log(response);          
+          console.log(response);
           //request ok
           this.postMail(this.emailPayload);
           this.virtualClickUpload("Carregar");
           //clean form if there is no photo added
           const checkUpload = setTimeout(() => {
-            if(!this.uploadPhotoStarted)
-              this.cleanForm();
-          },2000);
-
+            if (!this.uploadPhotoStarted) this.cleanForm();
+          }, 2000);
         })
         .catch((response) => {
           alert("Problema ao tentar cadastrar a tarefa");
@@ -494,30 +510,30 @@ export default {
         });
     },
     postMail: async function (payload) {
-
-      if (payload)      
-      await this.$axios
-        .$post(this.$store.state.BaseURL + "emailSender/newTask/", 
-          JSON.stringify(payload), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response);          
-          //request ok
-          if (response.msg !== null && response.msg !== undefined) {
-            if(response.msg === 'sent')
-              console.log("EMAIL ENVIADO COM SUCESSO");
-            else
-              console.log("EMAIL NÃO ENVIADO");
-          }
-
-        })
-        .catch((response) => {
-          alert("Problema ao tentar enviar email!");
-          console.log(response);
-        });
+      if (payload)
+        await this.$axios
+          .$post(
+            this.$store.state.BASE_URL + "emailSender/newTask/",
+            JSON.stringify(payload),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response);
+            //request ok
+            if (response.msg !== null && response.msg !== undefined) {
+              if (response.msg === "sent")
+                console.log("EMAIL ENVIADO COM SUCESSO");
+              else console.log("EMAIL NÃO ENVIADO");
+            }
+          })
+          .catch((response) => {
+            alert("Problema ao tentar enviar email!");
+            console.log(response);
+          });
     },
     postPhoto: async function (event) {
       // console.log(event);
@@ -525,7 +541,7 @@ export default {
       const taskID = this.taskID;
       const initialStatus = this.initialStatus;
       this.uploadPhotoStarted = true;
-  
+
       await files.forEach((file) => {
         let formData = new FormData();
         formData.append("nome", file.name);
@@ -534,7 +550,7 @@ export default {
         formData.append("image", file);
 
         this.$axios
-          .$post(this.$store.state.BaseURL + "fotos/", formData, {
+          .$post(this.$store.state.BASE_URL + "fotos/", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -548,11 +564,10 @@ export default {
             console.log(response);
           });
       });
-
-    },  
+    },
     getTaskUser: async function (task) {
       this.$axios
-        .$get(this.$store.state.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
+        .$get(this.$store.state.BASE_URL + ("tarefasUsuarios/?tarefa=" + task))
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
@@ -584,7 +599,7 @@ export default {
       }
 
       this.$axios
-        .$get(this.$store.state.BaseURL + ("tarefas/" + task))
+        .$get(this.$store.state.BASE_URL + ("tarefas/" + task))
         .then((response) => {
           console.log(response);
           console.log(this.allEnviroments);
@@ -609,21 +624,27 @@ export default {
         });
     },
   },
-  mounted() {
-    
-    if (this.$store.state.editTaskId > 0) {
-      this.updateModeId = this.$store.state.editTaskId;
-      this.getTask(this.updateModeId);
-    } else {
-      this.getUsers();
-      this.getEnviroments();
+  created() {
+    if (this.actualUser === null || this.actualUser === undefined)
+      this.$router.push("/lobby");
+    else {
+      console.log("actual user add tarefa");
+      console.log(this.actualUser);
+
+      if (this.$store.state.editTaskId > 0) {
+        this.updateModeId = this.$store.state.editTaskId;
+        this.getTask(this.updateModeId);
+      } else {
+        this.getUsers();
+        this.getEnviroments();
+      }
     }
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.all {
+.allAdd {
   * {
     overflow-x: visible;
   }
@@ -650,7 +671,7 @@ export default {
     font-size: $size-title;
   }
 
-  .container {
+  .addContainer {
     width: $size-container;
     background-color: $white-back;
     border-radius: 15px;
@@ -673,6 +694,18 @@ export default {
         width: auto;
         height: auto;
         margin-right: 10px;
+      }
+    }
+
+    .ovvv {
+      background-color: $white-back;
+      width: 100%;
+      height: auto;
+      padding: 20px;
+      border-radius: 0px 0px 15px 15px;
+
+      .ovv-container {
+        height: 1000px;
       }
     }
 
@@ -837,7 +870,7 @@ export default {
     font-size: $size-title;
   }
 
-  .container {
+  .addContainer {
     width: $size-container;
   }
 
@@ -861,7 +894,7 @@ export default {
     font-size: $size-title !important;
   }
 
-  .container {
+  .addContainer {
     width: $size-container;
   }
 
@@ -883,11 +916,11 @@ export default {
 @media screen and (max-width: 400px) {
   $size-container: 100vw !important;
 
-  .all {
+  .allAdd {
     padding: 0px !important;
   }
 
-  .container {
+  .addContainer {
     width: $size-container;
     border-radius: 0px !important;
   }

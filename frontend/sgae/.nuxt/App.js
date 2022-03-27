@@ -18,12 +18,12 @@ import '..\\node_modules\\primevue\\resources\\primevue.min.css'
 
 import '..\\node_modules\\primeicons\\primeicons.css'
 
-import _6b4fb138 from '..\\layouts\\backup.vue'
-import _6f6c098b from '..\\layouts\\default.vue'
 import _77a66d33 from '..\\layouts\\login.vue'
 import _1a3b193c from '..\\layouts\\pdf.vue'
+import _b429569a from '..\\layouts\\standard.vue'
+import _6f6c098b from './layouts/default.vue'
 
-const layouts = { "_backup": sanitizeComponent(_6b4fb138),"_default": sanitizeComponent(_6f6c098b),"_login": sanitizeComponent(_77a66d33),"_pdf": sanitizeComponent(_1a3b193c) }
+const layouts = { "_login": sanitizeComponent(_77a66d33),"_pdf": sanitizeComponent(_1a3b193c),"_standard": sanitizeComponent(_b429569a),"_default": sanitizeComponent(_6f6c098b) }
 
 export default {
   render (h, props) {

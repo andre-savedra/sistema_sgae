@@ -1,5 +1,5 @@
 <template>
-  <div class="p-d-flex p-flex-column default-main">
+  <div class="p-d-flex p-flex-column standard-main">
     <div class="default-header p-d-flex p-flex-row p-jc-between p-ai-center">
       <div
         class="default-header-left p-d-flex p-flex-row p-jc-between p-ai-center"
@@ -24,7 +24,7 @@
         class="default-header-right p-d-flex p-flex-row p-jc-end p-ai-center"
       >
         <Profile
-          v-if="profileLoaded"
+          v-if="actualUser"
           :user="actualUser"
           text_color="white"
           back_color="#313131"
@@ -99,9 +99,9 @@ export default {
   name: "default",
   data() {
     return {
-      visibleLeft: false,
-      profileLoaded: false,
       actualUser: null,
+      visibleLeft: false,
+      profileLoaded: false,      
       sidebarMenuButtons: [
         {
           textLabel: "Recuar",
@@ -214,7 +214,7 @@ export default {
           break;
 
         case 1: //button "Home"
-          this.$router.push("/home");
+          this.$router.push("/initial");
           this.checkSideBarVisibility();
 
           break;
@@ -241,57 +241,25 @@ export default {
           break;
 
         case 6: //button "logout"
+          await this.$auth.$storage.removeUniversal("actualUserStoraged");
           await this.$auth.logout();
           this.$router.push("/");
           this.checkSideBarVisibility();
           break;
       }
-    },
-    getUsuarios: async function (userId) {
-      await this.$axios
-        .get(this.$store.state.BASE_URL + "usuarios/" + userId)
-        .then((response) => {
-          console.log(response);
-          if (response.data.data !== null && response.data.data !== undefined) {             
-             this.$store.dispatch("setActualUser", structuredClone(response.data.data));
-             this.actualUser = structuredClone(response.data.data);
-             this.profileLoaded = true;
-
-             console.log("USUARIO ATUALMENTE LOGADO!");
-             console.log(this.$store.state.actualUser);             
-
-          }
-          
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getUser: async function () {
-      console.log("get User");
-      await this.$axios
-        .get(this.$store.state.BASE_URL + "api/v1/users/me/")
-        .then((response) => {
-          console.log("response");
-          console.log(response);
-
-          if (response.data !== null && response.data !== undefined) {
-            this.getUsuarios(response.data.id);
-          }
-          
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("erro ao pegar user");
-        });
-    },
+    },    
+   
   },
-  mounted() {
-    console.log("MOUNTED DEFAULT");
-    if (this.$store.state.actualUser === null) {
-      this.getUser();
-    }
+  created() {
+
+    const user = this.$auth.$storage.getUniversal("actualUserStoraged")
+
+    if(user !== null && user !== undefined) {
+      this.actualUser = user;
+    }    
+    
   },
+  
 };
 </script>
 
@@ -300,7 +268,7 @@ export default {
 
 $sidebar_second_positions: 150px, 220px, 220px, 300px;
 
-.default-main {
+.standard-main {
   width: 100vw;
   height: auto;
   min-height: 100vh;
@@ -458,7 +426,7 @@ $sidebar_second_positions: 150px, 220px, 220px, 300px;
     display: none;
   }
 
-  .default-main {
+  .standard-main {
     .default-header {
       height: var(--height-default-header-mobile);
       .default-header-right {

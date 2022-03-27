@@ -160,8 +160,7 @@ img {
   display: flex;
   width: 65%;
   height: 45%;
-  // min-width: 150px;
-  // min-height: 150px;
+ 
 }
 
 .formulario_cadastro .btn_enviar {
@@ -242,12 +241,10 @@ img {
   border-color: crimson;
 }
 
-html {
+/* html {
   height: 100vh;
-  overflow: hidden;
-  /* background: #240f54; */
-  /* background: linear-gradient(180deg,#240f54,#240f54 5%,#440bc8); */
-}
+  overflow: hidden;  
+} */
 
 @media screen and (max-width: 990px) {
   .logo_panel {

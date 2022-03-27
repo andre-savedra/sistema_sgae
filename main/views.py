@@ -32,7 +32,11 @@ def managePermissions(username, activity):
           
           if activity == 'getUsers':
               if usuario.idNivelAcessoFK.nivelAcesso > 1:
-                resp['approvement'] = True     
+                resp['approvement'] = True
+          elif activity == 'postTask':
+              if usuario.idNivelAcessoFK.nivelAcesso > 1:
+                resp['approvement'] = True
+
       
     return resp
 
@@ -327,9 +331,6 @@ class UsuariosAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        # print("request usuarios")
-        # print(request.user)
-        
         
         # GET USER WITH ACTIVATION STATUS
         if 'ativo' in request.GET:
@@ -340,7 +341,7 @@ class UsuariosAPIView(APIView):
             if permission['approvement']:
                 cargo = Cargos.objects.get(nivelAcesso=permission['usuario'].idNivelAcessoFK.nivelAcesso)
                 otherUsers = Usuarios.objects.filter(ativo=ativo).filter(idNivelAcessoFK__lt=cargo.id)
-                actualUser = Usuarios.objects.filter(id=permission['usuario'].id)
+                actualUser = Usuarios.objects.filter(id=permission['usuario'].id)                              
                 # union users
                 usuarios = actualUser | otherUsers
                 serializer = UsuariosSerializer(usuarios, many=True)            
@@ -390,6 +391,7 @@ class UsuariosAPIView(APIView):
                     'pages': resp[2]
                 }
             )
+        # GET USERS IN PRIMARY KEY
         else:
             usuarios = Usuarios.objects.get(idUserFK=pk)
             serializer = UsuariosSerializer(usuarios)
@@ -539,12 +541,18 @@ class TarefasAPIView(APIView):
         
 
     def post(self, request):
-        serializer = TarefasSerializerSimple(data=request.data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()        
-        # return Response({"msg": "Inserido com sucesso"})
-        # return Response({"id": serializer.data['id']})
-        return Response(serializer.data)
+        permission = managePermissions(request.user, 'postTask')
+
+        if permission['approvement']:
+            
+            # usuario = Usuarios.objects.get(id=permission['usuario'].id)
+
+            serializer = TarefasSerializerSimple(data=request.data, many=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()        
+            # return Response({"msg": "Inserido com sucesso"})
+            # return Response({"id": serializer.data['id']})
+            return Response(serializer.data)
         
 
     def put(self, request, pk=''):

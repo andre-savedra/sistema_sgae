@@ -161,7 +161,7 @@ export default {
     },
     redirect: {
       login: "/",
-      home: "/home",
+      home: "/lobby",
     },
   },
 
