@@ -46,6 +46,9 @@ def managePermissions(username, activity):
           elif activity == 'getTasksUsers':
               if usuario.idNivelAcessoFK.nivelAcesso > 1:
                 resp['approvement'] = True
+          elif activity == 'getPhotos':
+              if usuario.idNivelAcessoFK.nivelAcesso > 1:
+                resp['approvement'] = True
 
       
     return resp
@@ -572,17 +575,26 @@ class TarefasAPIView(APIView):
               )
 
               excluders = None
+              tarefasUsuariosFiltrada = None
               index = 0
 
-              for duplicate in duplicates:
+              print("duplicates")
+              print(duplicates)
+
+              if(len(duplicates) > 0):
+                  
+                for duplicate in duplicates:
                     if index == 0:
                         excluders = tarefasUsuarios.filter(**{x: duplicate[x] for x in unique_fields}).exclude(id=duplicate['max_id'])
                     else:
                         excluders = (excluders | tarefasUsuarios.filter(**{x: duplicate[x] for x in unique_fields}).exclude(id=duplicate['max_id']))
                     index += 1                
                 # .delete() add in query if i want exclude from database...'
-             
-              tarefasUsuariosFiltrada = tarefasUsuarios.exclude(id__in=excluders)
+                tarefasUsuariosFiltrada = tarefasUsuarios.exclude(id__in=excluders).order_by('id')
+              else:
+                print("DUPLICATE VAZIOOOO")
+                tarefasUsuariosFiltrada = tarefasUsuarios
+              
             
               resp = getPagination(request, tarefasUsuariosFiltrada)
               serializer = TarefasUsuariosSerializerIdTarefa(resp[0], many=True)
@@ -853,18 +865,24 @@ class FotosAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
-        if 'tarefa' in request.GET:   
-            tarefa = request.GET['tarefa']
-            fotos = Fotos.objects.filter(idTarefaFK=tarefa)
-            resp = getPagination(request, fotos)
-            serializer = FotosSerializer(resp[0], many=True)
-            return Response(
-                {
-                    'data': serializer.data,
-                    'total': resp[1],
-                    'pages': resp[2]
-                }
-            )
+        if 'tarefa' in request.GET:
+
+            permission = managePermissions(request.user, 'getPhotos')
+
+            if permission['approvement']:
+                tarefa = request.GET['tarefa']
+                fotos = Fotos.objects.filter(idTarefaFK=tarefa)
+                resp = getPagination(request, fotos)
+                serializer = FotosSerializer(resp[0], many=True)
+                return Response(
+                    {
+                        'data': serializer.data,
+                        'total': resp[1],
+                        'pages': resp[2]
+                    }
+                )
+            else:
+                return Response({"msg": "no permission"})
         elif pk != '':
             fotos = Fotos.objects.get(id=pk)
             serializer = FotosSerializer(fotos)

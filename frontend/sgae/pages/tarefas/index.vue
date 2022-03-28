@@ -1,7 +1,7 @@
 <template>
   <div class="allTasks p-d-flex p-flex-column p-jc-start p-ai-center">
     <h1 id="titleTasks">Tarefas cadastradas</h1>
-    <!-- <DataView
+     <DataView
       :value="tasks"
       :layout="layout"
       :paginator="true"
@@ -10,6 +10,7 @@
       :sortField="sortField"
       @page="onPage($event)"
       class="dataTaskViewer"
+      v-if="this.$store.state.BASE_URL"
     >
       <template #header>
         <div
@@ -49,7 +50,7 @@
               </div>
             </div>
 
-            <div class="oneElement p-d-flex p-flex-row p-jc-start p-ai-center">
+            <!-- <div class="oneElement p-d-flex p-flex-row p-jc-start p-ai-center">
               <label for="filters">Digite o filtro:</label>
               <AutoComplete
                 :multiple="false"
@@ -61,7 +62,7 @@
                 placeholder="Digite o filtro"
                 class="filteredField"
               />
-            </div>
+            </div> -->
           </div>
           <div class="col-6 viewSwitch">
             <DataViewLayoutOptions v-model="layout" />
@@ -75,20 +76,20 @@
       <template #list="slotProps">
         <div
           :class="
-            'listTaskDataView ' + slotProps.data.idStatusFK.nome + '-hover'
+            'listTaskDataView ' + slotProps.data.idTarefaFK.idStatusFK.nome + '-hover'
           "
         >
           <div
             class="col-12 elementListTaskDataView"
             v-if="
-              slotProps.data.nome !== null && slotProps.data.nome !== undefined
+              slotProps.data.idTarefaFK.nome !== null && slotProps.data.idTarefaFK.nome !== undefined
             "
           >
             <div class="imgTaskContainer">
               <img
                 v-if="slotProps.data.fotos[0]"
                 :src="
-                  this.$store.state.BASE_URL2 + slotProps.data.fotos[0].image
+                  $store.state.BASE_URL_IMGV + slotProps.data.fotos[0].image
                 "
                 alt="Foto Tarefa"
               />
@@ -102,16 +103,16 @@
               <div class="top p-d-flex p-flex-row p-jc-between p-ai-center">
                 <div class="top-texts">
                   <h3 class="p-ml-2">
-                    {{ limitText(slotProps.data.nome, 30) }}
+                    {{ limitText(slotProps.data.idTarefaFK.nome, 30) }}
                   </h3>
                   <span class="p-ml-3">{{
-                    limitText(slotProps.data.descricao, 40)
+                    limitText(slotProps.data.idTarefaFK.descricao, 40)
                   }}</span>
                 </div>
                 <div
                   class="top-index p-d-flex p-flex-column p-jc-start p-ai-end"
                 >
-                  <h4>#{{ slotProps.data.id }}</h4>
+                  <h4>#{{ slotProps.data.idTarefaFK.id }}</h4>
                 </div>
               </div>
               <div class="bottom p-d-flex p-flex-row p-jc-between p-ai-center">
@@ -127,7 +128,7 @@
                     <i class="pi pi-flag p-mr-2" />
                     <span class="p-mr-3"
                       ><strong>{{
-                        limitText(slotProps.data.idStatusFK.nome, 15)
+                        limitText(slotProps.data.idTarefaFK.idStatusFK.nome, 15)
                       }}</strong></span
                     >
                   </div>
@@ -140,7 +141,7 @@
                     <i class="pi pi-map-marker p-mr-2" />
                     <span class="p-mr-3"
                       ><strong>{{
-                        limitText(slotProps.data.idAmbienteFK.nome, 30)
+                        limitText(slotProps.data.idTarefaFK.idAmbienteFK.nome, 30)
                       }}</strong></span
                     >
                   </div>
@@ -175,13 +176,13 @@
                     >
                       <button
                         class="progressTask"
-                        v-on:click="progressTask(slotProps.data.id)"
+                        v-on:click="progressTask(slotProps.data.idTarefaFK.id)"
                       >
                         <i class="pi pi-arrow-circle-right" />
                       </button>
                       <button
                         class="editTask"
-                        v-on:click="editTask(slotProps.data.id)"
+                        v-on:click="editTask(slotProps.data.idTarefaFK.id)"
                       >
                         <i class="pi pi-pencil" />
                       </button>
@@ -194,13 +195,13 @@
                     >
                       <button
                         class="deleteTask"
-                        v-on:click="deleteTask(slotProps.data.id)"
+                        v-on:click="deleteTask(slotProps.data.idTarefaFK.id)"
                       >
                         <i class="pi pi-trash" />
                       </button>
                       <button
                         class="printTask"
-                        v-on:click="printTask(slotProps.data.id)"
+                        v-on:click="printTask(slotProps.data.idTarefaFK.id)"
                       >
                         <i class="pi pi-print" />
                       </button>
@@ -211,14 +212,14 @@
             </div>
           </div>
           <div
-            :class="'statusTask ' + slotProps.data.idStatusFK.nome"
+            :class="'statusTask ' + slotProps.data.idTarefaFK.idStatusFK.nome"
             v-if="
-              slotProps.data.nome !== null && slotProps.data.nome !== undefined
+              slotProps.data.idTarefaFK.nome !== null && slotProps.data.idTarefaFK.nome !== undefined
             "
           ></div>
         </div>
       </template>
-    </DataView> -->
+    </DataView>
     <!--
     <template #grid="slotProps">     
     </template>-->
@@ -364,7 +365,7 @@ export default {
         }
         console.log("getAllTaskUsers");
         console.log(this.tasks);
-        // this.getAllTaskPhotos();
+        this.getAllTaskPhotos();
       }
     },
     getTaskPhotos: function (task) {
@@ -386,10 +387,12 @@ export default {
       if (this.tasks !== null) {
         for (let i = 0; i < this.tasks.length; i++) {
           if (this.tasks[i].fotos === undefined) {
-            this.tasks[i].fotos = await this.getTaskPhotos(this.tasks[i].id);
+            this.tasks[i].fotos = await this.getTaskPhotos(this.tasks[i].idTarefaFK.id);
           }
         }
       }
+      console.log("getAllTaskPhotos");
+      console.log(this.tasks);
     },
     printTask: function (id) {
       console.log("imprimindo...");
@@ -439,6 +442,8 @@ export default {
     },
   },
   created() {
+    console.log("this.store")
+    console.log(this.$store.state.BASE_URL);
     if (this.actualUser === null || this.actualUser === undefined)
       this.$router.push("/lobby");
     else {

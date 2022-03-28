@@ -4,7 +4,7 @@
     :style="cssCustom"
   >
     <div class="profile-btn flex-row">
-      <Avatar v-if="componentUser" :image="this.$store.state.BASE_URL2 + componentUser.image" size="xlarge" shape="circle" />
+      <Avatar v-if="componentUser" :image="this.$store.state.BASE_URL_IMG + componentUser.image" size="xlarge" shape="circle" />
     </div>
 
     <p id="profile-name" v-if="componentUser">
