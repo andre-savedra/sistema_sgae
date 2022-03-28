@@ -104,7 +104,8 @@
                 <label class="lblBasic" for="requester">
                   <Avatar
                     :image="
-                      BaseURL2 + this.task[0].idTarefaFK.idSolicitanteFK.image
+                      $store.state.BASE_URL_IMG +
+                      this.task[0].idTarefaFK.idSolicitanteFK.image
                     "
                     size="large"
                     shape="circle"
@@ -128,7 +129,10 @@
                 <div v-for="(taskElement, index) in task" :key="index">
                   <label class="lblBasic" for="requester">
                     <Avatar
-                      :image="BaseURL2 + taskElement.idUsuarioFK.image"
+                      :image="
+                        $store.state.BASE_URL_IMG +
+                        taskElement.idUsuarioFK.image
+                      "
                       size="large"
                       shape="circle"
                     />
@@ -194,7 +198,7 @@
                     v-if="photos[0].length > 0"
                     :photos="photos[0]"
                     background="white"
-                    :baseURL="BaseURL2"
+                    :baseURL="$store.state.BASE_URL_IMG"
                     targetID="CarouselAddTask"
                   />
                 </div>
@@ -313,7 +317,7 @@
                     v-if="photos[0].length > 0"
                     :photos="photos[0]"
                     background="white"
-                    :baseURL="BaseURL2"
+                    :baseURL="$store.state.BASE_URL_IMG"
                     targetID="CarouselDiagnostic"
                   />
                 </div>
@@ -346,7 +350,7 @@
                     v-if="photos[1].length > 0"
                     :photos="photos[1]"
                     background="white"
-                    :baseURL="BaseURL2"
+                    :baseURL="$store.state.BASE_URL_IMG"
                     targetID="CarouselResult"
                   />
                   <div v-else>
@@ -409,7 +413,7 @@
                 :fileLimit="10"
                 invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
                 invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"
-                invalidFileLimitMessage	="Máximo de imagens anexadas é 10, diminua a quantidade de imagens!"
+                invalidFileLimitMessage="Máximo de imagens anexadas é 10, diminua a quantidade de imagens!"
               >
                 <template #empty>
                   <p>
@@ -426,7 +430,10 @@
                 progressButtonsContainer
                 p-d-flex p-flex-row p-jc-center p-ai-center
               "
-              v-if="this.task[0] !== null && this.task[0].idTarefaFK.dataFim === null"
+              v-if="
+                this.task[0] !== null &&
+                this.task[0].idTarefaFK.dataFim === null
+              "
             >
               <Button
                 class="btn-adv-progress"
@@ -468,7 +475,6 @@
         v-if="newTaskStatusName === 'Encerrada'"
         class="btn-clean"
         label="Declinar"
-        
       />
       <Button v-else class="btn-clean" label="Cancelar" @click="cleanForm()" />
     </div>
@@ -476,14 +482,15 @@
 </template>
 
 <script>
+import AsyncUserStoraged from "@/assets/scripts/asyncUserStoraged";
+
 export default {
+  extends: AsyncUserStoraged,
   name: "andamentoTarefa",
-  layout: "default",
-  middleware: 'auth',
+  layout: "standard",
+  middleware: "auth",
   data() {
     return {
-      BaseURL: "http://localhost:8003/",
-      BaseURL2: "http://localhost:8003",
       emailPayload: null,
       viewMode: "overview", //overview or progress
       taskID: 1,
@@ -614,7 +621,7 @@ export default {
             this.postTaskStatus(),
             this.putTask(),
           ]);
-          this.emailPayload = [structuredClone(this.newTaskStatus)];          
+          this.emailPayload = [structuredClone(this.newTaskStatus)];
           this.viewMode = "overview";
           this.cleanNewStatus();
           this.getTaskUser(this.taskID);
@@ -645,9 +652,6 @@ export default {
           this.postMail(this.emailPayload);
           break;
       }
-
-     
-   
     },
     postTask: async function () {
       const index = 0;
@@ -657,11 +661,15 @@ export default {
       this.task[index].dataInicio = this.formatDate("backend");
       this.task[index].idStatusFK = 1;
       await this.$axios
-        .$post(this.BaseURL + "tarefas/", JSON.stringify(this.task), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .$post(
+          this.$store.state.BASE_URL + "tarefas/",
+          JSON.stringify(this.task),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((response) => {
           console.log(response);
           //request ok
@@ -698,7 +706,10 @@ export default {
 
       await this.$axios
         .$put(
-          this.BaseURL + "tarefas/" + this.task[index].idTarefaFK.id + "/",
+          this.$store.state.BASE_URL +
+            "tarefas/" +
+            this.task[index].idTarefaFK.id +
+            "/",
           JSON.stringify(body),
           {
             headers: {
@@ -720,15 +731,20 @@ export default {
 
     postTaskStatus: async function () {
       console.log("tentando salvar taskSTATUS");
+      this.newTaskStatus.descricao += " - " + this.limitName(this.actualUser.nome)
       const body = [this.newTaskStatus];
       console.log(body);
 
       await this.$axios
-        .$post(this.BaseURL + "tarefasStatus/", JSON.stringify(body), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .$post(
+          this.$store.state.BASE_URL + "tarefasStatus/",
+          JSON.stringify(body),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((response) => {
           console.log(response);
           //request ok
@@ -754,7 +770,7 @@ export default {
         formData.append("image", file);
 
         this.$axios
-          .$post(this.BaseURL + "fotos/", formData, {
+          .$post(this.$store.state.BASE_URL + "fotos/", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -780,13 +796,12 @@ export default {
     },
     getTaskStatus: async function (task) {
       this.$axios
-        .$get(this.BaseURL + ("tarefasStatus/?tarefa=" + task))
+        .$get(this.$store.state.BASE_URL + ("tarefasStatus/?tarefa=" + task))
         .then((response) => {
           console.log(response);
 
           //request ok
           if (response.data !== null && response.data !== undefined) {
-            
             this.taskStatus = structuredClone(response.data);
 
             this.taskStatus.map((status, index) => {
@@ -811,7 +826,7 @@ export default {
     getStatusType: async function () {
       this.taskStatusArray.length = 0;
       this.$axios
-        .$get(this.BaseURL + "status/")
+        .$get(this.$store.state.BASE_URL + "status/")
         .then((response) => {
           console.log(response);
 
@@ -843,7 +858,10 @@ export default {
     },
     getTaskUser: async function (task) {
       this.$axios
-        .$get(this.BaseURL + ("tarefasUsuarios/?tarefaCompleta=" + task))
+        .$get(
+          this.$store.state.BASE_URL +
+            ("tarefasUsuarios/?tarefaCompleta=" + task)
+        )
         .then((response) => {
           console.log(response);
 
@@ -863,7 +881,7 @@ export default {
     },
     getTaskPhotos: function (task) {
       this.$axios
-        .$get(this.BaseURL + ("fotos/?tarefa=" + task))
+        .$get(this.$store.state.BASE_URL + ("fotos/?tarefa=" + task))
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
@@ -932,30 +950,30 @@ export default {
       }
     },
     postMail: async function (payload) {
-
-      if (payload)      
-      await this.$axios
-        .$post(this.BaseURL + "emailSender/newTaskStatus/", 
-          JSON.stringify(payload), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response);          
-          //request ok
-          if (response.msg !== null && response.msg !== undefined) {
-            if(response.msg === 'sent')
-              console.log("EMAIL ENVIADO COM SUCESSO");
-            else
-              console.log("EMAIL NÃO ENVIADO");
-          }
-
-        })
-        .catch((response) => {
-          alert("Problema ao tentar enviar email!");
-          console.log(response);
-        });
+      if (payload)
+        await this.$axios
+          .$post(
+            this.$store.state.BASE_URL + "emailSender/newTaskStatus/",
+            JSON.stringify(payload),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response);
+            //request ok
+            if (response.msg !== null && response.msg !== undefined) {
+              if (response.msg === "sent")
+                console.log("EMAIL ENVIADO COM SUCESSO");
+              else console.log("EMAIL NÃO ENVIADO");
+            }
+          })
+          .catch((response) => {
+            alert("Problema ao tentar enviar email!");
+            console.log(response);
+          });
     },
     cleanNewStatus: function () {
       this.newTaskStatusName = "";
@@ -965,18 +983,18 @@ export default {
       this.newTaskStatus.descricao = "";
     },
   },
-  mounted() {
-    this.actualUser.id = 7;
-    this.actualUser.nome = "André Felipe Savedra Cruz";
+  created() {
+    if (this.actualUser === null || this.actualUser === undefined)
+      this.$router.push("/lobby");
+    else {
+      if (this.$store.state.editTaskId > 0)
+        this.taskID = this.$store.state.editTaskId;
+      else this.$router.push("/tarefas");
 
-    if (this.$store.state.editTaskId > 0)
-      this.taskID = this.$store.state.editTaskId;
-    else this.$router.push("/tarefas");
-    // else this.taskID = 62;
-
-    this.getTaskUser(this.taskID);
-    this.getTaskPhotos(this.taskID);
-    this.getStatusType();
+      this.getTaskUser(this.taskID);
+      this.getTaskPhotos(this.taskID);
+      this.getStatusType();
+    }
   },
 };
 </script>

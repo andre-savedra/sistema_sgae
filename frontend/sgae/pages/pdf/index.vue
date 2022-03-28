@@ -59,9 +59,12 @@
 </template>
 
 <script>
+import AsyncUserStoraged from "@/assets/scripts/asyncUserStoraged";
+
 export default {
-  layout: "default",
-  middleware: 'auth',
+  extends: AsyncUserStoraged,
+  layout: "standard",
+  middleware: "auth",
   data() {
     return {
       BaseURL: "http://localhost:8003/",
@@ -159,13 +162,13 @@ export default {
       if (this.showTasksToPrint && this.selectedTasksIds.length) {
         console.log("modo impressão de tasks");
         console.log(this.selectedTasksIds);
-        
+
         this.tasksPrintID.length = 0;
-        this.tasksPrintID = this.selectedTasksIds.map((taskId)=>{
+        this.tasksPrintID = this.selectedTasksIds.map((taskId) => {
           return taskId.id;
-        });        
+        });
         console.log(this.tasksPrintID);
-        
+
         await this.getTasksUser(this.tasksPrintID);
         console.log("agora vai o PDF TA");
         this.printPdf();
@@ -331,7 +334,7 @@ export default {
       }
 
       this.tasksPrint.forEach((task, index) => {
-        const base = this.BaseURL2;
+        const base = this.$store.state.BASE_URL_IMG;
 
         task.photos.map((actualPhoto) => {
           docDefinition.images[`photo${actualPhoto.id}`] =
@@ -652,7 +655,7 @@ export default {
         tasks.map(async (id) => {
           await this.$axios
             .$get(
-              this.BaseURL +
+              this.$store.state.BASE_URL +
                 ("tarefasUsuarios/?tarefaCompletaStatusPhoto=" + id)
             )
             .then((response) => {
@@ -661,8 +664,6 @@ export default {
               //request ok
               if (response.data !== null && response.data !== undefined) {
                 this.tasksPrint.push(structuredClone(response));
-
-                
 
                 response.photos.forEach((photo) => {
                   if (photo.idStatusFK !== 3)
@@ -690,7 +691,7 @@ export default {
     },
     getAllTaskIds: async function () {
       this.$axios
-        .$get(this.BaseURL + "tarefas/?ids=1")
+        .$get(this.$store.state.BASE_URL + "tarefas/?ids=1")
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
@@ -706,31 +707,37 @@ export default {
         });
     },
   },
-  mounted() {
-    switch (this.$store.state.printMode) {
-      case "dashboards":
-        break;
+  created() {
+    if (this.actualUser === null || this.actualUser === undefined)
+      this.$router.push("/lobby");
+    else {
 
-      case "tasks":
-        this.getAllTaskIds();
-        this.showTasksToPrint = true;        
-        break;
+      switch (this.$store.state.printMode) {
+        case "dashboards":
+          break;
 
-      default:
-        if (!this.$store.state.tasksToPrint.length) {
-          this.tasksPrintID.push(42);
-          this.tasksPrintID.push(43);
-        } else this.tasksPrintID = this.$store.state.tasksToPrint;
+        case "tasks":
+          this.getAllTaskIds();
+          this.showTasksToPrint = true;
+          break;
 
-        console.log("this.tasksPrintID");
-        console.log(this.tasksPrintID);
-        this.getTasksUser(this.tasksPrintID);
+        default:
+          if (!this.$store.state.tasksToPrint.length) {
+            // this.tasksPrintID.push(42);
+            // this.tasksPrintID.push(43);
+          } else this.tasksPrintID = this.$store.state.tasksToPrint;
 
-        break;
+          console.log("this.tasksPrintID");
+          console.log(this.tasksPrintID);
+          this.getTasksUser(this.tasksPrintID);
+
+          break;
+      }
+      this.$store.dispatch("setPrintMode", "");
+      this.$store.dispatch("setTaskToPrint", []);
     }
-    this.$store.dispatch("setPrintMode", "");
-    this.$store.dispatch("setTaskToPrint", []);
   },
+  
 };
 </script>
 <style lang="scss" scoped>
