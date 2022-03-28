@@ -2,8 +2,8 @@
   <main class="lobby p-d-flex p-flex-column p-jc-center p-ai-center">
     <section class="upper p-d-flex p-flex-column p-jc-center p-ai-center">
       <div class="img-inner p-d-flex p-flex-column p-jc-center p-ai-center">
-        <img v-if="flip" class="front" src="@/assets/media/sgae.png" />
-        <img v-else class="back" src="@/assets/media/sgae.png" />
+        <img v-if="flip" class="back" src="@/assets/media/sgae.png" />
+        <img v-else class="front" src="@/assets/media/sgae.png" />
       </div>
       <h1 v-if="loggedUser.nome">&#10024; {{ loggedUser.nome.split(' ')[0] }}, preparando seu ambiente! &#10024;</h1>
       <h1 v-else>&#10024; Preparando seu ambiente! &#10024;</h1>

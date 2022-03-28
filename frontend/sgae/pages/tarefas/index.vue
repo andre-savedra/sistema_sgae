@@ -1,7 +1,7 @@
 <template>
   <div class="allTasks p-d-flex p-flex-column p-jc-start p-ai-center">
     <h1 id="titleTasks">Tarefas cadastradas</h1>
-    <DataView
+    <!-- <DataView
       :value="tasks"
       :layout="layout"
       :paginator="true"
@@ -65,7 +65,9 @@
           </div>
           <div class="col-6 viewSwitch">
             <DataViewLayoutOptions v-model="layout" />
-            <button class="btnPrintAllTasks" v-on:click="printManyTasks()"><i class="pi pi-print" /></button>
+            <button class="btnPrintAllTasks" v-on:click="printManyTasks()">
+              <i class="pi pi-print" />
+            </button>
           </div>
         </div>
       </template>
@@ -85,7 +87,9 @@
             <div class="imgTaskContainer">
               <img
                 v-if="slotProps.data.fotos[0]"
-                :src="this.$store.state.BaseURL2 + slotProps.data.fotos[0].image"
+                :src="
+                  this.$store.state.BASE_URL2 + slotProps.data.fotos[0].image
+                "
                 alt="Foto Tarefa"
               />
             </div>
@@ -214,20 +218,23 @@
           ></div>
         </div>
       </template>
-      <!--
+    </DataView> -->
+    <!--
     <template #grid="slotProps">     
     </template>-->
-    </DataView>
   </div>
 </template>
 
 <script>
+import AsyncUserStoraged from "@/assets/scripts/asyncUserStoraged";
+
 export default {
+  extends: AsyncUserStoraged,
   name: "tarefas",
-  layout: "default",
-  middleware: 'auth',
+  layout: "standard",
+  middleware: "auth",
   data() {
-    return {      
+    return {
       sortKey: null,
       sortOrder: null,
       sortField: null,
@@ -237,7 +244,7 @@ export default {
         { label: "Em Andamento", value: "price" },
         { label: "Concluídas", value: "price" },
       ],
-      //useful      
+      //useful
       layout: "grid",
       tasks: null,
       totalTasks: null,
@@ -255,13 +262,6 @@ export default {
       selectedFilter: null,
       filteredSuggestions: null,
     };
-  },  
- 
-  mounted() {
-    
-    this.getTask(1);//page 1
-    this.$store.dispatch("setEditTask", 0);
-    this.$store.dispatch("setTaskToPrint", 0);
   },
 
   methods: {
@@ -298,7 +298,7 @@ export default {
     getTask: async function (page) {
       if (!this.taskPagesLoaded.includes(page)) {
         await this.$axios
-          .$get(this.$store.state.BaseURL + ("tarefas/?page=" + page))
+          .$get(this.$store.state.BASE_URL + ("tarefas/?page=" + page))
           .then((response) => {
             console.log("getTask");
             console.log(response);
@@ -324,9 +324,9 @@ export default {
                   this.tasks.push(structuredClone(task));
                 });
                 this.taskPage = page;
-                console.log("this.tasks");
-                console.log(this.tasks);
               }
+              console.log("this.tasks");
+              console.log(this.tasks);
               this.getAllTaskUsers();
             }
           })
@@ -340,7 +340,7 @@ export default {
     },
     getTasksUsers: function (task) {
       return this.$axios
-        .$get(this.$store.state.BaseURL + ("tarefasUsuarios/?tarefa=" + task))
+        .$get(this.$store.state.BASE_URL + ("tarefasUsuarios/?tarefa=" + task))
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
@@ -358,16 +358,18 @@ export default {
         for (let i = 0; i < this.tasks.length; i++) {
           if (this.tasks[i].responsaveis === undefined) {
             this.tasks[i].responsaveis = await this.getTasksUsers(
-              this.tasks[i].id
+              this.tasks[i].idTarefaFK.id
             );
           }
         }
-        this.getAllTaskPhotos();
+        console.log("getAllTaskUsers");
+        console.log(this.tasks);
+        // this.getAllTaskPhotos();
       }
     },
     getTaskPhotos: function (task) {
       return this.$axios
-        .$get(this.$store.state.BaseURL + ("fotos/?tarefa=" + task))
+        .$get(this.$store.state.BASE_URL + ("fotos/?tarefa=" + task))
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
@@ -396,7 +398,7 @@ export default {
       this.$store.dispatch("setPrintMode", "");
       this.$router.push("/pdf");
     },
-    printManyTasks: function(){
+    printManyTasks: function () {
       this.$store.dispatch("setTaskToPrint", []);
       this.$store.dispatch("setPrintMode", "tasks");
       this.$router.push("/pdf");
@@ -404,7 +406,7 @@ export default {
     deleteTask: function (taskId) {
       if (taskId > 0) {
         this.$axios
-          .$delete(this.$store.state.BaseURL + ("tarefas/" + taskId))
+          .$delete(this.$store.state.BASE_URL + ("tarefas/" + taskId))
           .then((response) => {
             //request ok
             if (response !== null) {
@@ -435,6 +437,17 @@ export default {
         });
       }
     },
+  },
+  created() {
+    if (this.actualUser === null || this.actualUser === undefined)
+      this.$router.push("/lobby");
+    else {
+      console.log("actual user tarefas");
+      console.log(this.actualUser);
+      this.getTask(1); //page 1
+      this.$store.dispatch("setEditTask", 0);
+      this.$store.dispatch("setTaskToPrint", 0);
+    }
   },
 };
 </script>
@@ -553,17 +566,17 @@ export default {
             align-items: flex-start;
             justify-content: flex-start;
           }
-          .btnPrintAllTasks{             
-             height: 32px;
-             margin: 4px 0px 5px 0px;             
-             border-radius: 5px; 
-             border: 1px solid #ffff;
-             background-color: #ffff;
-             &:hover{
-               border: 1px solid #c22a1f;
-               background-color: #c22a1f;
-               cursor: pointer;
-             }
+          .btnPrintAllTasks {
+            height: 32px;
+            margin: 4px 0px 5px 0px;
+            border-radius: 5px;
+            border: 1px solid #ffff;
+            background-color: #ffff;
+            &:hover {
+              border: 1px solid #c22a1f;
+              background-color: #c22a1f;
+              cursor: pointer;
+            }
           }
         }
       }

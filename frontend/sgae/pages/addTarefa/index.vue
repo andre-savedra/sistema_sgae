@@ -158,7 +158,7 @@
       </div>
     </div>
     <div class="buttons p-d-flex p-flex-row p-jc-evenly p-ai-center">
-      <Button class="btn-send" label="Enviar" @click="checkMode()" />
+      <Button class="btn-send" :disabled="btnDisabled" label="Enviar" @click="checkMode()" />
       <Button class="btn-clean" label="Limpar" @click="cleanForm()" />
     </div>
   </div>
@@ -199,6 +199,7 @@ export default {
         },
       ],
       updateModeId: 0,
+      btnDisabled: false
     };
   },
   methods: {
@@ -363,6 +364,8 @@ export default {
       });
     },
     checkMode: function () {
+      this.btnDisabled = true;
+
       if (this.updateModeId > 0) this.putTask();
       else this.postTask();
     },
@@ -397,6 +400,7 @@ export default {
         .catch((response) => {
           alert("Problema ao tentar cadastrar a tarefa");
           console.log(response);
+          this.btnDisabled = false;
         });
     },
     putTask: async function () {
@@ -474,6 +478,7 @@ export default {
         .catch((response) => {
           alert("Problema ao tentar cadastrar os usuários na tarefa");
           console.log(response);
+          this.btnDisabled = false;
         });
     },
     postTaskStatus: async function () {
@@ -507,6 +512,7 @@ export default {
         .catch((response) => {
           alert("Problema ao tentar cadastrar a tarefa");
           console.log(response);
+          this.btnDisabled = false;
         });
     },
     postMail: async function (payload) {
@@ -523,6 +529,7 @@ export default {
           )
           .then((response) => {
             console.log(response);
+            this.btnDisabled = false;
             //request ok
             if (response.msg !== null && response.msg !== undefined) {
               if (response.msg === "sent")
@@ -533,6 +540,7 @@ export default {
           .catch((response) => {
             alert("Problema ao tentar enviar email!");
             console.log(response);
+            this.btnDisabled = false;
           });
     },
     postPhoto: async function (event) {

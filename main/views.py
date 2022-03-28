@@ -15,6 +15,10 @@ from djoser.utils import decode_uid
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 
+
+from django.db.models import Count, Max
+
+
 #niveis de acesso
 can_deleteUser = 20
 can_approveUser = 20
@@ -34,6 +38,12 @@ def managePermissions(username, activity):
               if usuario.idNivelAcessoFK.nivelAcesso > 1:
                 resp['approvement'] = True
           elif activity == 'postTask':
+              if usuario.idNivelAcessoFK.nivelAcesso > 1:
+                resp['approvement'] = True
+          elif activity == 'getTasks':
+              if usuario.idNivelAcessoFK.nivelAcesso > 1:
+                resp['approvement'] = True
+          elif activity == 'getTasksUsers':
               if usuario.idNivelAcessoFK.nivelAcesso > 1:
                 resp['approvement'] = True
 
@@ -340,7 +350,7 @@ class UsuariosAPIView(APIView):
 
             if permission['approvement']:
                 cargo = Cargos.objects.get(nivelAcesso=permission['usuario'].idNivelAcessoFK.nivelAcesso)
-                otherUsers = Usuarios.objects.filter(ativo=ativo).filter(idNivelAcessoFK__lt=cargo.id)
+                otherUsers = Usuarios.objects.filter(ativo=ativo).filter(idNivelAcessoFK__nivelAcesso__lt=cargo.nivelAcesso)
                 actualUser = Usuarios.objects.filter(id=permission['usuario'].id)                              
                 # union users
                 usuarios = actualUser | otherUsers
@@ -529,7 +539,7 @@ class TarefasAPIView(APIView):
                     'pages': 0
                 }
             )     
-        else:
+        elif 'all' in request.GET:
             tarefas = Tarefas.objects.all()
             resp = getPagination(request, tarefas)            
             serializer = TarefasSerializer(resp[0], many=True)
@@ -537,7 +547,54 @@ class TarefasAPIView(APIView):
                 'data': serializer.data,
                 'total': resp[1],
                 'pages': resp[2]
-            })        
+            })
+        else:
+            permission = managePermissions(request.user, 'getTasks')
+
+            if permission['approvement']:
+              #get actual job
+              cargo = Cargos.objects.get(nivelAcesso=permission['usuario'].idNivelAcessoFK.nivelAcesso)
+              #employees with small levels
+              othersTarefasUsuarios = TarefasUsuarios.objects.filter(idUsuarioFK__idNivelAcessoFK__nivelAcesso__lt=cargo.nivelAcesso).only('idTarefaFK')
+              #get actual person
+              actualTarefasUsuarios = TarefasUsuarios.objects.filter(idUsuarioFK=permission['usuario'].id).only('idTarefaFK')
+              #union queries
+              tarefasUsuarios = othersTarefasUsuarios | actualTarefasUsuarios
+
+            #   scripts to remove duplicates:
+              unique_fields = ['idTarefaFK',]
+
+              duplicates = (
+                    tarefasUsuarios.values(*unique_fields)
+                    .order_by()
+                    .annotate(max_id=Max('id'), count_id=Count('id'))
+                    .filter(count_id__gt=1)
+              )
+
+              excluders = None
+              index = 0
+
+              for duplicate in duplicates:
+                    if index == 0:
+                        excluders = tarefasUsuarios.filter(**{x: duplicate[x] for x in unique_fields}).exclude(id=duplicate['max_id'])
+                    else:
+                        excluders = (excluders | tarefasUsuarios.filter(**{x: duplicate[x] for x in unique_fields}).exclude(id=duplicate['max_id']))
+                    index += 1                
+                # .delete() add in query if i want exclude from database...'
+             
+              tarefasUsuariosFiltrada = tarefasUsuarios.exclude(id__in=excluders)
+            
+              resp = getPagination(request, tarefasUsuariosFiltrada)
+              serializer = TarefasUsuariosSerializerIdTarefa(resp[0], many=True)
+              return Response(
+                {
+                    'data': serializer.data,
+                    'total': resp[1],
+                    'pages': resp[2]
+                }
+              )            
+            else:
+              return Response({"msg": "no permission"})
         
 
     def post(self, request):
@@ -577,18 +634,26 @@ class TarefasUsuariosAPIView(APIView):
 
     def get(self, request, pk=''):
 
-        if 'tarefa' in request.GET:            
-            tarefa = request.GET['tarefa']
-            tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)
-            resp = getPagination(request, tarefasUsuarios)
-            serializer = TarefasUsuariosSerializerReduced(resp[0], many=True)
-            return Response(
-                {
-                    'data': serializer.data,
-                    'total': resp[1],
-                    'pages': resp[2]
-                }
-            )
+        # GET BY TASK ID (REDUCED)
+        if 'tarefa' in request.GET:
+            permission = managePermissions(request.user, 'getTasksUsers')
+
+            if permission['approvement']:              
+                tarefa = request.GET['tarefa']
+                tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)
+                resp = getPagination(request, tarefasUsuarios)
+                serializer = TarefasUsuariosSerializerReduced(resp[0], many=True)
+                return Response(
+                    {
+                        'data': serializer.data,
+                        'total': resp[1],
+                        'pages': resp[2]
+                    }
+                )
+            else:
+                return Response({"msg": "no permission"})
+                
+        # GET ALL TASKS (COMPLETE)
         elif 'completa' in request.GET:            
             tarefasUsuarios = TarefasUsuarios.objects.all()
             resp = getPagination(request, tarefasUsuarios)
@@ -599,7 +664,8 @@ class TarefasUsuariosAPIView(APIView):
                     'total': resp[1],
                     'pages': resp[2]
                 }
-            )        
+            )
+        # GET TASKS, PHOTOS AND STATUS BY TASK ID  (COMPLETE)  
         elif 'tarefaCompletaStatusPhoto' in request.GET:
             tarefa = request.GET['tarefaCompletaStatusPhoto']
             tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)         
@@ -623,6 +689,7 @@ class TarefasUsuariosAPIView(APIView):
                     'pages': resp[2]
                 }
             )
+        # GET TASK BY ID (COMPLETE)
         elif 'tarefaCompleta' in request.GET:
             tarefa = request.GET['tarefaCompleta']
             tarefasUsuarios = TarefasUsuarios.objects.filter(idTarefaFK=tarefa)         
@@ -635,6 +702,7 @@ class TarefasUsuariosAPIView(APIView):
                     'pages': resp[2]
                 }
             )
+        # GET TASK BY USER ID (COMPLETE)
         elif 'usuario' in request.GET:            
             usuario = request.GET['usuario']
             tarefasUsuarios = TarefasUsuarios.objects.filter(idUsuarioFK=usuario)
@@ -646,7 +714,8 @@ class TarefasUsuariosAPIView(APIView):
                     'total': resp[1],
                     'pages': resp[2]
                 }
-            )
+            )        
+        # GET TASK BY PK (COMPLETE)
         elif pk != '':            
             tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
             serializer = TarefasUsuariosSerializer(tarefasUsuarios)
@@ -657,17 +726,27 @@ class TarefasUsuariosAPIView(APIView):
                     'pages': 0
                 }
             )
+        # GET ALL TASKS (COMPLETE)
         else:
-            tarefasUsuarios = TarefasUsuarios.objects.all()
-            resp = getPagination(request, tarefasUsuarios)
-            serializer = TarefasUsuariosSerializer(resp[0], many=True)
-            return Response(
+            permission = managePermissions(request.user, 'getTasksUsers')
+
+            if permission['approvement']:
+            #   cargo = Cargos.objects.get(nivelAcesso=permission['usuario'].idNivelAcessoFK.nivelAcesso)
+            #   othersTarefasUsuarios = TarefasUsuarios.objects.filter(idUsuarioFK__idNivelAcessoFK__nivelAcesso__lt=cargo.nivelAcesso)
+            #   actualTarefasUsuarios = TarefasUsuarios.objects.filter(idUsuarioFK=permission['usuario'].id)
+            #   tarefasUsuarios = othersTarefasUsuarios | actualTarefasUsuarios
+              tarefasUsuarios = TarefasUsuarios.objects.all()
+              resp = getPagination(request, tarefasUsuarios)
+              serializer = TarefasUsuariosSerializer(resp[0], many=True)
+              return Response(
                 {
                     'data': serializer.data,
                     'total': resp[1],
                     'pages': resp[2]
                 }
-            )
+              )
+            else:
+              return Response({"msg": "no permission"})
 
 
     def post(self, request):
