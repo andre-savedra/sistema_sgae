@@ -16,6 +16,10 @@
     <section
       class="Registro_panel p-d-flex p-flex-column p-jc-center p-ai-center"
     >
+      <div class="stars1"></div>
+      <div class="stars2"></div>
+      <div class="stars3"></div>
+
       <div
         class="
           formulario_registro
@@ -89,6 +93,22 @@
             </div>
 
             <div class="inputComboRegister">
+              <label class="lblRegister" for="photo">FOTO</label>
+              <FileUpload
+                :auto="true"
+                chooseLabel="Sua foto"
+                mode="basic"
+                accept="image/jpeg,image/png"
+                :maxFileSize="10000000"
+                @upload="postPhoto"
+                class="customAvatarUpload"
+                id="avatarUpload"
+                invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
+                invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"
+              />
+            </div>
+
+            <div class="inputComboRegister compPasswordRegister">
               <label class="lblRegister" for="senhaRegister">SENHA</label>
               <Password
                 v-model="userAuth.password"
@@ -99,7 +119,7 @@
                 placeholder="Senha"
               ></Password>
             </div>
-            <div class="inputComboRegister">
+            <div class="inputComboRegister compPasswordRegister">
               <label class="lblRegister" for="senhaRegister2"
                 >CONFIRME A SENHA</label
               >
@@ -128,7 +148,9 @@
               />
             </div>
 
-            <button type="submit" class="btn_enviar" :disabled="btnDisabled">CADASTRAR</button>
+            <button type="submit" class="btn_enviar" :disabled="btnDisabled">
+              CADASTRAR
+            </button>
           </div>
         </form>
       </div>
@@ -163,6 +185,7 @@ export default {
       ],
       jobSelected: null,
       jobs: [],
+      userPhoto: null,
     };
   },
   methods: {
@@ -177,7 +200,7 @@ export default {
 
       await this.$axios
         .$post(
-          "http://localhost:8003/api/v1/users/",
+          this.$store.state.BASE_URL + "api/v1/users/",
           JSON.stringify(this.userAuth),
           {
             headers: {
@@ -208,25 +231,82 @@ export default {
         });
     },
     postUsuario: async function () {
-      await this.$axios
-        .$post(
-          "http://localhost:8003/usuarios/",
-          JSON.stringify(this.userSec),
-          {
+      if (this.userPhoto !== null) {
+        let formData = new FormData();
+        formData.append("nome", this.userSec[0].nome);
+        formData.append("idUserFK", this.userSec[0].idUserFK);
+        formData.append("email", this.userSec[0].email);
+        formData.append("fone", this.userSec[0].fone);
+        formData.append("ativo", false);
+        formData.append("idNivelAcessoFK", this.userSec[0].idNivelAcessoFK);
+        formData.append("image", this.userPhoto);
+
+        this.$axios
+          .$post(this.$store.state.BASE_URL + "usuarios/", formData, {
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "multipart/form-data",
             },
-          }
-        )
-        .then((response) => {
-          this.btnDisabled = false;
-          this.$router.push("/");
-        })
-        .catch((response) => {
-          alert("Problema ao tentar registrar usuário");
-          this.btnDisabled = false;
-          console.log(response);
-        });
+          })
+          .then((response) => {
+            this.btnDisabled = false;
+            this.$router.push("/");
+          })
+          .catch((response) => {
+            alert("Problema ao tentar registrar usuário");
+            this.btnDisabled = false;
+            console.log(response);
+          });
+      } 
+      
+      else {
+        await this.$axios
+          .$post(
+            this.$store.state.BASE_URL + "usuarios/",
+            JSON.stringify(this.userSec),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((response) => {
+            this.btnDisabled = false;
+            this.$router.push("/");
+          })
+          .catch((response) => {
+            alert("Problema ao tentar registrar usuário");
+            this.btnDisabled = false;
+            console.log(response);
+          });
+      }
+    },
+    // postUsuario: async function () {
+    //   await this.$axios
+    //     .$post(
+    //       this.$store.state.BASE_URL + "usuarios/",
+    //       JSON.stringify(this.userSec),
+    //       {
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //       }
+    //     )
+    //     .then((response) => {
+    //       this.btnDisabled = false;
+    //       this.$router.push("/");
+    //     })
+    //     .catch((response) => {
+    //       alert("Problema ao tentar registrar usuário");
+    //       this.btnDisabled = false;
+    //       console.log(response);
+    //     });
+    // },
+    postPhoto: async function (event) {
+      console.log("postPhoto");
+      console.log(event);
+      this.userPhoto = event.files;
+      console.log("userPhoto:");
+      console.log(this.userPhoto);
     },
     sendRegister: async function () {
       console.log("tentando registrar....");
@@ -234,9 +314,8 @@ export default {
 
       //User register:
       if (this.userAuth.password === this.passwordConfirm) {
-        this.btnDisabled = true;         
+        this.btnDisabled = true;
         this.postUser();
-        
       } else {
         alert("Campos Senha e Confirmação de Senha não estão iguais");
         this.btnDisabled = false;
@@ -247,7 +326,7 @@ export default {
       this.jobs.length = 0;
 
       await this.$axios
-        .get("http://localhost:8003/cargos")
+        .get(this.$store.state.BASE_URL + "cargos")
         .then((dataResponse) => {
           dataResponse.data.data.forEach((element) => {
             this.jobs.push({
@@ -264,7 +343,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .logo_panel {
   height: 100vh;
   width: 50%;
@@ -274,6 +353,12 @@ export default {
 }
 
 .Registro_panel {
+  .stars1,
+  .stars2,
+  .stars3 {
+    display: none;
+  }
+
   height: auto;
   min-height: 100vh;
   max-height: 100vh;
@@ -382,7 +467,7 @@ img {
 .linksRegister {
   font-size: 14px;
   .backBtn {
-    width: 80px;
+    width: 100px;
     padding: 0px;
     margin: 10px 0px 0px 5px;
   }
@@ -465,23 +550,6 @@ img {
         }
       }
     }
-  }
-}
-
-#senhaRegister,
-#senhaRegister2,
-.inputComboRegister .passInputRegister {
-  width: 100%;
-  border: 0;
-  border-bottom: 1px solid black;
-  font-size: 18px;
-  overflow: hidden;
-  overflow-y: hidden;
-  &:focus,
-  &:valid {
-    outline: 0;
-    border-color: crimson;
-    overflow: hidden;
   }
 }
 
@@ -611,7 +679,7 @@ html {
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 760px) {
   img {
     display: none;
   }
@@ -626,7 +694,35 @@ html {
   }
 
   .Registro_panel {
-    width: 500px;
+    width: 100%;
+    /* background-color: #313131; */
+    /* color: white; */
+    overflow-y: hidden;
+
+    .stars1,
+    .stars2,
+    .stars3 {
+      /* display: visible; */
+    }
+
+    .registerForm {
+      /* background-color: white; */
+      /* border: none; */
+    }
+  }
+}
+
+/* @media screen and (max-width: 600px) {
+.Registro_panel {
+    width: 80%;
+    background-color: black;
+  }
+} */
+
+@media screen and (max-width: 440px) {
+  .registerForm {
+    width: 100%;
+    /* background-color: black; */
   }
 }
 </style>

@@ -1532,6 +1532,6 @@ export default {
 }
 
 /* viewMode === 'progress' */
-.all .form .main {
-}
+/* .all .form .main {
+} */
 </style>

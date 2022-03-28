@@ -122,15 +122,66 @@ $stars3-shadows: box-shadow-stars(500);
     // border-color: none !important;
 }
 
-// ******************* TELA LOGIN ***************************
+// ******************* TELA LOGIN e REGISTRAR ***************************
 .registerBtn,
-.resetPswBtn {
+.resetPswBtn,
+.linksRegister {
     .p-button-icon-left {
       width: 33px;
       margin: 0px;
     }
   }
 
+
+// ******************* TELA REGISTRAR ***************************
+.compPasswordRegister{
+
+    #senhaRegister,
+    #senhaRegister2,
+    .inputComboRegister .passInputRegister {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid black;
+      font-size: 18px;
+      overflow: hidden;
+      overflow-y: hidden;
+      &:focus,
+      &:valid {
+        outline: 0;        
+        border-color: crimson;
+        overflow: hidden;
+      }   
+    }
+    .p-input-icon-right > i:last-of-type {        
+        color: crimson;
+        font-weight: bold;
+    }
+    .p-input-icon-right>i {
+        position: absolute;
+        top: 50%;
+        left: 90%;
+        margin-top: -0.5rem;
+    }
+}
+
+
+.inputComboRegister .customAvatarUpload{
+    .p-fileupload-choose{
+      background-color: #e47474;
+      border:none;
+      height: 35px;
+
+      &:hover,
+      &:focus{
+        background-color: #dc3d3d;
+      }
+
+      .p-button-icon{
+          width:30px;
+      }
+
+    }
+  }
 
 
 
@@ -273,18 +324,11 @@ $stars3-shadows: box-shadow-stars(500);
             background-color: var(--task-background-invisible);
             background-image: var(--task-background-invisible);
 
-            // background-color: red;
-            .listTaskDataView {
-
-                // margin: 20px 0px;
-                // background-color: red;
-                // border-radius: 20px 20px 20px 20px;
-                .elementListTaskDataView {
-                    //    padding: 10px;
-
-                }
-
-            }
+            
+            // .listTaskDataView {              
+            //     .elementListTaskDataView {              
+            //     }
+            // }
 
 
         }
