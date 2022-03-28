@@ -122,6 +122,17 @@ $stars3-shadows: box-shadow-stars(500);
     // border-color: none !important;
 }
 
+// ******************* TELA LOGIN ***************************
+.registerBtn,
+.resetPswBtn {
+    .p-button-icon-left {
+      width: 33px;
+      margin: 0px;
+    }
+  }
+
+
+
 
 // ******************* TELA ADD TAREFAS ***************************
 

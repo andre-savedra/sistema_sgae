@@ -621,7 +621,6 @@ export default {
       const post = await Promise.all([
         this.postTaskStatus(),
       ]);
-
       
       if (this.progressAllowed === "ok") {
         switch (this.newTaskStatusName) {

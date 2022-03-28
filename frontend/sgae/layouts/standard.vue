@@ -152,7 +152,7 @@ export default {
           textLabel: "Usuários",
           iconBtn: "pi pi-users",
           showButton: true,
-          adminButton: false,
+          adminButton: true,
           showSidebar: false,
           hasSidebar: false,
           sideButtons: null,
@@ -170,16 +170,13 @@ export default {
     };
   },
   methods: {
-    //  reloadButtons() {
-    //   console.log("reloading buttons....");
-    //   for (let i = 0; i < this.sidebarMenuButtons.length; i++) {
-    //     if (this.sidebarMenuButtons[i].adminButton == true) {
-    //       this.sidebarMenuButtons[i].showButton = this.$store.state.user.admin;
-    //     }
-    //   }
-    // },
-    teste(msg) {
-      console.log("Hello " + msg);
+     reloadButtons() {
+      console.log("reloading buttons....");
+      for (let i = 0; i < this.sidebarMenuButtons.length; i++) {
+        if (this.sidebarMenuButtons[i].adminButton == true) {          
+          this.sidebarMenuButtons[i].showButton = (this.actualUser.idNivelAcessoFK.nivelAcesso > 15)? true : false;
+        }
+      }
     },
     resetSidebarMenu() {
       for (let i = 0; i < this.sidebarMenuButtons.length; i++) {
@@ -259,6 +256,9 @@ export default {
     }    
     
   },
+  mounted(){
+    this.reloadButtons();
+  }
   
 };
 </script>

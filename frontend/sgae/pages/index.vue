@@ -40,12 +40,12 @@
                 class="registerBtn p-button-text p-button-danger"
                 @click="registerPage()"
               />
-              <Button
+              <!-- <Button
                 icon="pi pi-key"
                 label="Esqueceu Senha?"
                 class="resetPswBtn p-button-text p-button-danger"
                 @click="resetPage()"
-              />
+              /> -->
             </div>
 
             <button type="submit" class="btn_enviar" :disabled="btnDisabled">
@@ -100,7 +100,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .loginForm {
   width: 55%;
   height: auto;
@@ -192,16 +192,14 @@ img {
     width: 110px;
     padding: 0px;
     margin: 10px 0px 0px 5px;
+    
   }
   .resetPswBtn {
     width: 165px;
     padding: 0px;
     margin: 10px 5px 0px 0px;
   }
-  .p-button .p-button-icon-left {
-    margin: 0px !important;
-    width: 25px;
-  }
+  
 }
 
 .inputcontainer {
