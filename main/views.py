@@ -39,9 +39,13 @@ def managePermissions(username, activity):
               activity == 'getTasks' or
               activity == 'getTasksUsers' or
               activity == 'getPhotos' or
-              activity == 'deleteTask'):
+              activity == 'deleteTask' or
+              activity == 'postStatus_Progresso'):
             if usuario.idNivelAcessoFK.nivelAcesso > 1:
-                resp['approvement'] = True         
+                resp['approvement'] = True
+          elif activity == 'postStatus_Encerrada':
+            if usuario.idNivelAcessoFK.nivelAcesso > 3:
+                resp['approvement'] = True
       
     return resp
 
@@ -72,7 +76,7 @@ class EmailSenderAPIView(APIView):
             messageBody = ('A tarefa de número #' 
             + str(tarefa.id) + ' - ' + str(tarefa.nome) + ', solicitada por '
             + str(tarefa.idSolicitanteFK.nome) + ','
-            + ' foi atribuída à você! \n\n Vá até o sistema SGAE - Sistema de Gestão de Ambientes e Localize-a!'
+            + ' foi atribuída à você! \n\n Vá até o sistema SGAE - Sistema de Gestão de Ambientes e Confira!'
             + '\n\n Acesse nosso sistema em: http://localhost:8003/')
           
             send_mail(
@@ -847,11 +851,34 @@ class TarefasStatusAPIView(APIView):
 
 
     def post(self, request):
-        serializer = TarefasStatusSerializerSimple(data=request.data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"msg": "Inserido com sucesso"})
-        #return Response({"id": serializer.data['id']})
+        message = "no permission"
+
+        status = Status.objects.get(id=request.data[0]['idStatusFK'])
+        activity = ''
+        if status.nome == 'Encerrada':
+            activity = 'postStatus_Encerrada'
+        else:
+            activity = 'postStatus_Progresso'
+        
+        permission = managePermissions(request.user, activity)
+
+        if permission['approvement']:
+            tarefa = Tarefas.objects.get(id=request.data[0]['idTarefaFK'])
+            if status.nome == 'Encerrada':
+                if tarefa.idSolicitanteFK.id == permission['usuario'].id:
+                    serializer = TarefasStatusSerializerSimple(data=request.data, many=True)
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save()
+                    message = 'Atualizado com sucesso'                
+            else:
+                serializer = TarefasStatusSerializerSimple(data=request.data, many=True)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                message = 'Atualizado com sucesso'        
+
+        return Response({"msg": message})
+                    
+        
 
     def put(self, request, pk=''):
         tarefasStatus = TarefasStatus.objects.get(id=pk)

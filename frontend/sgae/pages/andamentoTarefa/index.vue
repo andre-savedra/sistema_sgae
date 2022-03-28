@@ -491,6 +491,7 @@ export default {
   middleware: "auth",
   data() {
     return {
+      progressAllowed: '',
       emailPayload: null,
       viewMode: "overview", //overview or progress
       taskID: 1,
@@ -615,43 +616,47 @@ export default {
       });
     },
     progressTaskSubmit: async function () {
-      switch (this.newTaskStatusName) {
-        case "Em andamento":
-          const anda = await Promise.all([
-            this.postTaskStatus(),
-            this.putTask(),
-          ]);
-          this.emailPayload = [structuredClone(this.newTaskStatus)];
-          this.viewMode = "overview";
-          this.cleanNewStatus();
-          this.getTaskUser(this.taskID);
-          this.getStatusType();
-          this.postMail(this.emailPayload);
-          break;
+      this.progressAllowed = '';
 
-        case "Concluída":
-          const conc = await Promise.all([
-            this.postTaskStatus(),
-            this.putTask(),
-            this.virtualClickUpload("Carregar"),
-          ]);
-          this.emailPayload = [structuredClone(this.newTaskStatus)];
-          this.postMail(this.emailPayload);
-          break;
+      const post = await Promise.all([
+        this.postTaskStatus(),
+      ]);
 
-        case "Encerrada":
-          const enc = await Promise.all([
-            this.postTaskStatus(),
-            this.putTask(true),
-          ]);
-          this.emailPayload = [structuredClone(this.newTaskStatus)];
-          this.viewMode = "overview";
-          this.cleanNewStatus();
-          this.getTaskUser(this.taskID);
-          this.getStatusType();
-          this.postMail(this.emailPayload);
-          break;
-      }
+      
+      if (this.progressAllowed === "ok") {
+        switch (this.newTaskStatusName) {
+          case "Em andamento":
+            const anda = await Promise.all([this.putTask()]);
+            this.emailPayload = [structuredClone(this.newTaskStatus)];
+            this.viewMode = "overview";
+            this.cleanNewStatus();
+            this.getTaskUser(this.taskID);
+            this.getStatusType();
+            this.postMail(this.emailPayload);
+            break;
+
+          case "Concluída":
+            const conc = await Promise.all([
+              this.putTask(),
+              this.virtualClickUpload("Carregar"),
+            ]);
+            this.emailPayload = [structuredClone(this.newTaskStatus)];
+            this.postMail(this.emailPayload);
+            break;
+
+          case "Encerrada":
+            const enc = await Promise.all([this.putTask(true)]);
+            this.emailPayload = [structuredClone(this.newTaskStatus)];
+            this.viewMode = "overview";
+            this.cleanNewStatus();
+            this.getTaskUser(this.taskID);
+            this.getStatusType();
+            this.postMail(this.emailPayload);
+            break;
+        }
+      } else if (this.progressAllowed === "permission")
+        alert("Você não tem permissão para alterar esta tarefa ou concluí-la");
+      else alert("Não foi possível alterar a tarefa!");
     },
     postTask: async function () {
       const index = 0;
@@ -731,7 +736,8 @@ export default {
 
     postTaskStatus: async function () {
       console.log("tentando salvar taskSTATUS");
-      this.newTaskStatus.descricao += " - " + this.limitName(this.actualUser.nome)
+      this.newTaskStatus.descricao +=
+        " - (" + this.limitName(this.actualUser.nome) + ")";
       const body = [this.newTaskStatus];
       console.log(body);
 
@@ -748,11 +754,15 @@ export default {
         .then((response) => {
           console.log(response);
           //request ok
-          console.log("taskSTATUS OK");
+          if (response.msg === "Atualizado com sucesso") 
+            this.progressAllowed = 'ok'
+          else 
+            this.progressAllowed = 'permission'
         })
         .catch((response) => {
           alert("Problema ao tentar cadastrar status da tarefa");
           console.log(response);
+          this.progressAllowed = "error";
         });
     },
     postPhoto: async function (event) {
