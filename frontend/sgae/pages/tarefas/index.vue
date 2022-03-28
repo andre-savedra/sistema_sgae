@@ -1,7 +1,7 @@
 <template>
   <div class="allTasks p-d-flex p-flex-column p-jc-start p-ai-center">
     <h1 id="titleTasks">Tarefas cadastradas</h1>
-     <DataView
+    <DataView
       :value="tasks"
       :layout="layout"
       :paginator="true"
@@ -76,13 +76,16 @@
       <template #list="slotProps">
         <div
           :class="
-            'listTaskDataView ' + slotProps.data.idTarefaFK.idStatusFK.nome + '-hover'
+            'listTaskDataView ' +
+            slotProps.data.idTarefaFK.idStatusFK.nome +
+            '-hover'
           "
         >
           <div
             class="col-12 elementListTaskDataView"
             v-if="
-              slotProps.data.idTarefaFK.nome !== null && slotProps.data.idTarefaFK.nome !== undefined
+              slotProps.data.idTarefaFK.nome !== null &&
+              slotProps.data.idTarefaFK.nome !== undefined
             "
           >
             <div class="imgTaskContainer">
@@ -141,7 +144,10 @@
                     <i class="pi pi-map-marker p-mr-2" />
                     <span class="p-mr-3"
                       ><strong>{{
-                        limitText(slotProps.data.idTarefaFK.idAmbienteFK.nome, 30)
+                        limitText(
+                          slotProps.data.idTarefaFK.idAmbienteFK.nome,
+                          30
+                        )
                       }}</strong></span
                     >
                   </div>
@@ -214,7 +220,8 @@
           <div
             :class="'statusTask ' + slotProps.data.idTarefaFK.idStatusFK.nome"
             v-if="
-              slotProps.data.idTarefaFK.nome !== null && slotProps.data.idTarefaFK.nome !== undefined
+              slotProps.data.idTarefaFK.nome !== null &&
+              slotProps.data.idTarefaFK.nome !== undefined
             "
           ></div>
         </div>
@@ -387,7 +394,9 @@ export default {
       if (this.tasks !== null) {
         for (let i = 0; i < this.tasks.length; i++) {
           if (this.tasks[i].fotos === undefined) {
-            this.tasks[i].fotos = await this.getTaskPhotos(this.tasks[i].idTarefaFK.id);
+            this.tasks[i].fotos = await this.getTaskPhotos(
+              this.tasks[i].idTarefaFK.id
+            );
           }
         }
       }
@@ -408,16 +417,25 @@ export default {
     },
     deleteTask: function (taskId) {
       if (taskId > 0) {
+        console.log("deletar tarefa:", taskId);
         this.$axios
           .$delete(this.$store.state.BASE_URL + ("tarefas/" + taskId))
           .then((response) => {
             //request ok
-            if (response !== null) {
+            if (response.msg !== null && response.msg !== undefined) {
+              console.log("deletado:");
+              console.log(response);
               //remove
-              this.tasks.map((task, index) => {
-                if (task.id === taskId) this.tasks.splice(index, 1);
-                console.log("excluindo index" + index);
-              });
+              if (response.msg === "Apagado com sucesso")
+                this.tasks.map((task, index) => {
+                  if (task.idTarefaFK.id === taskId)
+                    this.tasks.splice(index, 1);
+                  console.log("excluindo index" + index);
+                });
+              else
+                alert(
+                  "Você não tem permissão para apagar uma tarefa que não criou!"
+                );
             }
           })
           .catch((response) => {
@@ -428,8 +446,16 @@ export default {
     },
     editTask: function (taskId) {
       if (taskId > 0) {
-        this.$store.dispatch("setEditTask", taskId).then((response) => {
-          this.$router.push("/addTarefa");
+        this.tasks.map((task) => {
+          if (task.idTarefaFK.id === taskId) {
+            if (this.actualUser.id === task.idTarefaFK.idSolicitanteFK.id) {
+              this.$store.dispatch("setEditTask", taskId).then(() => {
+                this.$router.push("/addTarefa");
+              });
+            } else {
+              alert("Você não pode alterar uma tarefa que não criou!");
+            }
+          }
         });
       }
     },
@@ -442,7 +468,7 @@ export default {
     },
   },
   created() {
-    console.log("this.store")
+    console.log("this.store");
     console.log(this.$store.state.BASE_URL);
     if (this.actualUser === null || this.actualUser === undefined)
       this.$router.push("/lobby");

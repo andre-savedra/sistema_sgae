@@ -34,22 +34,14 @@ def managePermissions(username, activity):
       if usuario.idNivelAcessoFK.nivelAcesso:
           resp['usuario'] = usuario
           
-          if activity == 'getUsers':
-              if usuario.idNivelAcessoFK.nivelAcesso > 1:
-                resp['approvement'] = True
-          elif activity == 'postTask':
-              if usuario.idNivelAcessoFK.nivelAcesso > 1:
-                resp['approvement'] = True
-          elif activity == 'getTasks':
-              if usuario.idNivelAcessoFK.nivelAcesso > 1:
-                resp['approvement'] = True
-          elif activity == 'getTasksUsers':
-              if usuario.idNivelAcessoFK.nivelAcesso > 1:
-                resp['approvement'] = True
-          elif activity == 'getPhotos':
-              if usuario.idNivelAcessoFK.nivelAcesso > 1:
-                resp['approvement'] = True
-
+          if (activity == 'getUsers' or 
+              activity == 'postTask' or
+              activity == 'getTasks' or
+              activity == 'getTasksUsers' or
+              activity == 'getPhotos' or
+              activity == 'deleteTask'):
+            if usuario.idNivelAcessoFK.nivelAcesso > 1:
+                resp['approvement'] = True         
       
     return resp
 
@@ -632,9 +624,17 @@ class TarefasAPIView(APIView):
         return Response(serializer.data)
 
     def delete(self, request, pk=''):
-        tarefas = Tarefas.objects.get(id=pk)
-        tarefas.delete()
-        return Response({"msg": "Apagado com sucesso"})
+        message = "no permission"
+        permission = managePermissions(request.user, 'deleteTask')
+        if permission['approvement']:
+          tarefas = Tarefas.objects.get(id=pk)
+
+          if tarefas.idSolicitanteFK.id == permission['usuario'].id:
+
+            tarefas.delete()
+            message = "Apagado com sucesso"
+          
+        return Response({"msg": message})
 
 
 class TarefasUsuariosAPIView(APIView):
@@ -776,9 +776,19 @@ class TarefasUsuariosAPIView(APIView):
         return Response(serializer.data)
 
     def delete(self, request, pk=''):
-        tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
-        tarefasUsuarios.delete()
-        return Response({"msg": "Apagado com sucesso"})
+
+        message = "no permission"
+        permission = managePermissions(request.user, 'deleteTask')
+        if permission['approvement']:
+          tarefasUsuarios = TarefasUsuarios.objects.get(id=pk)
+
+          if tarefasUsuarios.idTarefaFK.idSolicitanteFK.id == permission['usuario'].id:
+
+            tarefasUsuarios.delete()
+            message = "Apagado com sucesso"
+          
+        return Response({"msg": message})
+        
 
 
 class TarefasStatusAPIView(APIView):
