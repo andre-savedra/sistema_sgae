@@ -41,7 +41,8 @@ def managePermissions(username, activity):
                 activity == 'getTasksUsers' or
                 activity == 'getPhotos' or
                 activity == 'deleteTask' or
-                activity == 'postStatus_Progresso'):
+                activity == 'postStatus_Progresso' or
+                activity == 'changeUsuario'):
                 if usuario.idNivelAcessoFK.nivelAcesso > 1:
                     resp['approvement'] = True
             elif activity == 'postStatus_Encerrada':
@@ -460,11 +461,17 @@ class UsuariosAPIView(APIView):
     def put(self, request, pk=''):
 
         if 'change' in request.GET:
-            usuarios = Usuarios.objects.get(id=pk)
-            serializer = UsuariosSerializer(usuarios, data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
+            permission = managePermissions(request.user, 'changeUsuario')
+
+            if ((permission['approvement']) and (permission['usuario'].id == pk)):
+
+                usuarios = Usuarios.objects.get(id=pk)
+                serializer = UsuariosSerializerSimple(usuarios, data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response({"msg": "Atualizado com sucesso"})                
+            else:
+                return Response({"msg": "no permission"})
         elif 'activation' in request.GET:
             # check user level
             message = ""
