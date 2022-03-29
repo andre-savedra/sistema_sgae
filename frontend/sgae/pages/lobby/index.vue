@@ -103,7 +103,7 @@ export default {
 
   background-color: #313131;
   color: white;
-  overflow-y: visible;
+  overflow-y: hidden;
   text-align: center;
 
   .front {
