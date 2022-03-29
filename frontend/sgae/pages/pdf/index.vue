@@ -66,9 +66,7 @@ export default {
   layout: "standard",
   middleware: "auth",
   data() {
-    return {
-      BaseURL: "http://localhost:8003/",
-      BaseURL2: "http://localhost:8003",
+    return {      
       tasksPrintID: [],
       tasksPrint: [],
       photos: [],

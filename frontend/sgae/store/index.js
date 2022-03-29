@@ -2,9 +2,9 @@ export const state = () => ({
     editTaskId: 0,
     tasksToPrint: [],
     printMode: '',
-    BASE_URL: 'http://localhost:8003/',
-    BASE_URL_IMG: 'http://localhost:8003',
-    BASE_URL_IMGV: 'http://localhost:8003',
+    BASE_URL: 'http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/',
+    BASE_URL_IMG: 'http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com',
+    BASE_URL_IMGV: 'http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com',
     actualUser: null,
 });
 
