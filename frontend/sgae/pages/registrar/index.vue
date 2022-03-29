@@ -96,7 +96,7 @@
               <label class="lblRegister" for="photo">FOTO</label>
               <FileUpload
                 :auto="true"
-                chooseLabel="Sua foto"
+                :chooseLabel="btnUploadLabel"
                 mode="basic"
                 accept="image/jpeg,image/png"
                 :maxFileSize="10000000"
@@ -140,12 +140,12 @@
                 class="backBtn p-button-text p-button-danger"
                 @click="backPage()"
               />
-              <Button
+              <!-- <Button
                 icon="pi pi-key"
                 label="Esqueceu Senha?"
                 class="resetPswBtnRegister p-button-text p-button-danger"
                 @click="resetPage()"
-              />
+              /> -->
             </div>
 
             <button type="submit" class="btn_enviar" :disabled="btnDisabled">
@@ -165,6 +165,8 @@ export default {
   name: "register",
   data() {
     return {
+      btnInitialLabel: "Sua foto aqui",
+      btnUploadLabel: "Sua foto aqui",
       btnDisabled: false,
       passwordConfirm: null,
       phoneFormated: null,
@@ -222,16 +224,22 @@ export default {
             this.postUsuario();
           } else {
             console.log("Error:");
+            this.btnUploadLabel = this.btnInitialLabel;
+            this.userPhoto = null;
+            this.btnDisabled = false;
           }
         })
         .catch((response) => {
-          alert("Problema ao tentar registrar usuário");
+          console.log(response.data);
+          alert("Problema: " + response);
           this.btnDisabled = false;
+          this.btnUploadLabel = this.btnInitialLabel;
+          this.userPhoto = null;
           console.log(response);
         });
     },
     postUsuario: async function () {
-      if (this.userPhoto !== null) {
+      if (this.userPhoto !== undefined && this.userPhoto !== null) {
         let formData = new FormData();
         formData.append("nome", this.userSec[0].nome);
         formData.append("idUserFK", this.userSec[0].idUserFK);
@@ -239,29 +247,36 @@ export default {
         formData.append("fone", this.userSec[0].fone);
         formData.append("ativo", false);
         formData.append("idNivelAcessoFK", this.userSec[0].idNivelAcessoFK);
-        formData.append("image", this.userPhoto);
+        formData.append("image", this.userPhoto[0]);
 
         this.$axios
-          .$post(this.$store.state.BASE_URL + "usuarios/", formData, {
+          .$post(this.$store.state.BASE_URL + "cadastroUsuario/", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
           })
           .then((response) => {
+            console.log(response);
+            if(response.msg !== undefined) 
+            {
+              alert(response.msg);
+            }
             this.btnDisabled = false;
+            this.btnUploadLabel = this.btnInitialLabel;
+            this.userPhoto = null;
             this.$router.push("/");
           })
           .catch((response) => {
             alert("Problema ao tentar registrar usuário");
             this.btnDisabled = false;
+            this.btnUploadLabel = this.btnInitialLabel;
+            this.userPhoto = null;
             console.log(response);
           });
-      } 
-      
-      else {
+      } else {
         await this.$axios
           .$post(
-            this.$store.state.BASE_URL + "usuarios/",
+            this.$store.state.BASE_URL + "cadastroUsuario/",
             JSON.stringify(this.userSec),
             {
               headers: {
@@ -307,6 +322,8 @@ export default {
       this.userPhoto = event.files;
       console.log("userPhoto:");
       console.log(this.userPhoto);
+
+      if (this.userPhoto[0].name) this.btnUploadLabel = this.userPhoto[0].name;
     },
     sendRegister: async function () {
       console.log("tentando registrar....");

@@ -77,6 +77,21 @@ class UsuariosSerializerSimple(serializers.ModelSerializer):
             'image'
         ]
 
+class UsuariosSerializerCadastro(serializers.ModelSerializer):
+
+    class Meta:        
+        model = Usuarios
+        fields = [
+            'id',
+            'nome',
+            'idUserFK',
+            'email',
+            'fone',
+            'ativo',
+            'idNivelAcessoFK',
+            'image'
+        ]
+
 class UsuariosSerializerUidToken(serializers.ModelSerializer):
 
     class Meta:

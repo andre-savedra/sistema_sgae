@@ -33,20 +33,24 @@ def managePermissions(username, activity):
 
       if usuario.idNivelAcessoFK.nivelAcesso:
           resp['usuario'] = usuario
-          
-          if (activity == 'getUsers' or 
-              activity == 'postTask' or
-              activity == 'getTasks' or
-              activity == 'getTasksUsers' or
-              activity == 'getPhotos' or
-              activity == 'deleteTask' or
-              activity == 'postStatus_Progresso'):
-            if usuario.idNivelAcessoFK.nivelAcesso > 1:
-                resp['approvement'] = True
-          elif activity == 'postStatus_Encerrada':
-            if usuario.idNivelAcessoFK.nivelAcesso > 3:
-                resp['approvement'] = True
-      
+
+          if usuario.ativo == True:                    
+            if (activity == 'getUsers' or 
+                activity == 'postTask' or
+                activity == 'getTasks' or
+                activity == 'getTasksUsers' or
+                activity == 'getPhotos' or
+                activity == 'deleteTask' or
+                activity == 'postStatus_Progresso'):
+                if usuario.idNivelAcessoFK.nivelAcesso > 1:
+                    resp['approvement'] = True
+            elif activity == 'postStatus_Encerrada':
+                if usuario.idNivelAcessoFK.nivelAcesso > 3:
+                    resp['approvement'] = True
+            elif activity == 'getUsersToken':
+                if usuario.idNivelAcessoFK.nivelAcesso > 15:
+                    resp['approvement'] = True
+        
     return resp
 
 class EmailSenderAPIView(APIView):
@@ -330,6 +334,33 @@ class StatusAPIView(APIView):
         status.delete()
         return Response({"msg": "Apagado com sucesso"})
 
+class CadastroUsuariosAPIView(APIView):
+
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        message = 'Erro'
+
+        if request.data['idUserFK']:
+
+            user = User.objects.get(id=request.data['idUserFK'])
+            if user:
+                
+                usuario = Usuarios.objects.filter(email=request.data['email'])
+                if usuario:
+                    # message = 'Erro: já existe'
+                    message = 'Criado com sucesso'
+                else:
+                    serializer = UsuariosSerializerCadastro(data=request.data)      
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save()
+                    message = 'Criado com sucesso'
+            else:
+                message = 'Erro: user não encontrado'
+
+        return Response({"msg": message})
+        #return Response({"id": serializer.data['id']})
+
 
 
 class UsuariosAPIView(APIView):
@@ -367,15 +398,21 @@ class UsuariosAPIView(APIView):
             
         # GET USERS TO BE APPROVED (TOKEN EXISTS)  
         elif 'token' in request.GET:
-            usuarios = Usuarios.objects.exclude(uid__isnull=True)
-            serializer = UsuariosSerializer(usuarios, many=True)            
-            return Response(
-                {
-                    'data': serializer.data,
-                    'total': 0,
-                    'pages': 0
-                }
-            )
+
+            permission = managePermissions(request.user, 'getUsersToken')
+            if permission['approvement']:
+                usuarios = Usuarios.objects.exclude(uid__isnull=True)
+                serializer = UsuariosSerializer(usuarios, many=True)            
+                return Response(
+                    {
+                        'data': serializer.data,
+                        'total': 0,
+                        'pages': 0
+                    }
+                )
+            else:
+                return Response({"msg": "no permission"})
+                    
         # GET USERS WITH TOKEN AND UID  
         elif 'uid' in request.GET:
             usuarios = Usuarios.objects.all()

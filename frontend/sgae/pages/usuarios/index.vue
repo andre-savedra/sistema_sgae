@@ -44,7 +44,7 @@
                 >
                   <Avatar
                     v-if="user.image"
-                    :image="BaseURL2 + user.image"
+                    :image="$store.state.BASE_URL_IMG + user.image"
                     size="large"
                     shape="circle"
                   />
@@ -111,21 +111,22 @@
 </template>
 
 <script>
+import AsyncUserStoraged from "@/assets/scripts/asyncUserStoraged";
+
 export default {
+  extends: AsyncUserStoraged,
   name: "usuarios",
-  layout: "default",
-  middleware: 'auth',
+  layout: "standard",
+  middleware: "auth",
   data() {
     return {
-      BaseURL: "http://localhost:8003/",
-      BaseURL2: "http://localhost:8003",
       activationUsers: null,
     };
   },
   methods: {
     getActivationUsers: async function () {
       this.$axios
-        .$get(this.BaseURL + "usuarios/?token")
+        .$get(this.$store.state.BASE_URL + "usuarios/?token")
         .then((response) => {
           console.log(response);
 
@@ -150,13 +151,14 @@ export default {
     },
     modifyUser: function (userId, status) {
       const body = {
-        id: 37,
+        id: this.actualUser.id,
         status: status,
       };
       if (userId > 0) {
         this.$axios
           .$put(
-            this.BaseURL + ("usuarios/" + userId + "/?activation"),
+            this.$store.state.BASE_URL +
+              ("usuarios/" + userId + "/?activation"),
             JSON.stringify(body),
             {
               headers: {
@@ -173,7 +175,6 @@ export default {
 
               switch (response.msg) {
                 case "approved":
-
                   this.activationUsers.map((user, index) => {
                     if (user.id === userId)
                       this.activationUsers.splice(index, 1);
@@ -181,7 +182,7 @@ export default {
                   });
 
                   alert("Usuário aprovado com sucesso!");
-                  
+
                   break;
                 case "already approved":
                   alert("Erro: Usuário não precisa de aprovação!");
@@ -199,16 +200,23 @@ export default {
             }
           })
           .catch((response) => {
-            alert("Problema ao tentar deletar a tarefa");
+            alert("Problema ao tentar aprovar");
             console.log(response);
           });
       }
     },
   },
-  mounted() {
-    //get users with activation token to be valid
-    this.getActivationUsers();
+  created() {
+    if (this.actualUser === null || this.actualUser === undefined)
+      this.$router.push("/lobby");
+    else this.getActivationUsers();
   },
+  mounted(){
+    if (this.actualUser !== null && this.actualUser !== undefined)
+      if(this.actualUser.idNivelAcessoFK.nivelAcesso < 15)
+        this.$router.push("/initial");
+
+  }
 };
 </script>
 
