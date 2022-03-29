@@ -211,7 +211,8 @@ export default {
           break;
 
         case 1: //button "Home"
-          this.$router.push("/initial");
+          // this.$router.push("/initial");
+          this.$router.push("/tarefas");
           this.checkSideBarVisibility();
 
           break;

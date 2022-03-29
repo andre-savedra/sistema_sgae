@@ -175,7 +175,8 @@ export default {
   },
   methods: {
     backPage() {
-      this.$router.push("/initial");
+      this.$router.push("/tarefas");
+      // this.$router.push("/initial");
     },
      postChangeUser: async function () {
 

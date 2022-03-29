@@ -48,7 +48,8 @@ export default {
         if(this.counter > 4){
           clearTimeout(flipperTimer);
           // console.log("redirecionando....");
-          this.$router.push("/initial");
+          // this.$router.push("/initial");
+          this.$router.push("/tarefas");
         }
       
     },

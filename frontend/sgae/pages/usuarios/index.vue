@@ -214,7 +214,8 @@ export default {
   mounted(){
     if (this.actualUser !== null && this.actualUser !== undefined)
       if(this.actualUser.idNivelAcessoFK.nivelAcesso < 15)
-        this.$router.push("/initial");
+        this.$router.push("/tarefas");
+        // this.$router.push("/initial");
 
   }
 };
