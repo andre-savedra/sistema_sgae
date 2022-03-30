@@ -14,7 +14,7 @@ export default function (ctx, inject) {
 
   // Register strategies
   // local
-  $auth.registerStrategy('local', new scheme_3e2123be($auth, {"endpoints":{"login":{"url":"http://localhost:8003/api/v1/auth/token/login/","method":"post","propertyName":"auth_token"},"logout":{"url":"http://localhost:8003/api/v1/auth/token/logout/","method":"post","propertyName":"auth_token"},"user":{"url":"http://localhost:8003/cargos/","method":"get","propertyName":false}},"tokenType":"Token","tokenName":"Authorization","_name":"local"}))
+  $auth.registerStrategy('local', new scheme_3e2123be($auth, {"endpoints":{"login":{"url":"http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/api/v1/auth/token/login/","method":"post","propertyName":"auth_token"},"logout":{"url":"http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/api/v1/auth/token/logout/","method":"post","propertyName":"auth_token"},"user":{"url":"http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/cargos/","method":"get","propertyName":false}},"tokenType":"Token","tokenName":"Authorization","_name":"local"}))
 
   // Inject it to nuxt context as $auth
   inject('auth', $auth)

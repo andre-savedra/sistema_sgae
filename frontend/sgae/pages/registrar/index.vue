@@ -2,7 +2,7 @@
   <main class="Registro p-d-flex p-flex-row p-jc-center p-ai-center">
     <section
       class="
-        logo_panel
+        logo_register_panel
         p-d-flex p-flex-column p-jc-center p-ai-center p-text-center
       "
     >
@@ -34,12 +34,12 @@
         >
           <div class="inputRegisterContainer">
             <div class="inputComboRegister">
-              <label class="lblRegister" for="name">USUÁRIO</label>
+              <label class="lblRegister" for="nameR">USUÁRIO</label>
               <InputText
                 type="number"
                 v-model="userAuth.username"
-                id="name"
-                class="basicInputRegister"
+                id="nameR"
+                class="basicInputRegisterR"
                 placeholder="NIF ou Matrícula"
                 minlength="6"
                 required
@@ -50,8 +50,8 @@
               <InputText
                 type="text"
                 v-model="userSec[0].nome"
-                id="fullname"
-                class="basicInputRegister"
+                id="fullnameR"
+                class="basicInputRegisterR"
                 placeholder="Nome Completo"
                 required
               />
@@ -61,8 +61,8 @@
               <InputText
                 type="email"
                 v-model="userAuth.email"
-                id="mail"
-                class="basicInputRegister"
+                id="mailR"
+                class="basicInputRegisterR"
                 placeholder="Email"
                 required
               />
@@ -72,8 +72,8 @@
               <InputMask
                 mask="(99) 99999-9999"
                 v-model="phoneFormated"
-                id="phone"
-                class="basicInputRegister"
+                id="phoneR"
+                class="basicInputRegisterR"
                 placeholder="(99) 9.9999-9999"
                 required
               />
@@ -257,8 +257,7 @@ export default {
           })
           .then((response) => {
             console.log(response);
-            if(response.msg !== undefined) 
-            {
+            if (response.msg !== undefined) {
               alert(response.msg);
             }
             this.btnDisabled = false;
@@ -360,8 +359,9 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
-.logo_panel {
+.logo_register_panel {
   height: 100vh;
   width: 50%;
   background-color: #313131;
@@ -405,6 +405,7 @@ export default {
 
   &::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
     border-radius: 10px;
     background-color: #cccccc;
   }
@@ -434,7 +435,6 @@ export default {
   margin-bottom: 20px;
   font-size: 28px;
   overflow-y: hidden;
-  /* padding-bottom: 50px; */
 }
 
 .inputRegisterContainer {
@@ -455,8 +455,6 @@ img {
   display: flex;
   width: 65%;
   height: 45%;
-  // min-width: 150px;
-  // min-height: 150px;
 }
 
 .formulario_registro .btn_enviar {
@@ -515,23 +513,22 @@ img {
 
 .p-input-icon-right i {
   width: 15px;
-  display: flex; //!important
-  align-items: flex-end; //!important
-  justify-content: flex-end; //!important
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
-#name,
-#mail,
-#phone,
-#fullname,
-.basicInputRegister {
+#nameR,
+#mailR,
+#phoneR,
+#fullnameR,
+.basicInputRegisterR {
   width: 100%;
   border: 0;
   border-bottom: 2px solid black;
   font-size: 18px;
   box-shadow: none;
-  border-color: none;
-
+  /* border-color: none; savedra*/
   &:focus,
   &:valid,
   &:hover {
@@ -542,6 +539,7 @@ img {
     border-color: none;
   }
 }
+
 
 .dropdownRegister {
   width: 100%;
@@ -570,69 +568,14 @@ img {
   }
 }
 
-@function box-shadow-stars($n) {
-  $star-shadows: "#{random(4000)-2000}px #{random(4000)-2000}px #fff";
-  @for $i from 2 through $n {
-    $star-color-num: random(3);
-    $star-color: #fff;
-    @if ($star-color-num == 1) {
-      $star-color: "#fff";
-    }
-    @if ($star-color-num == 2) {
-      $star-color: "#FF6666";
-    }
-    @if ($star-color-num == 3) {
-      $star-color: "#79bfea";
-    }
-    $star-shadows: "#{$star-shadows}, #{random(4000)-2000}px #{random(4000)-2000}px #{$star-color}";
-  }
-  @return unquote($star-shadows);
-}
-$stars1-shadows: box-shadow-stars(10000);
-$stars2-shadows: box-shadow-stars(1000);
-$stars3-shadows: box-shadow-stars(500);
-
 html {
   height: 100vh;
   overflow: hidden;
-  /* background: #240f54; */
-  /* background: linear-gradient(180deg,#240f54,#240f54 5%,#440bc8); */
-}
-.stars1 {
-  width: 1px;
-  height: 1px;
-  box-shadow: $stars1-shadows;
-  border-radius: 50%;
-  animation: rotateEarth 200s linear infinite;
-  opacity: 0.9;
-}
-.stars2 {
-  width: 2px;
-  height: 2px;
-  box-shadow: $stars2-shadows;
-  border-radius: 50%;
-  animation: rotateEarth 190s linear infinite;
-  opacity: 0.9;
-}
-.stars3 {
-  width: 3px;
-  height: 3px;
-  box-shadow: $stars3-shadows;
-  border-radius: 50%;
-  animation: rotateEarth 180s linear infinite;
-  opacity: 0.9;
-}
-@keyframes rotateEarth {
-  from {
-    transform: translateY(0px);
-  }
-  to {
-    transform: translateY(2000px);
-  }
+  
 }
 
 @media screen and (max-width: 990px) {
-  .logo_panel {
+  .logo_register_panel {
     h1 {
       max-width: 80%;
       font-size: 18px;
@@ -657,7 +600,7 @@ html {
 }
 
 @media screen and (max-width: 806px) {
-  .logo_panel {
+  .logo_register_panel {
     img {
       width: 65%;
       height: 40%;
@@ -682,7 +625,7 @@ html {
 }
 
 @media screen and (max-width: 700px) {
-  .logo_panel {
+  .logo_register_panel {
     h1 {
       max-width: 80%;
       font-size: 16px;
@@ -705,41 +648,20 @@ html {
     display: none;
   }
 
-  .logo_panel {
+  .logo_register_panel {
     display: none;
     width: 0%;
   }
 
   .Registro_panel {
     width: 100%;
-    /* background-color: #313131; */
-    /* color: white; */
     overflow-y: hidden;
-
-    .stars1,
-    .stars2,
-    .stars3 {
-      /* display: visible; */
-    }
-
-    .registerForm {
-      /* background-color: white; */
-      /* border: none; */
-    }
   }
 }
-
-/* @media screen and (max-width: 600px) {
-.Registro_panel {
-    width: 80%;
-    background-color: black;
-  }
-} */
 
 @media screen and (max-width: 440px) {
   .registerForm {
     width: 100%;
-    /* background-color: black; */
   }
 }
 </style>

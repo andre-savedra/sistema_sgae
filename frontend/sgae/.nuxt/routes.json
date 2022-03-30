@@ -14,13 +14,6 @@
     "_name": "_25fc8521"
   },
   {
-    "name": "backup",
-    "path": "/backup",
-    "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\backup\\\\index.vue",
-    "chunkName": "pages/backup/index",
-    "_name": "_2f1cd7af"
-  },
-  {
     "name": "erro",
     "path": "/erro",
     "component": "C:\\\\PROJETO_SGAE\\\\frontend\\\\sgae\\\\pages\\\\erro\\\\index.vue",
