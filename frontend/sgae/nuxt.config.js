@@ -140,17 +140,17 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: "https://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/api/v1/auth/token/login/",
+            url: "http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/api/v1/auth/token/login/",
             method: "post",
             propertyName: "auth_token",
           },
           logout: {
-            url: "https://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/api/v1/auth/token/logout/",
+            url: "http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/api/v1/auth/token/logout/",
             method: "post",
             propertyName: "auth_token",
           },
           user: {
-            url: "https://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/cargos/",
+            url: "http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/cargos/",
             method: "get",
             propertyName: false,
           },
