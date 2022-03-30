@@ -104,7 +104,7 @@
                 class="customAvatarUpload"
                 id="avatarUpload"
                 invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
-                invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"
+                invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"                
               />
             </div>
 
