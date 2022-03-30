@@ -106,14 +106,14 @@ EMAIL_HOST_PASSWORD = '@senaimange501'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME':'sgae',
-        'HOST':'sgae-mange-db.cm7c2kbqcgmi.us-east-1.rds.amazonaws.com',
-        'USER':'root',
-        'PASSWORD':'z6jXdr77OwLwpJSvZHb3',
-        'PORT':'3306',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME':'sgae',
+    #     'HOST':'sgae-mange-db.cm7c2kbqcgmi.us-east-1.rds.amazonaws.com',
+    #     'USER':'root',
+    #     'PASSWORD':'z6jXdr77OwLwpJSvZHb3',
+    #     'PORT':'3306',
+    # }
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql',
     #     'NAME':'sgae',
@@ -122,10 +122,10 @@ DATABASES = {
     #     'PASSWORD':'fmsroot',
     #     'PORT':'3306',
     # }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
