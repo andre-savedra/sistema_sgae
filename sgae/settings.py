@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-%xuctycm31h+z!7qkm*350)ewbo5lu(o9=8@uxr8e_^f1!ta1e
 DEBUG = True
 
 # ALLOWED_HOSTS = ["projeto-sgae-dev.us-east-1.elasticbeanstalk.com"]
-ALLOWED_HOSTS = ['sgae3.us-east-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['sgae3.us-east-1.elasticbeanstalk.com','127.0.0.1']
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
@@ -167,7 +167,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT=os.path.join(BASE_DIR,'static/')
+STATIC_ROOT= 'static'
 
 MEDIA_URL = '/media/'
 
