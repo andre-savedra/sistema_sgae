@@ -14,7 +14,7 @@ export default function (ctx, inject) {
 
   // Register strategies
   // local
-  $auth.registerStrategy('local', new scheme_3e2123be($auth, {"endpoints":{"login":{"url":"http://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/api/v1/auth/token/login/","method":"post","propertyName":"auth_token"},"logout":{"url":"http://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/api/v1/auth/token/logout/","method":"post","propertyName":"auth_token"},"user":{"url":"http://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/cargos/","method":"get","propertyName":false}},"tokenType":"Token","tokenName":"Authorization","_name":"local"}))
+  $auth.registerStrategy('local', new scheme_3e2123be($auth, {"endpoints":{"login":{"url":"https://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/api/v1/auth/token/login/","method":"post","propertyName":"auth_token"},"logout":{"url":"https://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/api/v1/auth/token/logout/","method":"post","propertyName":"auth_token"},"user":{"url":"https://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/cargos/","method":"get","propertyName":false}},"tokenType":"Token","tokenName":"Authorization","_name":"local"}))
 
   // Inject it to nuxt context as $auth
   inject('auth', $auth)
