@@ -2,9 +2,9 @@ export const state = () => ({
     editTaskId: 0,
     tasksToPrint: [],
     printMode: '',
-    BASE_URL: 'http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com/',
-    BASE_URL_IMG: 'http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com',
-    BASE_URL_IMGV: 'http://projeto-sgae-dev.us-east-1.elasticbeanstalk.com',
+    BASE_URL: 'http://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/',
+    BASE_URL_IMG: 'http://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com',
+    BASE_URL_IMGV: 'http://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com',
     actualUser: null,
 });
 
