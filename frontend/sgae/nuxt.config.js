@@ -140,17 +140,17 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: "https://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/api/v1/auth/token/login/",
+            url: "https://backend.sgae501.com.br/api/v1/auth/token/login/",
             method: "post",
             propertyName: "auth_token",
           },
           logout: {
-            url: "https://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/api/v1/auth/token/logout/",
+            url: "https://backend.sgae501.com.br/api/v1/auth/token/logout/",
             method: "post",
             propertyName: "auth_token",
           },
           user: {
-            url: "https://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/cargos/",
+            url: "https://backend.sgae501.com.br/cargos/",
             method: "get",
             propertyName: false,
           },

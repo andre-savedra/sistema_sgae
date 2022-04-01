@@ -69,7 +69,7 @@ export default {
       console.log(valueStoraged)
     }    
 
-    const server = "https://env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com/";
+    const server = "https://backend.sgae501.com.br/";
     const users = await $axios.get(server + "api/v1/users/me/");
     // console.log("users");
     // console.log(users);
