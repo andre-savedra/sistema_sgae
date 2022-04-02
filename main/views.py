@@ -82,7 +82,7 @@ class EmailSenderAPIView(APIView):
             + str(tarefa.id) + ' - ' + str(tarefa.nome) + ', solicitada por '
             + str(tarefa.idSolicitanteFK.nome) + ','
             + ' foi atribuída à você! \n\n Vá até o sistema SGAE - Sistema de Gestão de Ambientes e Confira!'
-            + '\n\n Acesse nosso sistema em: http://localhost:8003/')
+            + '\n\n Acesse nosso sistema em: https://educacional.sgae501.com.br/')
           
             send_mail(
             'SGAE - Uma nova tarefa foi atribuída à você!',
@@ -128,7 +128,7 @@ class EmailSenderAPIView(APIView):
             + str(tarefa.id) + ' - ' + str(tarefa.nome) + ', solicitada por '
             + str(tarefa.idSolicitanteFK.nome) + ','
             + ' está em um novo Status: ' + str(status.nome) + '.\n\n Vá até o sistema SGAE - Sistema de Gestão de Ambientes e Localize-a!'
-            + '\n\n Acesse nosso sistema em: http://localhost:8003/')
+            + '\n\n Acesse nosso sistema em: https://educacional.sgae501.com.br/')
           
             send_mail(
             'SGAE - Novo Status da Tarefa #' + str(tarefa.id),
@@ -156,9 +156,9 @@ class RequestActivateUser(APIView):
             usuario.save()
             print("novo usuario:")
             print(usuario)
-            return HttpResponseRedirect('http://localhost:3003/sucesso/')
+            return HttpResponseRedirect('https://educacional.sgae501.com.br/sucesso/')
         else:
-            return HttpResponseRedirect('http://localhost:3003/erro/')
+            return HttpResponseRedirect('https://educacional.sgae501.com.br/erro/')
             
 
 def getPagination(request, listItems):
