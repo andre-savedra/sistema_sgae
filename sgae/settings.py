@@ -101,8 +101,6 @@ EMAIL_HOST_USER = 'sgae.mange@gmail.com'
 EMAIL_HOST_PASSWORD = '@senaimange501'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     # 'default': {
