@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-%xuctycm31h+z!7qkm*350)ewbo5lu(o9=8@uxr8e_^f1!ta1e
 DEBUG = True
 
 # ALLOWED_HOSTS = ["projeto-sgae-dev.us-east-1.elasticbeanstalk.com"]
-ALLOWED_HOSTS = ['env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com', 'backend.sgae501.com.br']
+ALLOWED_HOSTS = ['env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com', 
+                 'backend.sgae501.com.br', '127.0.0.1', 'localhost']
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
@@ -45,7 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',    
     'djoser',
-    'main',
+    'main',    
 ]
 
 MIDDLEWARE = [
@@ -92,13 +93,7 @@ DJOSER = {
 
 SITE_NAME = "SGAE-Sistema de Gerenciamento de Ambientes de Ensino - Senai Roberto Mange"
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'sgae.mange@gmail.com'
-EMAIL_HOST_PASSWORD = '@senaimange501'
+
 
 
 # Database

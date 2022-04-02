@@ -58,6 +58,20 @@ class EmailSenderAPIView(APIView):
 
  permission_classes = (IsAuthenticated,)
 
+ def get(self, request, type):
+    sendTo = []
+    sendTo.append('andre_savedra@hotmail.com')
+    messageBody = "Mensagem de teste do andre"
+    send_mail(
+            'SGAE - Uma nova tarefa foi atribuída à você!',
+            messageBody,
+            "avisos@sgae501.com.br",
+            sendTo,
+            fail_silently=False,
+    )
+    return Response({"msg": "ok"})
+
+
  def post(self, request, type):
     
     messageResponse = ''
@@ -87,7 +101,7 @@ class EmailSenderAPIView(APIView):
             send_mail(
             'SGAE - Uma nova tarefa foi atribuída à você!',
             messageBody,
-            None,
+            "avisos@sgae501.com.br",
             sendTo,
             fail_silently=False,
             )
@@ -133,7 +147,7 @@ class EmailSenderAPIView(APIView):
             send_mail(
             'SGAE - Novo Status da Tarefa #' + str(tarefa.id),
             messageBody,
-            None,
+            "avisos@sgae501.com.br",
             sendTo,
             fail_silently=False,
             )
