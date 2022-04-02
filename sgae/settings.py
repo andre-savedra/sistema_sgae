@@ -93,7 +93,14 @@ DJOSER = {
 
 SITE_NAME = "SGAE-Sistema de Gerenciamento de Ambientes de Ensino - Senai Roberto Mange"
 
-
+#send djoser com aws
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'AKIA3BTOWQCMXJXCSZXW'
+EMAIL_HOST_PASSWORD = 'BM/SDEIUK3ioz8zWKwo9gV7R2k4Qv9ql6YYvKkRlCbDw'
+DEFAULT_FROM_EMAIL = 'avisos@sgae501.com.br'
 
 
 # Database
