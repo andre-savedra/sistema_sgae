@@ -84,6 +84,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sgae.wsgi.application'
 
+AUTH_PASSWORD_VALIDATORS  = []
 
 DJOSER = {
     # "USER_ID_FIELD": "username",
