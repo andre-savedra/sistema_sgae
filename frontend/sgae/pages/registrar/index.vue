@@ -104,7 +104,7 @@
                 class="customAvatarUpload"
                 id="avatarUpload"
                 invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
-                invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"                
+                invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"
               />
             </div>
 
@@ -229,13 +229,36 @@ export default {
             this.btnDisabled = false;
           }
         })
-        .catch((response) => {
-          console.log(response.data);
-          alert("Problema: " + response);
+        .catch((error) => {
+          console.log(error.response);
+
+          let errorMessage = "";
+          if (error.response) {
+            let notEmpty = false;
+
+            if (error.response.data.password) {
+              error.response.data.password.map((msg) => {
+                errorMessage += "\n" + msg;
+              });
+              notEmpty = true;
+            } 
+            if (error.response.data.email) {
+              error.response.data.email.map((msg) => {
+                errorMessage += "\n" + msg;
+              });
+              notEmpty = true;
+            }
+
+            if(!notEmpty) {
+              errorMessage = "Erro: " + error.response.status;
+              errorMessage += "\n" + error.response.statusText;
+            }
+          }
+
+          alert(errorMessage);
           this.btnDisabled = false;
           this.btnUploadLabel = this.btnInitialLabel;
           this.userPhoto = null;
-          console.log(response);
         });
     },
     postUsuario: async function () {
@@ -541,7 +564,6 @@ img {
   }
 }
 
-
 .dropdownRegister {
   width: 100%;
   overflow-x: visible;
@@ -572,7 +594,6 @@ img {
 html {
   height: 100vh;
   overflow: hidden;
-  
 }
 
 @media screen and (max-width: 990px) {

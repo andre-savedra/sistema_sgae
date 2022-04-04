@@ -14,7 +14,7 @@ export default function (ctx, inject) {
 
   // Register strategies
   // local
-  $auth.registerStrategy('local', new scheme_3e2123be($auth, {"endpoints":{"login":{"url":"http://localhost:8003/api/v1/auth/token/login/","method":"post","propertyName":"auth_token"},"logout":{"url":"http://localhost:8003/api/v1/auth/token/logout/","method":"post","propertyName":"auth_token"},"user":{"url":"http://localhost:8003/cargos/","method":"get","propertyName":false}},"tokenType":"Token","tokenName":"Authorization","_name":"local"}))
+  $auth.registerStrategy('local', new scheme_3e2123be($auth, {"endpoints":{"login":{"url":"https://backend.sgae501.com.br/api/v1/auth/token/login/","method":"post","propertyName":"auth_token"},"logout":{"url":"https://backend.sgae501.com.br/api/v1/auth/token/logout/","method":"post","propertyName":"auth_token"},"user":{"url":"https://backend.sgae501.com.br/cargos/","method":"get","propertyName":false}},"tokenType":"Token","tokenName":"Authorization","_name":"local"}))
 
   // Inject it to nuxt context as $auth
   inject('auth', $auth)
