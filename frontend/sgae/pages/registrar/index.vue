@@ -355,6 +355,7 @@ export default {
     },
   },
   created() {
+    this.$auth.$storage.removeUniversal("actualUserStoraged");
     this.getJobs();
   },
 };

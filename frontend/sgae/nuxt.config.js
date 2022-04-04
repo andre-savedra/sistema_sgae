@@ -135,22 +135,26 @@ export default {
     // baseURL: '/',
   },
 
+  env:{
+    BASE_URL: process.env.BASE_URL
+  },
+
   auth: {
     strategies: {
       local: {
         endpoints: {
           login: {
-            url: "https://backend.sgae501.com.br/api/v1/auth/token/login/",
+            url: (process.env.BASE_URL + "/api/v1/auth/token/login/"),
             method: "post",
             propertyName: "auth_token",
           },
           logout: {
-            url: "https://backend.sgae501.com.br/api/v1/auth/token/logout/",
+            url: (process.env.BASE_URL + "/api/v1/auth/token/logout/"),
             method: "post",
             propertyName: "auth_token",
           },
           user: {
-            url: "https://backend.sgae501.com.br/cargos/",
+            url: (process.env.BASE_URL + "/cargos/"),
             method: "get",
             propertyName: false,
           },

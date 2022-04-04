@@ -2,9 +2,9 @@ export const state = () => ({
     editTaskId: 0,
     tasksToPrint: [],
     printMode: '',
-    BASE_URL: 'https://backend.sgae501.com.br/',
-    BASE_URL_IMG: 'https://backend.sgae501.com.br',
-    BASE_URL_IMGV: 'https://backend.sgae501.com.br',
+    BASE_URL: (process.env.BASE_URL + '/'),
+    BASE_URL_IMG: process.env.BASE_URL,
+    BASE_URL_IMGV: process.env.BASE_URL,
     actualUser: null,
 });
 

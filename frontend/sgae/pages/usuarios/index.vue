@@ -117,7 +117,7 @@ export default {
   extends: AsyncUserStoraged,
   name: "usuarios",
   layout: "standard",
-  middleware: "auth",
+  // middleware: "auth",
   data() {
     return {
       activationUsers: null,
@@ -208,7 +208,7 @@ export default {
   },
   created() {
     if (this.actualUser === null || this.actualUser === undefined)
-      this.$router.push("/lobby");
+      this.$router.push("/lobby");      
     else this.getActivationUsers();
   },
   mounted(){
@@ -419,6 +419,7 @@ export default {
 
   .allUsers {
     padding: 0px !important;
+    justify-content: flex-start !important;
   }
 
   .containerUsers {

@@ -80,13 +80,12 @@ export default {
     },
     sendlogin() {
       console.log("tentando autenticar....");
-      console.log(this.login);
+      
       this.btnDisabled = true;
 
       this.$auth
         .loginWith("local", { data: this.login })
         .then(() => {
-          
           console.log("DEU CERTO O LOGIN");
         })
         .catch((erro) => {
@@ -98,6 +97,9 @@ export default {
         });
     },
   },
+  created() {
+    this.$auth.$storage.removeUniversal("actualUserStoraged");
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -105,6 +107,17 @@ export default {
   width: 55%;
   height: auto;
 }
+
+/* .Cadastro_panel,
+.formulario_cadastro, */
+#titulo,
+.loginForm,
+.inputcontainer,
+.inputCombo{
+  overflow-y: hidden;
+}
+
+
 
 .formulario_cadastro {
   width: 100%;
@@ -160,7 +173,6 @@ img {
   display: flex;
   width: 65%;
   height: 45%;
- 
 }
 
 .formulario_cadastro .btn_enviar {
@@ -192,14 +204,12 @@ img {
     width: 110px;
     padding: 0px;
     margin: 10px 0px 0px 5px;
-    
   }
   .resetPswBtn {
     width: 165px;
     padding: 0px;
     margin: 10px 5px 0px 0px;
   }
-  
 }
 
 .inputcontainer {
