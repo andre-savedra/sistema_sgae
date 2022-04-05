@@ -65,7 +65,7 @@ class EmailSenderAPIView(APIView):
     send_mail(
             'SGAE - Uma nova tarefa foi atribuída à você!',
             messageBody,
-            "avisos@sgae501.com.br",
+            "alertas@sgae501.com.br",
             sendTo,
             fail_silently=False,
     )
@@ -101,7 +101,7 @@ class EmailSenderAPIView(APIView):
             send_mail(
             'SGAE - Uma nova tarefa foi atribuída à você!',
             messageBody,
-            "avisos@sgae501.com.br",
+            "alertas@sgae501.com.br",
             sendTo,
             fail_silently=False,
             )
@@ -147,7 +147,7 @@ class EmailSenderAPIView(APIView):
             send_mail(
             'SGAE - Novo Status da Tarefa #' + str(tarefa.id),
             messageBody,
-            "avisos@sgae501.com.br",
+            "alertas@sgae501.com.br",
             sendTo,
             fail_silently=False,
             )
