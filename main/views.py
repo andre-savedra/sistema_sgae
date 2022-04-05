@@ -67,7 +67,7 @@ class EmailSenderAPIView(APIView):
             messageBody,
             "alertas@sgae501.com.br",
             sendTo,
-            fail_silently=False,
+            fail_silently=True,
     )
     return Response({"msg": "ok"})
 
@@ -103,7 +103,7 @@ class EmailSenderAPIView(APIView):
             messageBody,
             "alertas@sgae501.com.br",
             sendTo,
-            fail_silently=False,
+            fail_silently=True,
             )
 
             messageResponse = 'sent'
@@ -149,7 +149,7 @@ class EmailSenderAPIView(APIView):
             messageBody,
             "alertas@sgae501.com.br",
             sendTo,
-            fail_silently=False,
+            fail_silently=True,
             )
 
             messageResponse = 'sent'
