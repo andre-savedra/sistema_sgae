@@ -4,3 +4,4 @@ frontend/sgae/.env
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+sgae/.env
