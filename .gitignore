@@ -1,6 +1,6 @@
 frontend/sgae/node_modules
-frontend/sgae/.env
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+sgae/*.env
