@@ -356,6 +356,8 @@ class CadastroUsuariosAPIView(APIView):
     def post(self, request):
         message = 'Erro'
 
+        print(request.data);
+
         if request.data['idUserFK']:
 
             user = User.objects.get(id=request.data['idUserFK'])

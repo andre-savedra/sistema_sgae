@@ -2,6 +2,7 @@
 # import django
 # import datetime
 # import pandas as pd
+import re
 from django.db import models
 from django.utils import timezone
 
@@ -44,7 +45,7 @@ def upload_image_user(instance, filename):
 
 class Usuarios(models.Model):
     nome = models.CharField(max_length=55)
-    idUserFK = models.BigIntegerField(blank=True, null=True)
+    idUserFK = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
     email = models.CharField(max_length=80)
     fone = models.CharField(max_length=15)
     ativo = models.BooleanField(default=False)

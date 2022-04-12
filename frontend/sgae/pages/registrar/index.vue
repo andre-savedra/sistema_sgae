@@ -101,6 +101,7 @@
                 accept="image/jpeg,image/png"
                 :maxFileSize="10000000"
                 @upload="postPhoto"
+                @before-upload="()=>{btnUploadLabel = 'Carregando...'}"
                 class="customAvatarUpload"
                 id="avatarUpload"
                 invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
@@ -212,6 +213,7 @@ export default {
         )
         .then((response) => {
           if (response.email === this.userAuth.email) {
+            alert("email bateu!");
             this.userSec[0].email = this.userAuth.email;
             this.userSec[0].idNivelAcessoFK = this.jobSelected.id;
             this.userSec[0].idUserFK = response.id;
@@ -241,7 +243,7 @@ export default {
                 errorMessage += "\n" + msg;
               });
               notEmpty = true;
-            } 
+            }
             if (error.response.data.email) {
               error.response.data.email.map((msg) => {
                 errorMessage += "\n" + msg;
@@ -249,7 +251,7 @@ export default {
               notEmpty = true;
             }
 
-            if(!notEmpty) {
+            if (!notEmpty) {
               errorMessage = "Erro: " + error.response.status;
               errorMessage += "\n" + error.response.statusText;
             }
@@ -263,6 +265,7 @@ export default {
     },
     postUsuario: async function () {
       if (this.userPhoto !== undefined && this.userPhoto !== null) {
+        alert("tem foto");
         let formData = new FormData();
         formData.append("nome", this.userSec[0].nome);
         formData.append("idUserFK", this.userSec[0].idUserFK);
@@ -271,6 +274,33 @@ export default {
         formData.append("ativo", false);
         formData.append("idNivelAcessoFK", this.userSec[0].idNivelAcessoFK);
         formData.append("image", this.userPhoto[0]);
+
+        alert(
+          "formData: \n" +
+            "nome:" +
+            this.userSec[0].nome +
+            "\n" +
+            "idUserFK:" +
+            this.userSec[0].idUserFK +
+            "\n" +
+            "email:" +
+            this.userSec[0].email +
+            "\n" +
+            "fone:" +
+            this.userSec[0].fone +
+            "\n" +
+            "ativo:" +
+            "false" +
+            "\n" +
+            "idNivelAcessoFK:" +
+            this.userSec[0].idNivelAcessoFK +
+            "\n" +
+            "image:" +
+            this.userPhoto[0].name +
+            "\n"
+        );
+        console.log("formData");
+        console.log(formData);
 
         this.$axios
           .$post(this.$store.state.BASE_URL + "cadastroUsuario/", formData, {
@@ -296,18 +326,49 @@ export default {
             console.log(response);
           });
       } else {
+        alert("não tem foto");
+
+        alert(
+          "body: \n" +
+            "nome:" +
+            this.userSec[0].nome +
+            "\n" +
+            "idUserFK:" +
+            this.userSec[0].idUserFK +
+            "\n" +
+            "email:" +
+            this.userSec[0].email +
+            "\n" +
+            "fone:" +
+            this.userSec[0].fone +
+            "\n" +
+            "ativo:" +
+            "false" +
+            "\n" +
+            "idNivelAcessoFK:" +
+            this.userSec[0].idNivelAcessoFK +
+            "\n"
+        );
+
+        let formData = new FormData();
+        formData.append("nome", this.userSec[0].nome);
+        formData.append("idUserFK", this.userSec[0].idUserFK);
+        formData.append("email", this.userSec[0].email);
+        formData.append("fone", this.userSec[0].fone);
+        formData.append("ativo", false);
+        formData.append("idNivelAcessoFK", this.userSec[0].idNivelAcessoFK);
+
         await this.$axios
-          .$post(
-            this.$store.state.BASE_URL + "cadastroUsuario/",
-            JSON.stringify(this.userSec),
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          )
+          .$post(this.$store.state.BASE_URL + "cadastroUsuario/", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
           .then((response) => {
             this.btnDisabled = false;
+            if (response.msg !== undefined) {
+              alert(response.msg);
+            }
             this.$router.push("/");
           })
           .catch((response) => {
@@ -345,7 +406,13 @@ export default {
       console.log("userPhoto:");
       console.log(this.userPhoto);
 
-      if (this.userPhoto[0].name) this.btnUploadLabel = this.userPhoto[0].name;
+      const maxChars = 20;
+      if (this.userPhoto[0].name) {
+        if(this.userPhoto[0].name.length > maxChars)
+          this.btnUploadLabel = "..." + this.userPhoto[0].name.slice((this.userPhoto[0].name.length - maxChars));
+        else
+          this.btnUploadLabel = this.userPhoto[0].name;
+      }
     },
     sendRegister: async function () {
       console.log("tentando registrar....");
