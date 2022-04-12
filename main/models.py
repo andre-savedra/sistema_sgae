@@ -40,7 +40,8 @@ def upload_image_teste(instance, filename):
     return f"{timezone.now()}-{filename}"
 
 def upload_image_user(instance, filename):
-    return f"{instance.idUserFK}-{timezone.now()}-{filename}"
+    return f"{filename}"
+    # return f"{instance.idUserFK}-{timezone.now()}-{filename}"
 
 
 class Usuarios(models.Model):

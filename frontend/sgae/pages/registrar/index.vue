@@ -297,6 +297,9 @@ export default {
             "\n" +
             "image:" +
             this.userPhoto[0].name +
+            "\n" +
+            "image:" +
+            this.userPhoto[0].size +
             "\n"
         );
         console.log("formData");
