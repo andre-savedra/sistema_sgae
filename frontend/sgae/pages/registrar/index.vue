@@ -455,6 +455,7 @@ export default {
     },
   },
   created() {
+    console.log("novo registrar.....");
     this.$auth.$storage.removeUniversal("actualUserStoraged");
     this.getJobs();
 
