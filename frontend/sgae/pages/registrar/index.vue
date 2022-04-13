@@ -161,6 +161,8 @@
 
 
 <script>
+import AwsS3Users from "@/assets/scripts/awsS3Users.js";
+
 export default {
   layout: "login",
   name: "register",
@@ -416,6 +418,11 @@ export default {
         else
           this.btnUploadLabel = this.userPhoto[0].name;
       }
+
+      //test aws S3:
+
+
+
     },
     sendRegister: async function () {
       console.log("tentando registrar....");
@@ -450,6 +457,9 @@ export default {
   created() {
     this.$auth.$storage.removeUniversal("actualUserStoraged");
     this.getJobs();
+
+    const S3Users = AwsS3Users.awsManager();
+    console.log(S3Users);
   },
 };
 </script>
