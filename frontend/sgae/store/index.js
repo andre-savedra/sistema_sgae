@@ -14,7 +14,7 @@ export const state = () => ({
 //     "nome": "Master",
 //     "idUserFK": 32,
 //     "email": "sgae.mange@gmail.com",
-//     "fone": "19993805639",
+//     "fone": "",
 //     "ativo": true,
 //     "idNivelAcessoFK": {
 //         "id": 8,

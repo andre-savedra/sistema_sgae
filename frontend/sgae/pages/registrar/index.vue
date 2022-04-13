@@ -461,6 +461,9 @@ export default {
 
     const S3Users = AwsS3Users.awsManager();
     console.log(S3Users);
+
+    console.log("process:")
+    console.log(process.env.REGION);
   },
 };
 </script>
