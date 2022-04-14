@@ -462,8 +462,8 @@ export default {
     const S3Users = AwsS3Users.awsManager();
     console.log(S3Users);
 
-    console.log("process:")
-    console.log(process.env.REGION);
+    console.log("process2222:")
+    console.log(this.$store.state.TESTE_ENV);
   },
 };
 </script>

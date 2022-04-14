@@ -6,6 +6,7 @@ export const state = () => ({
     BASE_URL_IMG: process.env.BASE_URL,
     BASE_URL_IMGV: process.env.BASE_URL,
     actualUser: null,
+    TESTE_ENV: process.env.REGION,
 });
 
 // ACTUAL USER STRUCTURE:
