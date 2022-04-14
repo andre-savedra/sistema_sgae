@@ -168,7 +168,6 @@ export default {
   name: "register",
   data() {
     return {
-      ok: null,
       btnInitialLabel: "Sua foto aqui",
       btnUploadLabel: "Sua foto aqui",
       btnDisabled: false,
@@ -461,18 +460,10 @@ export default {
     this.getJobs();
 
     const S3Users = AwsS3Users.awsManager();
-    console.log(S3Users);
+    // console.log(S3Users);
+    console.log(process.env.NUXT_ENV_REGIO)
 
   },
-  mounted() {
-    console.log("process 3:")
-    this.ok = process.env.NUXT_ENV_CU;
-    console.log(this.ok);
-  
-
-
-  }
-  
 };
 </script>
 
