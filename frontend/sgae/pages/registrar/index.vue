@@ -101,7 +101,11 @@
                 accept="image/jpeg,image/png"
                 :maxFileSize="10000000"
                 @upload="postPhoto"
-                @before-upload="()=>{btnUploadLabel = 'Carregando...'}"
+                @before-upload="
+                  () => {
+                    btnUploadLabel = 'Carregando...';
+                  }
+                "
                 class="customAvatarUpload"
                 id="avatarUpload"
                 invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
@@ -191,9 +195,10 @@ export default {
       jobSelected: null,
       jobs: [],
       userPhoto: null,
+      S3Client: null,
     };
   },
-  methods: {    
+  methods: {
     backPage() {
       this.$router.push("/");
     },
@@ -413,16 +418,20 @@ export default {
 
       const maxChars = 20;
       if (this.userPhoto[0].name) {
-        if(this.userPhoto[0].name.length > maxChars)
-          this.btnUploadLabel = "..." + this.userPhoto[0].name.slice((this.userPhoto[0].name.length - maxChars));
-        else
-          this.btnUploadLabel = this.userPhoto[0].name;
+        if (this.userPhoto[0].name.length > maxChars)
+          this.btnUploadLabel =
+            "..." +
+            this.userPhoto[0].name.slice(
+              this.userPhoto[0].name.length - maxChars
+            );
+        else this.btnUploadLabel = this.userPhoto[0].name;
       }
 
       //test aws S3:
 
-
-
+      this.S3Client.uploadFile(this.userPhoto[0], ("1-" + this.userPhoto[0].name))
+        .then((data) => console.log(data))
+        .catch((err) => console.error(err));
     },
     sendRegister: async function () {
       console.log("tentando registrar....");
@@ -455,13 +464,11 @@ export default {
     },
   },
   created() {
-    console.log("novo registrar.....");
     this.$auth.$storage.removeUniversal("actualUserStoraged");
     this.getJobs();
 
-    const S3Users = AwsS3Users.awsManager();
-    console.log(S3Users);
-
+    this.S3Client = AwsS3Users.awsManager();
+    console.log(this.S3Client);
   },
 };
 </script>

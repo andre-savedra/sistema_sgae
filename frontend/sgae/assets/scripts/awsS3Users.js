@@ -15,8 +15,8 @@ export default {
         
         /*  Notice that if you don't provide a dirName, the file will be automatically uploaded to the root of your bucket */
         const S3Client = new S3(config);
-        // return S3Client;
-        return config;
+        return S3Client;
+        // return config;
     }       
 
 };
