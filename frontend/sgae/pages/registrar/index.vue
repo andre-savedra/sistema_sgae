@@ -168,6 +168,7 @@ export default {
   name: "register",
   data() {
     return {
+      ok: null,
       btnInitialLabel: "Sua foto aqui",
       btnUploadLabel: "Sua foto aqui",
       btnDisabled: false,
@@ -465,7 +466,8 @@ export default {
   },
   mounted() {
     console.log("process 3:")
-    console.log(process.env.CU);
+    this.ok = process.env.CU;
+    console.log(ok);
 
   }
   
