@@ -466,10 +466,9 @@ export default {
   },
   mounted() {
     console.log("process 3:")
-    this.ok = process.env.CU;
+    this.ok = process.env.NUXT_ENV_CU;
     console.log(this.ok);
-    const legal = context.env.CU;
-    console.log(legal);
+  
 
 
   }
