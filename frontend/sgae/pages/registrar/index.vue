@@ -461,7 +461,7 @@ export default {
 
     const S3Users = AwsS3Users.awsManager();
     // console.log(S3Users);
-    console.log(process.env.NUXT_ENV_REGIO)
+    console.log(process.env.NUXT_ENV_REGION)
 
   },
 };
