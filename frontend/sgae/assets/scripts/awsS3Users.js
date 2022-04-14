@@ -5,11 +5,11 @@ export default {
         console.log("AWS S3 MANAGER RUNNING");
 
         const config = {
-            bucketName: process.env.BUCKET_NAME,
-            dirName: process.env.DIR_NAME_USERS, /* optional */
-            region: process.env.REGION,
-            accessKeyId: process.env.ACCESSKEY_ID,
-            secretAccessKey: process.env.SECRET_ACESSKEY_ID,
+            bucketName: process.env.NUXT_ENV_BUCKET_NAME,
+            dirName: process.env.NUXT_ENV_DIR_NAME_USERS, /* optional */
+            region: process.env.NUXT_ENV_REGION,
+            accessKeyId: process.env.NUXT_ENV_ACCESSKEY_ID,
+            secretAccessKey: process.env.NUXT_ENV_SECRET_ACESSKEY_ID,
             // s3Url: 'https://my-s3-url.com/', /* optional */
         }
         
