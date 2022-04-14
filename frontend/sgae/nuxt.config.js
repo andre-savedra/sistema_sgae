@@ -36,6 +36,14 @@ export default {
     
   ],
 
+  // publicRuntimeConfig:{
+  //   DIR_NAME_USERS: "usuarios",
+  //   SECRET_ACESSKEY_ID: "qualquer",
+  //   ACCESSKEY_ID: "qualquer",
+  //   BUCKET_NAME: "sgae-storage",
+  //   REGION: "us-east-1",
+  // },
+
   primevue: {
     theme: "saga-blue",
     ripple: true,

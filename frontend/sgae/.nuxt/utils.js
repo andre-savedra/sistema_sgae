@@ -200,7 +200,7 @@ export async function setContext (app, context) {
       payload: context.payload,
       error: context.error,
       base: app.router.options.base,
-      env: {}
+      env: {"BASE_URL":"http://localhost:8003","NUXT_ENV_ACCESSKEY_ID":"qualquer","NUXT_ENV_BUCKET_NAME":"","NUXT_ENV_DIR_NAME_USERS":"qualquer","NUXT_ENV_REGION":"us-east-1","NUXT_ENV_SECRET_ACESSKEY_ID":"qualquer"}
     }
     // Only set once
 

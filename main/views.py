@@ -197,7 +197,7 @@ class CargosAPIView(APIView):
     """
     permission_classes = (IsAuthenticatedOrReadOnly,)
     
-    def get(self, request, pk=''):
+    def get(self, request, pk=''):       
         if 'nivel' in request.GET:            
             nivel = request.GET['nivel']
             cargos = Cargos.objects.filter(nivelAcesso=nivel)
