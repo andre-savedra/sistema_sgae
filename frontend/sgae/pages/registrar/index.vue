@@ -467,7 +467,10 @@ export default {
   mounted() {
     console.log("process 3:")
     this.ok = process.env.CU;
-    console.log(ok);
+    console.log(this.ok);
+    const legal = context.env.CU;
+    console.log(legal);
+
 
   }
   
