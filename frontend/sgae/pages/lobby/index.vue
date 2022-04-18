@@ -61,7 +61,7 @@ export default {
     this.flipper();
   },
   async asyncData({ $axios, $auth }) {
-    console.log($auth)
+    console.log($auth);
 
     //cheack if there is value storaged
     const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
@@ -74,43 +74,44 @@ export default {
 
     let users = $auth.$storage.getUniversal("user");
 
-    if(users)
-    {
-      alert("encontrou cookie users:\n" + JSON.stringify(users))
-    }
-    else{
+    if (users) {
+      alert("encontrou cookie users:\n" + JSON.stringify(users));
+    } else {
       alert("não encontrou cookie user");
       users = await $axios.get(server + "api/v1/users/me/");
       users = users.data;
       console.log("users requisitado:");
       console.log(users);
     }
-   
 
     let loggedUser = null;
 
     if (users) {
-      alert(
-        "users:\n" + users + "\n" + users.username + "\n" + users.id
-      );
+      alert("users:\n" + users + "\n" + users.username + "\n" + users.id);
 
-      alert("token: \n" + $auth.$storage.getUniversal("_token.local"))
+      alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
 
-      const usuarios = await fetch((server + "usuarios/" + users.id), {
+      await fetch(server + "usuarios/" + users.id, {
         headers: {
-          "Authorization": $auth.$storage.getUniversal("_token.local")
-        }
-      }).catch((error)=>{
-        alert("erro fetch:\n" + error);
-      });     
+          Authorization: $auth.$storage.getUniversal("_token.local"),
+        },
+      })
+        .then((response) => {
 
-      if(usuarios){        
-        loggedUser = await usuarios.json();        
-        loggedUser = loggedUser.data;
-        console.log(loggedUser);
-        alert("loggedUser original:" + loggedUser);
-        alert(JSON.stringify(loggedUser));
-      }
+          if (response) {
+            loggedUser = await response.json();
+            loggedUser = loggedUser.data;
+            console.log(loggedUser);
+            alert("loggedUser original:" + loggedUser);
+            alert(JSON.stringify(loggedUser));
+          }
+          else{
+            alert("response vazia");
+          }
+        })
+        .catch((error) => {
+          alert("erro fetch:\n" + error);
+        });
 
       // await $axios.get((server + "usuarios/" + users.id)).then((response) => {
       //     console.log("response then:");
@@ -122,7 +123,7 @@ export default {
       //     console.log("response catch error");
       //     console.log(response);
       //     alert(response);
-      //   });   
+      //   });
     }
 
     if (loggedUser) {
