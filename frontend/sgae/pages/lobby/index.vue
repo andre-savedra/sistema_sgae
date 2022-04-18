@@ -87,37 +87,32 @@ export default {
     let loggedUser = null;
 
     if (users) {
-      alert("users:\n" + users + "\n" + users.username + "\n" + users.id);
-
       alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
 
-      await fetch(server + "usuarios/" + users.id, {
+      fetch(server + "usuarios/" + users.id, {
         headers: {
           Authorization: $auth.$storage.getUniversal("_token.local"),
         },
-      })
-        .then((response) => {
-          if (response) {
-            loggedUser = await response.json();
-            loggedUser = loggedUser.data;
-            console.log(loggedUser);
-            alert("loggedUser original:" + loggedUser);
-            alert(JSON.stringify(loggedUser));
-
-            if(loggedUser){
-              await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-              return {
-                loggedUser,
-              };
-
-            }
-          } else {
-            alert("response vazia");
-          }
-        })
-        .catch((error) => {
-          alert("erro fetch:\n" + error);
-        });
+      }).then((response) => {
+        if (response) {
+          loggedUser = response.json();
+          loggedUser = loggedUser.data;
+          console.log(loggedUser);
+          alert("loggedUser original:" + loggedUser);
+          alert(JSON.stringify(loggedUser));
+          //       if(loggedUser){
+          //         await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+          //         return {
+          //           loggedUser,
+          //         };
+          //       }
+        } else {
+          alert("response vazia");
+        }
+      });
+      //   .catch((error) => {
+      //     alert("erro fetch:\n" + error);
+      //   });
 
       // await $axios.get((server + "usuarios/" + users.id)).then((response) => {
       //     console.log("response then:");
