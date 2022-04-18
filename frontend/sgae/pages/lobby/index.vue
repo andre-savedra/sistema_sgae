@@ -21,7 +21,7 @@
 <script>
 export default {
   name: "lobby",
-  layout: "login",
+  layout: "login2",
   middleware: "auth",
   data() {
     return {
@@ -98,7 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* .lobby {
+ .lobby {
   width: 100vw;
   height: 100vh;
 
@@ -170,5 +170,5 @@ export default {
   p {
     font-size: 11px;
   }
-} */
+} 
 </style>
