@@ -96,19 +96,15 @@ export default {
 
       alert("token: \n" + $auth.$storage.getUniversal("_token.local"))
 
-      await fetch((server + "usuarios/" + users.id), {
+      const usuarios = await fetch((server + "usuarios/" + users.id), {
         headers: {
           "Authorization": $auth.$storage.getUniversal("_token.local")
         }
-      }).then((response)=>{
-        console.log("usuarios:");
-        console.log(response);
-        console.log(response.responseText);
-        console.log(JSON.parse(response.responseText));
-
       }).catch((error)=>{
         alert("erro fetch:\n" + error);
       });
+
+      loggedUser = await usuarios.json();
 
       // if(usuarios){
         
