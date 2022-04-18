@@ -62,24 +62,37 @@ export default {
   },
   async asyncData({ $axios, $auth }) {
     //cheack if there is value storaged
-     const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
+    const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
     if (valueStoraged) {
-       console.log("Storaged already defined");
-       console.log(valueStoraged);
-     }
+      console.log("Storaged already defined");
+      console.log(valueStoraged);
+    }
 
-     const server = process.env.BASE_URL + "/";
-     const users = await $axios.get(server + "api/v1/users/me/");
-   
+    const server = process.env.BASE_URL + "/";
+    const users = await $axios.get(server + "api/v1/users/me/");
+    console.log(users);
+
     let loggedUser = null;
 
-     if (users) {
-       alert("users:\n" + users + "\n" + users.data.username  + "\n" + users.data.id )
-      //  const usuarios = await $axios.get(server + "usuarios/" + users.data.id);
-   
-    //   loggedUser = usuarios.data.data;
-     }
-   
+    if (users) {
+      alert(
+        "users:\n" + users + "\n" + users.data.username + "\n" + users.data.id
+      );
+      const usuarios = await $axios.get(server + "usuarios/" + users.data.id)
+      .then((response)=>{
+        console.log(response);
+        alert(response);
+      })
+      .catch((response)=>{
+        console.log(response);
+        alert(response);
+
+      });
+      console.log(usuarios);
+
+      //   loggedUser = usuarios.data.data;
+    }
+
     // if (loggedUser) {
     //   await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
     //   return {
