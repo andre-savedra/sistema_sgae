@@ -78,16 +78,17 @@ export default {
       alert(
         "users:\n" + users + "\n" + users.data.username + "\n" + users.data.id
       );
-      const usuarios = await $axios.get(server + "usuarios/" + users.data.id)
-      .then((response)=>{
-        console.log(response);
-        alert(response);
-      })
-      .catch((response)=>{
-        console.log(response);
-        alert(response);
-
-      });
+      const usuarios = await fetch((server + "usuarios/" + users.data.id))
+      // const usuarios = await $axios
+      //   .get(server + "usuarios/" + users.data.id)
+      //   .then((response) => {
+      //     console.log(response);
+      //     alert(response);
+      //   })
+      //   .catch((response) => {
+      //     console.log(response);
+      //     alert(response);
+      //   });
       console.log(usuarios);
 
       //   loggedUser = usuarios.data.data;
