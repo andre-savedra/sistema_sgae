@@ -61,6 +61,8 @@ export default {
     this.flipper();
   },
   async asyncData({ $axios, $auth }) {
+    console.log($auth)
+
     //cheack if there is value storaged
     const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
     if (valueStoraged) {
@@ -69,11 +71,20 @@ export default {
     }
 
     const server = process.env.BASE_URL + "/";
-    console.log($auth)
-    console.log($auth.strategy)
-    const users = await $axios.get(server + "api/v1/users/me/");
-    console.log("users");
-    console.log(users);
+
+    let users = $auth.$storage.getUniversal("user");
+
+    if(users)
+    {
+      alert("encontrou cookie users:\n" + JSON.stringify(users))
+    }
+    else{
+      alert("não encontrou cookie user");
+      users = await $axios.get(server + "api/v1/users/me/");
+      console.log("users requisitado:");
+      console.log(users);
+    }
+   
 
     let loggedUser = null;
 
@@ -81,6 +92,9 @@ export default {
       alert(
         "users:\n" + users + "\n" + users.data.username + "\n" + users.data.id
       );
+
+      alert("token: \n" + $auth.$storage._state._token.local)
+
       // alert($auth.strategy.token.get())
       // const usuarios = await fetch((server + "usuarios/" + users.data.id));
       await $axios.get((server + "usuarios/" + users.data.id)).then((response) => {
@@ -93,10 +107,7 @@ export default {
           console.log("response catch error");
           console.log(response);
           alert(response);
-
-        });
-
-          
+        });          
 
     
     }
