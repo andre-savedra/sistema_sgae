@@ -108,7 +108,8 @@ export default {
         loggedUser = await usuarios.json();        
         loggedUser = loggedUser.data;
         console.log(loggedUser);
-        alert(loggedUser);
+        alert("loggedUser original:" + loggedUser);
+        alert(JSON.stringify(loggedUser));
       }
 
       // await $axios.get((server + "usuarios/" + users.id)).then((response) => {
