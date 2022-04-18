@@ -79,8 +79,7 @@ export default {
         "users:\n" + users + "\n" + users.data.username + "\n" + users.data.id
       );
       // const usuarios = await fetch((server + "usuarios/" + users.data.id));
-      const usuarios = await $axios
-        .get((server + "usuarios/" + users.data.id))
+      const usuarios = await $axios.get((server + "usuarios/" + users.data.id))
         .then((response) => {
           console.log(response);
           alert(response);
@@ -91,7 +90,9 @@ export default {
         });
       console.log(usuarios);
 
-      loggedUser = usuarios.data.data;
+      // loggedUser = usuarios.data.data;
+      console.log("USARIOOOOOOOOOOOOOO");
+      console.log(usuarios);
     }
 
     if (loggedUser) {
