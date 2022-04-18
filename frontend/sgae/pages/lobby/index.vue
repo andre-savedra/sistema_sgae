@@ -5,11 +5,12 @@
         <img v-if="flip" class="back" src="@/assets/media/sgae.png" />
         <img v-else class="front" src="@/assets/media/sgae.png" />
       </div>
-      <h1 v-if="loggedUser.nome">
+      <!-- <h1 v-if="loggedUser.nome">
         &#10024; {{ loggedUser.nome.split(" ")[0] }}, preparando seu ambiente!
         &#10024;
       </h1>
-      <h1 v-else>&#10024; Preparando seu ambiente! &#10024;</h1>
+      <h1 v-else>&#10024; Preparando seu ambiente! &#10024;</h1> -->
+      <h1>&#10024; Preparando seu ambiente! &#10024;</h1>
     </section>
     <footer class="p-d-flex p-flex-column p-jc-center p-ai-end">
       <h3>Sistema de Gestão de Ambiente de Ensino</h3>
@@ -25,7 +26,7 @@
 export default {
   name: "lobby",
   layout: "login",
-  // middleware: "auth",
+  middleware: "auth",
   data() {
     return {
       flip: false,
@@ -61,35 +62,29 @@ export default {
   },
   async asyncData({ $axios, $auth }) {
     //cheack if there is value storaged
-    const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
-    if (valueStoraged) {
-      console.log("Storaged already defined");
-      console.log(valueStoraged);
-    }
+    // const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
+    // if (valueStoraged) {
+    //   console.log("Storaged already defined");
+    //   console.log(valueStoraged);
+    // }
 
-    const server = process.env.BASE_URL + "/";
-    const users = await $axios.get(server + "api/v1/users/me/");
-    // console.log("users");
-    // console.log(users);
+    // const server = process.env.BASE_URL + "/";
+    // const users = await $axios.get(server + "api/v1/users/me/");
+   
+    // let loggedUser = null;
 
-    let loggedUser = null;
-
-    if (users) {
-      const usuarios = await $axios.get(server + "usuarios/" + users.data.id);
-      // console.log("usuarios");
-      // console.log(usuarios);
-      loggedUser = usuarios.data.data;
-    }
-
-    // console.log("user async");
-    // console.log(loggedUser);
-
-    if (loggedUser) {
-      await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-      return {
-        loggedUser,
-      };
-    }
+    // if (users) {
+    //   const usuarios = await $axios.get(server + "usuarios/" + users.data.id);
+   
+    //   loggedUser = usuarios.data.data;
+    // }
+   
+    // if (loggedUser) {
+    //   await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+    //   return {
+    //     loggedUser,
+    //   };
+    // }
   },
 };
 </script>
