@@ -296,39 +296,39 @@ export default {
 
       if (imageLocation !== null && imageLocation !== undefined) {
         formData.append("image", imageLocation);
-        alert("tem foto na localização: " + imageLocation);
+        // alert("tem foto na localização: " + imageLocation);
       } 
       else {
-        alert("não tem foto");
+        // alert("não tem foto");
       }
 
-      alert(
-        "formData: \n" +
-          "nome:" +
-          this.userSec[0].nome +
-          "\n" +
-          "idUserFK:" +
-          this.userSec[0].idUserFK +
-          "\n" +
-          "email:" +
-          this.userSec[0].email +
-          "\n" +
-          "fone:" +
-          this.userSec[0].fone +
-          "\n" +
-          "ativo:" +
-          "false" +
-          "\n" +
-          "idNivelAcessoFK:" +
-          this.userSec[0].idNivelAcessoFK +
-          "\n" +
-          "image:" +
-          this.userPhoto[0].name +
-          "\n" +
-          "image:" +
-          this.userPhoto[0].size +
-          "\n"
-      );
+      // alert(
+      //   "formData: \n" +
+      //     "nome:" +
+      //     this.userSec[0].nome +
+      //     "\n" +
+      //     "idUserFK:" +
+      //     this.userSec[0].idUserFK +
+      //     "\n" +
+      //     "email:" +
+      //     this.userSec[0].email +
+      //     "\n" +
+      //     "fone:" +
+      //     this.userSec[0].fone +
+      //     "\n" +
+      //     "ativo:" +
+      //     "false" +
+      //     "\n" +
+      //     "idNivelAcessoFK:" +
+      //     this.userSec[0].idNivelAcessoFK +
+      //     "\n" +
+      //     "image:" +
+      //     this.userPhoto[0].name +
+      //     "\n" +
+      //     "image:" +
+      //     this.userPhoto[0].size +
+      //     "\n"
+      // );
       console.log("formData");
       console.log(formData);
 

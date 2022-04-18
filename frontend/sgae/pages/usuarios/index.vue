@@ -44,7 +44,7 @@
                 >
                   <Avatar
                     v-if="user.image"
-                    :image="$store.state.BASE_URL_IMG + user.image"
+                    :image="user.image"
                     size="large"
                     shape="circle"
                   />
