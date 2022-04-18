@@ -94,7 +94,7 @@ export default {
         "users:\n" + users + "\n" + users.username + "\n" + users.id
       );
 
-      alert("token: \n" + $auth.$storage.getUniversal("token"))
+      alert("token: \n" + $auth.strategy.token.get())
 
       // alert($auth.strategy.token.get())
       // const usuarios = await fetch((server + "usuarios/" + users.data.id));
