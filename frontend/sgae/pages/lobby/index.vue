@@ -103,7 +103,9 @@ export default {
       }).then((response)=>{
         console.log("usuarios:");
         console.log(response);
-        console.log(response.data);
+        console.log(response.responseText);
+        console.log(JSON.parse(response.responseText));
+
       }).catch((error)=>{
         alert("erro fetch:\n" + error);
       });
