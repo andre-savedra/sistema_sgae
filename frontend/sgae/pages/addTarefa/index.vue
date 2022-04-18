@@ -572,6 +572,7 @@ export default {
             .then((awsResponse) => {
               console.log("save aws file " + index);
               console.log(awsResponse);
+              alert("salvou na aws:" + awsResponse.location)
               photoLocations.push(awsResponse)
             })
             .catch((err) => {
@@ -581,8 +582,9 @@ export default {
         })
       );
 
-      if(photoLocations.length > 0 && hasError === false)      
-        this.postPhoto(photoLocations);      
+      if(photoLocations.length > 0 && hasError === false){
+        this.postPhoto(photoLocations);        
+      }   
       else
         alert("erro  ao salvar na aws s3")
       

@@ -21,8 +21,8 @@
 <script>
 export default {
   name: "lobby",
-  layout: "login2",
-  middleware: "auth",
+  layout: "login",
+  // middleware: "auth",
   data() {
     return {
       flip: false,
@@ -60,40 +60,7 @@ export default {
     this.flipper();
   },
 
-  async asyncData({ $axios, $auth }) {
-
-    //cheack if there is value storaged
-    const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
-    if(valueStoraged){
-      console.log("Storaged already defined");
-      console.log(valueStoraged)
-    }    
-
-    const server = (process.env.BASE_URL + "/");
-    const users = await $axios.get(server + "api/v1/users/me/");
-    // console.log("users");
-    // console.log(users);
-
-    let loggedUser = null;
-
-    if (users) {
-      const usuarios = await $axios.get(server + "usuarios/" + users.data.id);
-      // console.log("usuarios");
-      // console.log(usuarios);
-      loggedUser = usuarios.data.data;
-    }
-
-    // console.log("user async");
-    // console.log(loggedUser);
-
-    if(loggedUser){
-      await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-      return {
-        loggedUser,
-      };
-    }
-
-  },
+ 
 };
 </script>
 
