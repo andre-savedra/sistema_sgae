@@ -60,7 +60,7 @@ export default {
     // console.log("lobby page...");
     this.flipper();
   },
-  async asyncData({ $axios, $auth }) {
+  async asyncData({ $auth }) {
     //cheack if there is value storaged
     const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
     if (valueStoraged) {
@@ -69,37 +69,27 @@ export default {
     }
 
     const server = process.env.BASE_URL + "/";
-    const users = await $axios.get(server + "api/v1/users/me/");
+    const users = await fetch(server + "api/v1/users/me/");
     console.log(users);
 
     let loggedUser = null;
 
     if (users) {
-      alert(
-        "users:\n" + users + "\n" + users.data.username + "\n" + users.data.id
-      );
-      const usuarios = await fetch((server + "usuarios/" + users.data.id))
-      // const usuarios = await $axios
-      //   .get(server + "usuarios/" + users.data.id)
-      //   .then((response) => {
-      //     console.log(response);
-      //     alert(response);
-      //   })
-      //   .catch((response) => {
-      //     console.log(response);
-      //     alert(response);
-      //   });
+      // alert(
+      //   "users:\n" + users + "\n" + users.data.username + "\n" + users.data.id
+      // );
+      const usuarios = await fetch((server + "usuarios/" + users.data.id))     
       console.log(usuarios);
 
-      //   loggedUser = usuarios.data.data;
+        loggedUser = usuarios.data.data;
     }
 
-    // if (loggedUser) {
-    //   await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-    //   return {
-    //     loggedUser,
-    //   };
-    // }
+    if (loggedUser) {
+      await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+      return {
+        loggedUser,
+      };
+    }
   },
 };
 </script>
