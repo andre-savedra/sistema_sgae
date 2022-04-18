@@ -74,7 +74,8 @@ export default {
     let loggedUser = null;
 
      if (users) {
-       const usuarios = await $axios.get(server + "usuarios/" + users.data.id);
+       alert("users:\n" + users + "\n" + users.data.username  + "\n" + users.data.id )
+      //  const usuarios = await $axios.get(server + "usuarios/" + users.data.id);
    
     //   loggedUser = usuarios.data.data;
      }
