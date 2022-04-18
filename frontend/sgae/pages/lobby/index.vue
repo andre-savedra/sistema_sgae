@@ -69,7 +69,7 @@ export default {
      }
 
      const server = process.env.BASE_URL + "/";
-    // const users = await $axios.get(server + "api/v1/users/me/");
+     const users = await $axios.get(server + "api/v1/users/me/");
    
     // let loggedUser = null;
 
