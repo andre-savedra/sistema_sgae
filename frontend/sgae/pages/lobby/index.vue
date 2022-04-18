@@ -71,13 +71,13 @@ export default {
      const server = process.env.BASE_URL + "/";
      const users = await $axios.get(server + "api/v1/users/me/");
    
-    // let loggedUser = null;
+    let loggedUser = null;
 
-    // if (users) {
-    //   const usuarios = await $axios.get(server + "usuarios/" + users.data.id);
+     if (users) {
+       const usuarios = await $axios.get(server + "usuarios/" + users.data.id);
    
     //   loggedUser = usuarios.data.data;
-    // }
+     }
    
     // if (loggedUser) {
     //   await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
