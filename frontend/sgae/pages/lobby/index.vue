@@ -97,15 +97,13 @@ export default {
         },
       })
         .then((response) => {
-
           if (response) {
             loggedUser = await response.json();
             loggedUser = loggedUser.data;
             console.log(loggedUser);
             alert("loggedUser original:" + loggedUser);
             alert(JSON.stringify(loggedUser));
-          }
-          else{
+          } else {
             alert("response vazia");
           }
         })
