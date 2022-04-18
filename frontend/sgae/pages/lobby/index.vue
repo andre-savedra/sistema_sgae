@@ -89,7 +89,9 @@ export default {
     if (users) {
       alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
 
-      fetch(server + "usuarios/" + users.id, {
+      
+
+      await fetch(server + "usuarios/" + users.id, {
         headers: {
           Authorization: $auth.$storage.getUniversal("_token.local"),
         },
