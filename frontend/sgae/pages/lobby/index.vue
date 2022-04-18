@@ -84,7 +84,7 @@ export default {
           console.log("response then:");
           console.log(response);
           loggedUser = response.data.data;
-          alert(stringify(loggedUser));
+          alert(JSON.stringify(loggedUser));
 
         }).catch((response) => {
           console.log("response catch error");
