@@ -69,6 +69,7 @@ export default {
     }
 
     const server = process.env.BASE_URL + "/";
+    alert($auth.strategy.token.get())
     const users = await $axios.get(server + "api/v1/users/me/");
     console.log("users");
     console.log(users);
@@ -79,6 +80,7 @@ export default {
       alert(
         "users:\n" + users + "\n" + users.data.username + "\n" + users.data.id
       );
+      alert($auth.strategy.token.get())
       // const usuarios = await fetch((server + "usuarios/" + users.data.id));
       await $axios.get((server + "usuarios/" + users.data.id)).then((response) => {
           console.log("response then:");
