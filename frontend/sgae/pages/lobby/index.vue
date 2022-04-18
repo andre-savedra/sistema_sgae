@@ -96,19 +96,30 @@ export default {
 
       alert("token: \n" + $auth.$storage.getUniversal("_token.local"))
 
-      // alert($auth.strategy.token.get())
-      // const usuarios = await fetch((server + "usuarios/" + users.data.id));
-      await $axios.get((server + "usuarios/" + users.id)).then((response) => {
-          console.log("response then:");
-          console.log(response);
-          loggedUser = response.data.data;
-          alert(JSON.stringify(loggedUser));
+      const usuarios = await fetch((server + "usuarios/" + users.id), {
+        headers: {
+          "Authorization": $auth.$storage.getUniversal("_token.local")
+        }
+      });
 
-        }).catch((response) => {
-          console.log("response catch error");
-          console.log(response);
-          alert(response);
-        });          
+      if(usuarios){
+        loggedUser = usuarios.data.data;
+        alert(JSON.stringify(loggedUser));
+      }
+
+      // await $axios.get((server + "usuarios/" + users.id)).then((response) => {
+      //     console.log("response then:");
+      //     console.log(response);
+      //     loggedUser = response.data.data;
+      //     alert(JSON.stringify(loggedUser));
+
+      //   }).catch((response) => {
+      //     console.log("response catch error");
+      //     console.log(response);
+      //     alert(response);
+      //   });          
+
+
 
     
     }
