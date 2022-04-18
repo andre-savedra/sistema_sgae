@@ -33,17 +33,6 @@ class Status(models.Model):
         return self.nome
 
 
-def upload_image_task(instance, filename):
-    return f"{instance.idTarefaFK}-{instance.idStatusFK}-{timezone.now()}-{filename}"
-
-def upload_image_teste(instance, filename):
-    return f"{timezone.now()}-{filename}"
-
-def upload_image_user(instance, filename):
-    # return f"{filename}"
-    return f"{instance.idUserFK}-{timezone.now()}-{filename}"
-
-
 class Usuarios(models.Model):
     nome = models.CharField(max_length=55)
     idUserFK = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
@@ -51,7 +40,7 @@ class Usuarios(models.Model):
     fone = models.CharField(max_length=15)
     ativo = models.BooleanField(default=False)
     idNivelAcessoFK = models.ForeignKey(Cargos, related_name="cargo", blank=True, null=True, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=upload_image_user, blank=True, null=True)
+    image = models.CharField(max_length=1500, blank=True, null=True)
     uid = models.CharField(max_length=55, blank=True, null=True)
     token = models.CharField(max_length=1000, blank=True, null=True)
     
@@ -95,7 +84,7 @@ class Fotos(models.Model):
     nome = models.CharField(max_length=55, blank=True, null=True)
     idTarefaFK = models.ForeignKey(Tarefas, on_delete=models.CASCADE, blank=True, null=True)
     idStatusFK = models.ForeignKey(Status, on_delete=models.CASCADE, blank=True, null=True)
-    image = models.FileField(upload_to=upload_image_task, blank=True, null=True)
+    image = models.CharField(max_length=1500, blank=True, null=True)
     
     def __str__(self):
         return self.nome

@@ -21,7 +21,7 @@
       <div class="carousel-inner" v-if="photos.length > 0">
         <div class="carousel-item active">
           <ImagePreview
-            :src="url + photos[0].image"
+            :src="photos[0].image"
             :alt="photos[0].nome"
             preview
           />
@@ -33,7 +33,7 @@
         >
           <ImagePreview
             v-if="photosCopy"
-            :src="url + photo.image"
+            :src="photo.image"
             :alt="photo.nome"
             preview
           />
@@ -69,11 +69,10 @@
 <script>
 export default {
   name: "CustomCarousel",
-  props: ["photos", "background", "baseURL", "targetID"],
+  props: ["photos", "background", "targetID"],
   data() {
     return {
       photosCopy: null,
-      url: this.baseURL,
     };
   },
   computed: {

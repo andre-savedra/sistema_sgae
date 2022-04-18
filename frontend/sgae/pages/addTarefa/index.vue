@@ -132,7 +132,7 @@
                 :multiple="true"
                 accept="image/jpeg,image/png"
                 :maxFileSize="10000000"
-                @upload="postPhoto($event)"
+                @upload="savePhotoAWS($event)"
                 class="customFileUpload"
                 id="imageUpload"
                 chooseLabel="Adicionar fotos"
@@ -158,7 +158,12 @@
       </div>
     </div>
     <div class="buttons p-d-flex p-flex-row p-jc-evenly p-ai-center">
-      <Button class="btn-send" :disabled="btnDisabled" label="Enviar" @click="checkMode()" />
+      <Button
+        class="btn-send"
+        :disabled="btnDisabled"
+        label="Enviar"
+        @click="checkMode()"
+      />
       <Button class="btn-clean" label="Limpar" @click="cleanForm()" />
     </div>
   </div>
@@ -166,6 +171,7 @@
 
 <script>
 import AsyncUserStoraged from "@/assets/scripts/asyncUserStoraged";
+import AwsS3Task from "@/assets/scripts/awsS3Task.js";
 
 export default {
   extends: AsyncUserStoraged,
@@ -186,6 +192,8 @@ export default {
       deadline: null,
       photos: [],
       uploadPhotoStarted: false,
+      S3Client: null,
+      filesToBeUploaded: null,
       task: [
         {
           nome: null,
@@ -199,7 +207,7 @@ export default {
         },
       ],
       updateModeId: 0,
-      btnDisabled: false
+      btnDisabled: false,
     };
   },
   methods: {
@@ -543,19 +551,54 @@ export default {
             this.btnDisabled = false;
           });
     },
-    postPhoto: async function (event) {
+    savePhotoAWS: async function (event) {
+      this.filesToBeUploaded = event.files;
+      let photoLocations = [];
+      let hasError = false;
+
+      this.uploadPhotoStarted = true;
+      await Promise.all(
+        this.filesToBeUploaded.map(async (file, index) => {
+          const photoName =
+            this.taskID.toString() +
+            "-" +
+            this.task[0].idStatusFK.toString() +
+            "-" +
+            index.toString();
+
+          //aws S3: SAVE PHOTO
+          //"idTarefa-idStatus-indexPhoto"
+          await this.S3Client.uploadFile(file, photoName)
+            .then((awsResponse) => {
+              console.log("save aws file " + index);
+              console.log(awsResponse);
+              photoLocations.push(awsResponse)
+            })
+            .catch((err) => {
+              console.error(err);
+              hasError = true;
+            });
+        })
+      );
+
+      if(photoLocations.length > 0 && hasError === false)      
+        this.postPhoto(photoLocations);      
+      else
+        alert("erro  ao salvar na aws s3")
+      
+
+    },
+    postPhoto: async function (photoLocations) {
       // console.log(event);
-      const files = event.files;
       const taskID = this.taskID;
       const initialStatus = this.initialStatus;
-      this.uploadPhotoStarted = true;
-
-      await files.forEach((file) => {
+      
+      await photoLocations.forEach((photoLocation) => {
         let formData = new FormData();
-        formData.append("nome", file.name);
+        formData.append("nome", photoLocation.key);
         formData.append("idTarefaFK", taskID);
         formData.append("idStatusFK", initialStatus);
-        formData.append("image", file);
+        formData.append("image", photoLocation.location);
 
         this.$axios
           .$post(this.$store.state.BASE_URL + "fotos/", formData, {
@@ -646,6 +689,8 @@ export default {
         this.getUsers();
         this.getEnviroments();
       }
+
+      this.S3Client = AwsS3Task.awsManager();
     }
   },
 };

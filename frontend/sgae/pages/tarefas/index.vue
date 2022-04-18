@@ -92,7 +92,7 @@
               <img
                 v-if="slotProps.data.fotos[0]"
                 :src="
-                  $store.state.BASE_URL_IMGV + slotProps.data.fotos[0].image
+                  slotProps.data.fotos[0].image
                 "
                 alt="Foto Tarefa"
               />

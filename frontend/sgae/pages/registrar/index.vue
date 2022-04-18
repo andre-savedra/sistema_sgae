@@ -205,6 +205,20 @@ export default {
     resetPage() {
       this.$router.push("reset");
     },
+    savePhotoAWS: async function (photoName) {
+      //aws S3: SAVE PHOTO
+      this.S3Client.uploadFile(this.userPhoto[0], photoName)
+        .then((awsResponse) => {
+          console.log(awsResponse);
+          this.postUsuario(awsResponse.location);
+        })
+        .catch((err) => {
+          console.error(err);
+          this.btnUploadLabel = this.btnInitialLabel;
+          this.userPhoto = null;
+          this.btnDisabled = false;
+        });
+    },
     postUser: async function () {
       this.userAuth.username = this.userAuth.username.toString();
 
@@ -220,7 +234,7 @@ export default {
         )
         .then((response) => {
           if (response.email === this.userAuth.email) {
-            alert("email bateu!");
+            console.log("email bateu!");
             this.userSec[0].email = this.userAuth.email;
             this.userSec[0].idNivelAcessoFK = this.jobSelected.id;
             this.userSec[0].idUserFK = response.id;
@@ -230,7 +244,8 @@ export default {
               .replaceAll(" ", "")
               .replaceAll("-", "");
             console.log(response);
-            this.postUsuario();
+
+            this.savePhotoAWS(response.id);
           } else {
             console.log("Error:");
             this.btnUploadLabel = this.btnInitialLabel;
@@ -270,145 +285,78 @@ export default {
           this.userPhoto = null;
         });
     },
-    postUsuario: async function () {
-      if (this.userPhoto !== undefined && this.userPhoto !== null) {
-        alert("tem foto");
-        let formData = new FormData();
-        formData.append("nome", this.userSec[0].nome);
-        formData.append("idUserFK", this.userSec[0].idUserFK);
-        formData.append("email", this.userSec[0].email);
-        formData.append("fone", this.userSec[0].fone);
-        formData.append("ativo", false);
-        formData.append("idNivelAcessoFK", this.userSec[0].idNivelAcessoFK);
-        formData.append("image", this.userPhoto[0]);
+    postUsuario: async function (imageLocation) {
+      let formData = new FormData();
+      formData.append("nome", this.userSec[0].nome);
+      formData.append("idUserFK", this.userSec[0].idUserFK);
+      formData.append("email", this.userSec[0].email);
+      formData.append("fone", this.userSec[0].fone);
+      formData.append("ativo", false);
+      formData.append("idNivelAcessoFK", this.userSec[0].idNivelAcessoFK);
 
-        alert(
-          "formData: \n" +
-            "nome:" +
-            this.userSec[0].nome +
-            "\n" +
-            "idUserFK:" +
-            this.userSec[0].idUserFK +
-            "\n" +
-            "email:" +
-            this.userSec[0].email +
-            "\n" +
-            "fone:" +
-            this.userSec[0].fone +
-            "\n" +
-            "ativo:" +
-            "false" +
-            "\n" +
-            "idNivelAcessoFK:" +
-            this.userSec[0].idNivelAcessoFK +
-            "\n" +
-            "image:" +
-            this.userPhoto[0].name +
-            "\n" +
-            "image:" +
-            this.userPhoto[0].size +
-            "\n"
-        );
-        console.log("formData");
-        console.log(formData);
-
-        this.$axios
-          .$post(this.$store.state.BASE_URL + "cadastroUsuario/", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((response) => {
-            console.log(response);
-            if (response.msg !== undefined) {
-              alert(response.msg);
-            }
-            this.btnDisabled = false;
-            this.btnUploadLabel = this.btnInitialLabel;
-            this.userPhoto = null;
-            this.$router.push("/");
-          })
-          .catch((response) => {
-            alert("Problema ao tentar registrar usuário");
-            this.btnDisabled = false;
-            this.btnUploadLabel = this.btnInitialLabel;
-            this.userPhoto = null;
-            console.log(response);
-          });
-      } else {
+      if (imageLocation !== null && imageLocation !== undefined) {
+        formData.append("image", imageLocation);
+        alert("tem foto na localização: " + imageLocation);
+      } 
+      else {
         alert("não tem foto");
-
-        alert(
-          "body: \n" +
-            "nome:" +
-            this.userSec[0].nome +
-            "\n" +
-            "idUserFK:" +
-            this.userSec[0].idUserFK +
-            "\n" +
-            "email:" +
-            this.userSec[0].email +
-            "\n" +
-            "fone:" +
-            this.userSec[0].fone +
-            "\n" +
-            "ativo:" +
-            "false" +
-            "\n" +
-            "idNivelAcessoFK:" +
-            this.userSec[0].idNivelAcessoFK +
-            "\n"
-        );
-
-        let formData = new FormData();
-        formData.append("nome", this.userSec[0].nome);
-        formData.append("idUserFK", this.userSec[0].idUserFK);
-        formData.append("email", this.userSec[0].email);
-        formData.append("fone", this.userSec[0].fone);
-        formData.append("ativo", false);
-        formData.append("idNivelAcessoFK", this.userSec[0].idNivelAcessoFK);
-
-        await this.$axios
-          .$post(this.$store.state.BASE_URL + "cadastroUsuario/", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((response) => {
-            this.btnDisabled = false;
-            if (response.msg !== undefined) {
-              alert(response.msg);
-            }
-            this.$router.push("/");
-          })
-          .catch((response) => {
-            alert("Problema ao tentar registrar usuário");
-            this.btnDisabled = false;
-            console.log(response);
-          });
       }
+
+      alert(
+        "formData: \n" +
+          "nome:" +
+          this.userSec[0].nome +
+          "\n" +
+          "idUserFK:" +
+          this.userSec[0].idUserFK +
+          "\n" +
+          "email:" +
+          this.userSec[0].email +
+          "\n" +
+          "fone:" +
+          this.userSec[0].fone +
+          "\n" +
+          "ativo:" +
+          "false" +
+          "\n" +
+          "idNivelAcessoFK:" +
+          this.userSec[0].idNivelAcessoFK +
+          "\n" +
+          "image:" +
+          this.userPhoto[0].name +
+          "\n" +
+          "image:" +
+          this.userPhoto[0].size +
+          "\n"
+      );
+      console.log("formData");
+      console.log(formData);
+
+      this.$axios
+        .$post(this.$store.state.BASE_URL + "cadastroUsuario/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          if (response.msg !== undefined) {
+            alert(response.msg);
+          }
+          this.btnDisabled = false;
+          this.btnUploadLabel = this.btnInitialLabel;
+          this.userPhoto = null;
+          this.$router.push("/");
+        })
+        .catch((response) => {
+          alert("Problema ao tentar registrar usuário");
+          this.btnDisabled = false;
+          this.btnUploadLabel = this.btnInitialLabel;
+          this.userPhoto = null;
+          console.log(response);
+        });
     },
-    // postUsuario: async function () {
-    //   await this.$axios
-    //     .$post(
-    //       this.$store.state.BASE_URL + "usuarios/",
-    //       JSON.stringify(this.userSec),
-    //       {
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //       }
-    //     )
-    //     .then((response) => {
-    //       this.btnDisabled = false;
-    //       this.$router.push("/");
-    //     })
-    //     .catch((response) => {
-    //       alert("Problema ao tentar registrar usuário");
-    //       this.btnDisabled = false;
-    //       console.log(response);
-    //     });
-    // },
+
     postPhoto: async function (event) {
       console.log("postPhoto");
       console.log(event);
@@ -426,12 +374,6 @@ export default {
             );
         else this.btnUploadLabel = this.userPhoto[0].name;
       }
-
-      //test aws S3:
-
-      this.S3Client.uploadFile(this.userPhoto[0], ("1-" + this.userPhoto[0].name))
-        .then((data) => console.log(data))
-        .catch((err) => console.error(err));
     },
     sendRegister: async function () {
       console.log("tentando registrar....");
@@ -468,7 +410,7 @@ export default {
     this.getJobs();
 
     this.S3Client = AwsS3Users.awsManager();
-    console.log(this.S3Client);
+    // console.log(this.S3Client);
   },
 };
 </script>

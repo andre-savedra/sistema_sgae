@@ -193,14 +193,14 @@ export async function setContext (app, context) {
   if (!app.context) {
     app.context = {
       isStatic: process.static,
-      isDev: false,
+      isDev: true,
       isHMR: false,
       app,
       store: app.store,
       payload: context.payload,
       error: context.error,
       base: app.router.options.base,
-      env: {"BASE_URL":"http://localhost:8003","NUXT_ENV_ACCESSKEY_ID":"qualquer","NUXT_ENV_BUCKET_NAME":"","NUXT_ENV_DIR_NAME_USERS":"qualquer","NUXT_ENV_REGION":"us-east-1","NUXT_ENV_SECRET_ACESSKEY_ID":"qualquer"}
+      env: {"BASE_URL":"http://localhost:8003","NUXT_ENV_ACCESSKEY_ID":"AKIA3BTOWQCMSJWX5KGT","NUXT_ENV_BUCKET_NAME":"sgae-storage","NUXT_ENV_DIR_NAME_TASK":"tarefas","NUXT_ENV_DIR_NAME_USERS":"usuarios","NUXT_ENV_REGION":"us-east-1","NUXT_ENV_SECRET_ACESSKEY_ID":"NMgOtOFg60UX7bEObNrfjxMs9QqAa3febDgeiinB"}
     }
     // Only set once
 
@@ -279,7 +279,7 @@ export async function setContext (app, context) {
   app.context.next = context.next
   app.context._redirected = false
   app.context._errored = false
-  app.context.isHMR = false
+  app.context.isHMR = Boolean(context.isHMR)
   app.context.params = app.context.route.params || {}
   app.context.query = app.context.route.query || {}
 }
@@ -297,6 +297,9 @@ export function middlewareSeries (promises, appContext) {
 export function promisify (fn, context) {
   let promise
   if (fn.length === 2) {
+      console.warn('Callback-based asyncData, fetch or middleware calls are deprecated. ' +
+        'Please switch to promises or async/await syntax')
+
     // fn(context, callback)
     promise = new Promise((resolve) => {
       fn(context, function (err, data) {

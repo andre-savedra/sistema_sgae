@@ -103,10 +103,7 @@
                 >
                 <label class="lblBasic" for="requester">
                   <Avatar
-                    :image="
-                      $store.state.BASE_URL_IMG +
-                      this.task[0].idTarefaFK.idSolicitanteFK.image
-                    "
+                    :image="this.task[0].idTarefaFK.idSolicitanteFK.image"
                     size="large"
                     shape="circle"
                   />
@@ -129,10 +126,7 @@
                 <div v-for="(taskElement, index) in task" :key="index">
                   <label class="lblBasic" for="requester">
                     <Avatar
-                      :image="
-                        $store.state.BASE_URL_IMG +
-                        taskElement.idUsuarioFK.image
-                      "
+                      :image="taskElement.idUsuarioFK.image"
                       size="large"
                       shape="circle"
                     />
@@ -198,7 +192,6 @@
                     v-if="photos[0].length > 0"
                     :photos="photos[0]"
                     background="white"
-                    :baseURL="$store.state.BASE_URL_IMG"
                     targetID="CarouselAddTask"
                   />
                 </div>
@@ -317,7 +310,6 @@
                     v-if="photos[0].length > 0"
                     :photos="photos[0]"
                     background="white"
-                    :baseURL="$store.state.BASE_URL_IMG"
                     targetID="CarouselDiagnostic"
                   />
                 </div>
@@ -350,7 +342,6 @@
                     v-if="photos[1].length > 0"
                     :photos="photos[1]"
                     background="white"
-                    :baseURL="$store.state.BASE_URL_IMG"
                     targetID="CarouselResult"
                   />
                   <div v-else>
@@ -403,7 +394,7 @@
                 :multiple="true"
                 accept="image/jpeg,image/png"
                 :maxFileSize="10000000"
-                @upload="postPhoto"
+                @upload="savePhotoAWS($event)"
                 class="customFileUpload"
                 id="imageUpload"
                 chooseLabel="Adicionar fotos"
@@ -483,6 +474,7 @@
 
 <script>
 import AsyncUserStoraged from "@/assets/scripts/asyncUserStoraged";
+import AwsS3Task from "@/assets/scripts/awsS3Task.js";
 
 export default {
   extends: AsyncUserStoraged,
@@ -491,13 +483,15 @@ export default {
   middleware: "auth",
   data() {
     return {
-      progressAllowed: '',
+      progressAllowed: "",
       emailPayload: null,
       viewMode: "overview", //overview or progress
       taskID: 1,
       initialStatus: 1,
       deadline: null,
       photos: [[], []],
+      filesToBeUploaded: null,
+      S3Client: null,
       task: null,
       actualUser: {
         id: null,
@@ -616,12 +610,10 @@ export default {
       });
     },
     progressTaskSubmit: async function () {
-      this.progressAllowed = '';
+      this.progressAllowed = "";
 
-      const post = await Promise.all([
-        this.postTaskStatus(),
-      ]);
-      
+      const post = await Promise.all([this.postTaskStatus()]);
+
       if (this.progressAllowed === "ok") {
         switch (this.newTaskStatusName) {
           case "Em andamento":
@@ -753,10 +745,9 @@ export default {
         .then((response) => {
           console.log(response);
           //request ok
-          if (response.msg === "Atualizado com sucesso") 
-            this.progressAllowed = 'ok'
-          else 
-            this.progressAllowed = 'permission'
+          if (response.msg === "Atualizado com sucesso")
+            this.progressAllowed = "ok";
+          else this.progressAllowed = "permission";
         })
         .catch((response) => {
           alert("Problema ao tentar cadastrar status da tarefa");
@@ -764,19 +755,49 @@ export default {
           this.progressAllowed = "error";
         });
     },
-    postPhoto: async function (event) {
-      console.log("postPhoto");
-      console.log(event);
-      const files = event.files;
+    savePhotoAWS: async function (event) {
+      this.filesToBeUploaded = event.files;
+      let photoLocations = [];
+      let hasError = false;
+      
+      await Promise.all(
+        this.filesToBeUploaded.map(async (file, index) => {
+          const photoName =
+            this.task[0].idTarefaFK.id.toString() +
+            "-" +
+            this.newTaskStatus.idStatusFK.toString() +
+            "-" +
+            index.toString();
+
+          //aws S3: SAVE PHOTO
+          //"idTarefa-idStatus-indexPhoto"
+          await this.S3Client.uploadFile(file, photoName)
+            .then((awsResponse) => {
+              console.log("save aws file " + index);
+              console.log(awsResponse);
+              photoLocations.push(awsResponse);
+            })
+            .catch((err) => {
+              console.error(err);
+              hasError = true;
+            });
+        })
+      );
+
+      if (photoLocations.length > 0 && hasError === false)
+        this.postPhoto(photoLocations);
+      else alert("erro  ao salvar na aws s3");
+    },
+    postPhoto: async function (photoLocations) {           
       const taskID = this.task[0].idTarefaFK.id;
       const initialStatus = this.newTaskStatus.idStatusFK;
 
-      await files.forEach((file) => {
+      await photoLocations.forEach((photoLocation) => {
         let formData = new FormData();
-        formData.append("nome", file.name);
+        formData.append("nome", photoLocation.key);
         formData.append("idTarefaFK", taskID);
         formData.append("idStatusFK", initialStatus);
-        formData.append("image", file);
+        formData.append("image", photoLocation.location);
 
         this.$axios
           .$post(this.$store.state.BASE_URL + "fotos/", formData, {
@@ -1003,6 +1024,8 @@ export default {
       this.getTaskUser(this.taskID);
       this.getTaskPhotos(this.taskID);
       this.getStatusType();
+
+      this.S3Client = AwsS3Task.awsManager();
     }
   },
 };
