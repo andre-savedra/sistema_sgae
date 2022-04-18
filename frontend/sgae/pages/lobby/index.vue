@@ -63,12 +63,12 @@ export default {
   async asyncData({ $axios, $auth }) {
     //cheack if there is value storaged
      const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
-    // if (valueStoraged) {
-    //   console.log("Storaged already defined");
-    //   console.log(valueStoraged);
-    // }
+    if (valueStoraged) {
+       console.log("Storaged already defined");
+       console.log(valueStoraged);
+     }
 
-    // const server = process.env.BASE_URL + "/";
+     const server = process.env.BASE_URL + "/";
     // const users = await $axios.get(server + "api/v1/users/me/");
    
     // let loggedUser = null;
