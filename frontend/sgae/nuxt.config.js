@@ -162,7 +162,7 @@ export default {
             propertyName: "auth_token",
           },
           user: {
-            url: (process.env.BASE_URL + "/cargos/"),
+            url: (process.env.BASE_URL + "/api/v1/users/me/"),
             method: "get",
             propertyName: false,
           },
