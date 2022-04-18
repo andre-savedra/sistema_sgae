@@ -103,7 +103,9 @@ export default {
       });
 
       if(usuarios){
-        loggedUser = usuarios.data.data;
+        console.log("usuarios:");
+        console.log(usuarios);
+        loggedUser = usuarios;
         alert(JSON.stringify(loggedUser));
       }
 
