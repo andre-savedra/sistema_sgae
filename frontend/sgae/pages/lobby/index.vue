@@ -74,30 +74,26 @@ export default {
     console.log(users);
 
     let loggedUser = null;
-    let meuUsuario = null;
 
     if (users) {
       alert(
         "users:\n" + users + "\n" + users.data.username + "\n" + users.data.id
       );
       // const usuarios = await fetch((server + "usuarios/" + users.data.id));
-      const usuarios = await $axios.get((server + "usuarios/" + users.data.id))
-        .then((response) => {
+      await $axios.get((server + "usuarios/" + users.data.id)).then((response) => {
           console.log("response then:");
           console.log(response);
-          meuUsuario = response;
-          alert(response);
-        })
-        .catch((response) => {
+          loggedUser = response.data.data;
+          alert(stringify(loggedUser));
+
+        }).catch((response) => {
           console.log("response catch error");
           console.log(response);
           alert(response);
+
         });
 
-        console.log("meuUsuario");
-        console.log(meuUsuario);
-        
-    
+          
 
     
     }
