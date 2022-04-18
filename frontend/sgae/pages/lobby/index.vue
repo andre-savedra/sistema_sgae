@@ -102,15 +102,12 @@ export default {
         }
       }).catch((error)=>{
         alert("erro fetch:\n" + error);
-      });
+      });     
 
-      loggedUser = await usuarios.json();
-
-      // if(usuarios){
-        
-      //   loggedUser = usuarios;
-      //   alert(JSON.stringify(loggedUser));
-      // }
+      if(usuarios){        
+        loggedUser = await usuarios.json();        
+        alert(loggedUser);
+      }
 
       // await $axios.get((server + "usuarios/" + users.id)).then((response) => {
       //     console.log("response then:");
@@ -122,11 +119,7 @@ export default {
       //     console.log("response catch error");
       //     console.log(response);
       //     alert(response);
-      //   });          
-
-
-
-    
+      //   });   
     }
 
     if (loggedUser) {
