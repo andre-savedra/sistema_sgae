@@ -62,7 +62,7 @@ export default {
   },
   async asyncData({ $axios, $auth }) {
     //cheack if there is value storaged
-    // const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
+     const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
     // if (valueStoraged) {
     //   console.log("Storaged already defined");
     //   console.log(valueStoraged);
