@@ -106,6 +106,7 @@ export default {
 
       if(usuarios){        
         loggedUser = await usuarios.json();        
+        console.log(loggedUser);
         alert(loggedUser);
       }
 
