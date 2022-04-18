@@ -96,18 +96,22 @@ export default {
 
       alert("token: \n" + $auth.$storage.getUniversal("_token.local"))
 
-      const usuarios = await fetch((server + "usuarios/" + users.id), {
+      await fetch((server + "usuarios/" + users.id), {
         headers: {
           "Authorization": $auth.$storage.getUniversal("_token.local")
         }
+      }).then((response)=>{
+        console.log("usuarios:");
+        console.log(response);
+      }).catch((error)=>{
+        alert("erro fetch:\n" + error);
       });
 
-      if(usuarios){
-        console.log("usuarios:");
-        console.log(usuarios);
-        loggedUser = usuarios;
-        alert(JSON.stringify(loggedUser));
-      }
+      // if(usuarios){
+        
+      //   loggedUser = usuarios;
+      //   alert(JSON.stringify(loggedUser));
+      // }
 
       // await $axios.get((server + "usuarios/" + users.id)).then((response) => {
       //     console.log("response then:");
