@@ -105,7 +105,8 @@ export default {
       });     
 
       if(usuarios){        
-        loggedUser = await usuarios.json().data;        
+        loggedUser = await usuarios.json();        
+        loggedUser = loggedUser.data;
         console.log(loggedUser);
         alert(loggedUser);
       }
