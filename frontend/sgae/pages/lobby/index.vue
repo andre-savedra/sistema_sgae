@@ -70,9 +70,11 @@ export default {
 
     const server = process.env.BASE_URL + "/";
     const users = await $axios.get(server + "api/v1/users/me/");
+    console.log("users");
     console.log(users);
 
     let loggedUser = null;
+    let meuUsuario = null;
 
     if (users) {
       alert(
@@ -81,18 +83,23 @@ export default {
       // const usuarios = await fetch((server + "usuarios/" + users.data.id));
       const usuarios = await $axios.get((server + "usuarios/" + users.data.id))
         .then((response) => {
+          console.log("response then:");
           console.log(response);
+          meuUsuario = response;
           alert(response);
         })
         .catch((response) => {
+          console.log("response catch error");
           console.log(response);
           alert(response);
         });
-      console.log(usuarios);
 
-      // loggedUser = usuarios.data.data;
-      console.log("USARIOOOOOOOOOOOOOO");
-      console.log(usuarios);
+        console.log("meuUsuario");
+        console.log(meuUsuario);
+        
+    
+
+    
     }
 
     if (loggedUser) {
