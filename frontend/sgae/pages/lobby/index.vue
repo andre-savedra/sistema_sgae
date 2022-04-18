@@ -103,6 +103,14 @@ export default {
             console.log(loggedUser);
             alert("loggedUser original:" + loggedUser);
             alert(JSON.stringify(loggedUser));
+
+            if(loggedUser){
+              await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+              return {
+                loggedUser,
+              };
+
+            }
           } else {
             alert("response vazia");
           }
@@ -124,12 +132,12 @@ export default {
       //   });
     }
 
-    if (loggedUser) {
-      await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-      return {
-        loggedUser,
-      };
-    }
+    // if (loggedUser) {
+    //   await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+    //   return {
+    //     loggedUser,
+    //   };
+    // }
   },
 };
 </script>
