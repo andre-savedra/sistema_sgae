@@ -91,7 +91,7 @@ export default {
       alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
 
 
-      const func1 = ()=>{
+      const func1 = async ()=>{
         console.log("func1");
         usuarios = await fetch(server + "usuarios/" + users.id, {
           headers: {
@@ -100,23 +100,22 @@ export default {
         })
       }
 
-      const func2 = ()=>{
+      const func2 = async ()=>{
         console.log("func2");
         loggedUser = await usuarios.json()
         loggedUser = loggedUser.data;
       }
 
-      const func3 = ()=>{
+      const func3 = async ()=>{
         console.log("func3");
         await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
       }
 
-      const tasks = [func1, func2, func3];
-      const callTasks = ()=>{
-        for (const task of tasks) {
-          await task();
-        }
-      }
+      Promise.all([
+        func1,
+        func2,
+        func3
+      ])
 
       callTasks();      
       
