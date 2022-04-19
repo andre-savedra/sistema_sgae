@@ -90,43 +90,16 @@ export default {
     if (users) {
       alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
 
+      usuarios = await fetch(server + "usuarios/" + users.id, {
+        headers: {
+          Authorization: $auth.$storage.getUniversal("_token.local"),
+        },
+      });
+      loggedUser = await usuarios.json();
+      loggedUser = await loggedUser.data;
+      await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
 
-      const func1 = async ()=>{
-        console.log("func1");
-        usuarios = await fetch(server + "usuarios/" + users.id, {
-          headers: {
-            Authorization: $auth.$storage.getUniversal("_token.local"),
-          },
-        })
-      }
-
-      const func2 = async ()=>{
-        console.log("func2");
-        loggedUser = await usuarios.json()
-        loggedUser = loggedUser.data;
-      }
-
-      const func3 = async ()=>{
-        console.log("func3");
-        await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-     
-      }
-      
-
-      const p = await Promise.all([
-        func1,
-        func2,
-        func3
-      ])
-
-      console.log("final")
-
-      
-
-      
     }
-
-   
   },
 };
 </script>
