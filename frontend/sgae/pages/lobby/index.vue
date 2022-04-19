@@ -111,7 +111,7 @@ export default {
         await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
       }
 
-      Promise.all([
+      const p = await Promise.all([
         func1,
         func2,
         func3
