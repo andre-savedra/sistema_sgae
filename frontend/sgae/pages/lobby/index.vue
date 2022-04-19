@@ -89,29 +89,38 @@ export default {
     if (users) {
       alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
 
-      
+      // const process = await Promise.all([
 
-      await fetch(server + "usuarios/" + users.id, {
+      // ])
+
+      console.log("antes");
+      const usuarios = await fetch(server + "usuarios/" + users.id, {
         headers: {
           Authorization: $auth.$storage.getUniversal("_token.local"),
         },
-      }).then((response) => {
-        if (response) {
-          loggedUser = response.json();
-          loggedUser = loggedUser.data;
-          console.log(loggedUser);
-          alert("loggedUser original:" + loggedUser);
-          alert(JSON.stringify(loggedUser));
-          //       if(loggedUser){
-          //         await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-          //         return {
-          //           loggedUser,
-          //         };
-          //       }
-        } else {
-          alert("response vazia");
-        }
       });
+      console.log("depois");
+
+      loggedUser = await usuarios.json();
+      console.log("depois 2");
+
+      // .then((response) => {
+      //   if (response) {
+      //     loggedUser = response.json();
+      //     loggedUser = loggedUser.data;
+      //     console.log(loggedUser);
+      //     alert("loggedUser original:" + loggedUser);
+      //     alert(JSON.stringify(loggedUser));
+      //       if(loggedUser){
+      //         await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+      //         return {
+      //           loggedUser,
+      //         };
+      //       }
+      //   } else {
+      //     alert("response vazia");
+      //   }
+      // });
       //   .catch((error) => {
       //     alert("erro fetch:\n" + error);
       //   });
