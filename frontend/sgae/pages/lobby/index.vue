@@ -109,7 +109,9 @@ export default {
       const func3 = async ()=>{
         console.log("func3");
         await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+     
       }
+      
 
       const p = await Promise.all([
         func1,
@@ -117,10 +119,9 @@ export default {
         func3
       ])
 
+      console.log("final")
+
       
-      return {
-        loggedUser,
-      };
 
       
     }
