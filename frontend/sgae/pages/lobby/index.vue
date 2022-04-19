@@ -60,49 +60,67 @@ export default {
     // console.log("lobby page...");
     this.flipper();
   },
-  async asyncData({ $axios, $auth }) {
-    console.log($auth);
+  async asyncData({ $auth }) {
+    // console.log($auth);
 
-    //cheack if there is value storaged
-    const valueStoraged = await $auth.$storage.getUniversal("actualUserStoraged");
-    if (valueStoraged) {
-      console.log("Storaged already defined");
-      console.log(valueStoraged);
-    }
+    // const valueStoraged = await $auth.$storage.getUniversal(
+    //   "actualUserStoraged"
+    // );
+    // if (valueStoraged) {
+    //   console.log("Storaged already defined");
+    //   console.log(valueStoraged);
+    // }
 
-    const server = await process.env.BASE_URL + "/";
+    // const server = (await process.env.BASE_URL) + "/";
 
-    let users = await $auth.$storage.getUniversal("user");
+    // let users = await $auth.$storage.getUniversal("user");
 
-    if (users) {
-      alert("encontrou cookie users:\n" + JSON.stringify(users));
-    } else {
-      alert("não encontrou cookie user");
-      users = await $axios.get(server + "api/v1/users/me/");
-      users = users.data;
-      console.log("users requisitado:");
-      console.log(users);
-    }
+    // if (users) {
+    //   alert("encontrou cookie users:\n" + JSON.stringify(users));
+    // } else {
+    //   alert("não encontrou cookie user");
+    //   users = await $axios.get(server + "api/v1/users/me/");
+    //   users = users.data;
+    //   console.log("users requisitado:");
+    //   console.log(users);
+    // }
 
-    let loggedUser = null;
-    let usuarios = null;
+    // let loggedUser = null;
+    // let usuarios = null;
 
-    if (users) {
-      alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
+    // if (users) {
+    //   alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
 
-      usuarios = await fetch(server + "usuarios/" + users.id, {
-        headers: {
-          Authorization: $auth.$storage.getUniversal("_token.local"),
-        },
-      });
-      loggedUser = await usuarios.json();
-      loggedUser = await loggedUser.data;
-      await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-      console.log("finalizar")
-      return {
-        loggedUser,
-      };
-    }
+    //   usuarios = await fetch(server + "usuarios/" + users.id, {
+    //     headers: {
+    //       Authorization: $auth.$storage.getUniversal("_token.local"),
+    //     },
+    //   });
+    //   loggedUser = await usuarios.json();
+    //   loggedUser = await loggedUser.data;
+    //   await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+    //   console.log("finalizar");
+    //   return {
+    //     loggedUser,
+    //   };
+    // }
+
+    const server = process.env.BASE_URL + "/";
+    const usuarios = await fetch(server + "usuarios/" + ($auth.$storage.getUniversal("user")).id, {
+      headers: {
+        Authorization: $auth.$storage.getUniversal("_token.local"),
+      },
+    });
+    const conv = await usuarios.json();
+    let loggedUser = conv.data;
+    $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+    
+    return{
+      loggedUser,
+    };
+
+
+
   },
 };
 </script>
