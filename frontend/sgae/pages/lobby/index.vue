@@ -117,7 +117,6 @@ export default {
         func3
       ])
 
-      callTasks();      
       
       return {
         loggedUser,
