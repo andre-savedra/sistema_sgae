@@ -102,7 +102,7 @@ export default {
       console.log("depois");
 
       loggedUser = await usuarios.json();
-      console.log(loggedUser);
+      console.log(structuredClone(loggedUser));
       console.log("depois 2");
 
       // .then((response) => {
