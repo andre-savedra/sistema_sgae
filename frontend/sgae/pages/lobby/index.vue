@@ -85,72 +85,49 @@ export default {
     }
 
     let loggedUser = null;
+    let usuarios = null;
 
     if (users) {
       alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
 
-      // const process = await Promise.all([
 
-      // ])
+      const func1 = ()=>{
+        console.log("func1");
+        usuarios = await fetch(server + "usuarios/" + users.id, {
+          headers: {
+            Authorization: $auth.$storage.getUniversal("_token.local"),
+          },
+        })
+      }
 
-      console.log("antes");
-      const usuarios = await fetch(server + "usuarios/" + users.id, {
-        headers: {
-          Authorization: $auth.$storage.getUniversal("_token.local"),
-        },
-      });
-      console.log("depois");
+      const func2 = ()=>{
+        console.log("func2");
+        loggedUser = await usuarios.json()
+        loggedUser = loggedUser.data;
+      }
 
-      loggedUser = await usuarios.json();
-      loggedUser = loggedUser.data;
-      console.log(structuredClone(loggedUser));
-      console.log("depois 2");
+      const func3 = ()=>{
+        console.log("func3");
+        await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+      }
 
-      await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+      const tasks = [func1, func2, func3];
+      const callTasks = ()=>{
+        for (const task of tasks) {
+          await task();
+        }
+      }
+
+      callTasks();      
+      
       return {
         loggedUser,
       };
 
-      // .then((response) => {
-      //   if (response) {
-      //     loggedUser = response.json();
-      //     loggedUser = loggedUser.data;
-      //     console.log(loggedUser);
-      //     alert("loggedUser original:" + loggedUser);
-      //     alert(JSON.stringify(loggedUser));
-      //       if(loggedUser){
-      //         await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-      //         return {
-      //           loggedUser,
-      //         };
-      //       }
-      //   } else {
-      //     alert("response vazia");
-      //   }
-      // });
-      //   .catch((error) => {
-      //     alert("erro fetch:\n" + error);
-      //   });
-
-      // await $axios.get((server + "usuarios/" + users.id)).then((response) => {
-      //     console.log("response then:");
-      //     console.log(response);
-      //     loggedUser = response.data.data;
-      //     alert(JSON.stringify(loggedUser));
-
-      //   }).catch((response) => {
-      //     console.log("response catch error");
-      //     console.log(response);
-      //     alert(response);
-      //   });
+      
     }
 
-    // if (loggedUser) {
-    //   await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-    //   return {
-    //     loggedUser,
-    //   };
-    // }
+   
   },
 };
 </script>
