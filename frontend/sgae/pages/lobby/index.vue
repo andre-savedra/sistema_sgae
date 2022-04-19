@@ -64,15 +64,15 @@ export default {
     console.log($auth);
 
     //cheack if there is value storaged
-    const valueStoraged = $auth.$storage.getUniversal("actualUserStoraged");
+    const valueStoraged = await $auth.$storage.getUniversal("actualUserStoraged");
     if (valueStoraged) {
       console.log("Storaged already defined");
       console.log(valueStoraged);
     }
 
-    const server = process.env.BASE_URL + "/";
+    const server = await process.env.BASE_URL + "/";
 
-    let users = $auth.$storage.getUniversal("user");
+    let users = await $auth.$storage.getUniversal("user");
 
     if (users) {
       alert("encontrou cookie users:\n" + JSON.stringify(users));
@@ -98,7 +98,10 @@ export default {
       loggedUser = await usuarios.json();
       loggedUser = await loggedUser.data;
       await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-
+      console.log("finalizar")
+      return {
+        loggedUser,
+      };
     }
   },
 };
