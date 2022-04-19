@@ -102,8 +102,14 @@ export default {
       console.log("depois");
 
       loggedUser = await usuarios.json();
+      loggedUser = loggedUser.data;
       console.log(structuredClone(loggedUser));
       console.log("depois 2");
+
+      await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+      return {
+        loggedUser,
+      };
 
       // .then((response) => {
       //   if (response) {
