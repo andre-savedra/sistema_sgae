@@ -39,6 +39,9 @@ export default {
       if (this.loggedUser !== null && this.loggedUser !== undefined) {
         this.counter++;
       }
+      else{
+        alert("logged nulo")
+      }
 
       // console.log("flipper");
 
