@@ -15,6 +15,7 @@ const _444f6294 = () => interopDefault(import('..\\pages\\registrar\\index.vue' 
 const _63eda994 = () => interopDefault(import('..\\pages\\reset\\index.vue' /* webpackChunkName: "pages/reset/index" */))
 const _02b33c50 = () => interopDefault(import('..\\pages\\sucesso\\index.vue' /* webpackChunkName: "pages/sucesso/index" */))
 const _e268616a = () => interopDefault(import('..\\pages\\tarefas\\index.vue' /* webpackChunkName: "pages/tarefas/index" */))
+const _a553d360 = () => interopDefault(import('..\\pages\\teste\\index.vue' /* webpackChunkName: "pages/teste/index" */))
 const _02cc2ccc = () => interopDefault(import('..\\pages\\usuarios\\index.vue' /* webpackChunkName: "pages/usuarios/index" */))
 const _1f4bed31 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
@@ -73,6 +74,10 @@ export const routerOptions = {
     path: "/tarefas",
     component: _e268616a,
     name: "tarefas"
+  }, {
+    path: "/teste",
+    component: _a553d360,
+    name: "teste"
   }, {
     path: "/usuarios",
     component: _02cc2ccc,

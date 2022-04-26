@@ -166,6 +166,7 @@
 
 <script>
 import AwsS3Users from "@/assets/scripts/awsS3Users.js";
+import imageCompression from "browser-image-compression";
 
 export default {
   layout: "login",
@@ -207,7 +208,7 @@ export default {
     },
     savePhotoAWS: async function (photoName) {
       //aws S3: SAVE PHOTO
-      this.S3Client.uploadFile(this.userPhoto[0], photoName)
+      this.S3Client.uploadFile(this.userPhoto, photoName)
         .then((awsResponse) => {
           console.log(awsResponse);
           this.postUsuario(awsResponse.location);
@@ -297,8 +298,7 @@ export default {
       if (imageLocation !== null && imageLocation !== undefined) {
         formData.append("image", imageLocation);
         // alert("tem foto na localização: " + imageLocation);
-      } 
-      else {
+      } else {
         // alert("não tem foto");
       }
 
@@ -358,21 +358,58 @@ export default {
     },
 
     postPhoto: async function (event) {
-      console.log("postPhoto");
-      console.log(event);
-      this.userPhoto = event.files;
-      console.log("userPhoto:");
-      console.log(this.userPhoto);
+      console.log(
+        "compressedFile instanceof Blob",
+        event.files[0] instanceof Blob
+      );
+      console.log(
+        `compressedFile size ${event.files[0].size / 1024 / 1024} MB`
+      );
 
+      //CHECK IF FILE NEEDS TO BE COMPRESSED
+      const fileZiseMb = event.files[0].size / 1024 / 1024;
+
+      if (fileZiseMb > 4.5) {
+        const options = {
+          maxSizeMB: 4,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        };
+
+        try {
+          const compressedFile = await imageCompression(
+            event.files[0],
+            options
+          );
+
+          console.log(
+            "compressedFile instanceof Blob",
+            compressedFile instanceof Blob
+          );
+          console.log(
+            `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
+          );
+
+          this.userPhoto = compressedFile;
+
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      else{ //FILE DOESN'T NEED TO BE COMPRESSED
+        this.userPhoto = event.files[0];
+      }
+
+      //CHECK FILENAME
       const maxChars = 20;
-      if (this.userPhoto[0].name) {
-        if (this.userPhoto[0].name.length > maxChars)
+      if (this.userPhoto.name) {
+        if (this.userPhoto.name.length > maxChars)
           this.btnUploadLabel =
             "..." +
-            this.userPhoto[0].name.slice(
-              this.userPhoto[0].name.length - maxChars
+            this.userPhoto.name.slice(
+              this.userPhoto.name.length - maxChars
             );
-        else this.btnUploadLabel = this.userPhoto[0].name;
+        else this.btnUploadLabel = this.userPhoto.name;
       }
     },
     sendRegister: async function () {

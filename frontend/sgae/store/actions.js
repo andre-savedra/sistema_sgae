@@ -19,4 +19,5 @@ export default {
     console.log(payload);
     context.commit("ACTUAL_USER", payload);
   },
+  
 };

@@ -11,4 +11,5 @@ export default {
     ACTUAL_USER(state, payload) {
         state.actualUser = payload;
     },
+   
 }

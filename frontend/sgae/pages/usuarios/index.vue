@@ -117,7 +117,7 @@ export default {
   extends: AsyncUserStoraged,
   name: "usuarios",
   layout: "standard",
-  // middleware: "auth",
+  middleware: "auth",
   data() {
     return {
       activationUsers: null,

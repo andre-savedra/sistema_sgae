@@ -733,6 +733,7 @@ export default {
       }
       this.$store.dispatch("setPrintMode", "");
       this.$store.dispatch("setTaskToPrint", []);
+
     }
   },
   
