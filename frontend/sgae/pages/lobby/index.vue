@@ -64,7 +64,8 @@ export default {
         // .get("https://backend.sgae501.com.br/usuarios/2")
         fetch("https://backend.sgae501.com.br/usuarios/2", {
           headers: {
-            Authorization: this.$auth.$storage.getUniversal("_token.local"),
+            // Authorization: this.$auth.$storage.getUniversal("_token.local"),
+            Authorization: 'Token 6386db97cafdf17280cd5c3e12d71f98560efe66',
           },
         })
         .then(async (usuarios) => {
