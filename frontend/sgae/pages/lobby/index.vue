@@ -59,16 +59,17 @@ export default {
       }
     },
     test() {
+      // .get("https://backend.sgae501.com.br/usuarios/2")
       return new Promise((resolve, reject)=>{
         this.$axios
-        .get("https://backend.sgae501.com.br/usuarios/2")
+        .get("http://mes.fms40.com.br/load_all_order_type")
         .then((usuarios) => {
           // const usuariosJson = usuarios.json();
           alert("resposta")
           console.log("usuarios.data");
           console.log(usuarios);
           
-          alert("nome:" + usuarios.data.data.nome);
+          alert("nome:" + usuarios.data[0].type);
           resolve(usuarios);
         })
         .catch((error) => {
