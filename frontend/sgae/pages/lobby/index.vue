@@ -60,16 +60,15 @@ export default {
     },
     test() {
       return new Promise((resolve, reject)=>{
-        const server = process.env.BASE_URL + "/";
         this.$axios
-        .get(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id)
+        .get("https://swapi.dev/api/" + "people/3/")
         .then((usuarios) => {
           // const usuariosJson = usuarios.json();
           console.log("usuarios.data");
-          console.log(usuarios.data.data);
+          console.log(usuarios);
           
-          alert("nome:" + usuarios.data.data.nome);
-          resolve(usuarios.data.data);
+          // alert("nome:" + usuarios.data.data.nome);
+          resolve(usuarios);
         })
         .catch((error) => {
           console.log("error");
@@ -78,6 +77,26 @@ export default {
         })
       })
     },
+    // test() {
+    //   return new Promise((resolve, reject)=>{
+    //     const server = process.env.BASE_URL + "/";
+    //     this.$axios
+    //     .get(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id)
+    //     .then((usuarios) => {
+    //       // const usuariosJson = usuarios.json();
+    //       console.log("usuarios.data");
+    //       console.log(usuarios.data.data);
+          
+    //       alert("nome:" + usuarios.data.data.nome);
+    //       resolve(usuarios.data.data);
+    //     })
+    //     .catch((error) => {
+    //       console.log("error");
+    //       console.log(error);  
+    //       reject(error);        
+    //     })
+    //   })
+    // },
   },
   async mounted() {
     // console.log("lobby page...");
@@ -89,10 +108,10 @@ export default {
     // })
 
     this.loggedUser = await this.test();
-    this.$auth.$storage.setUniversal(
-            "actualUserStoraged",
-            this.loggedUser
-          );
+    // this.$auth.$storage.setUniversal(
+    //         "actualUserStoraged",
+    //         this.loggedUser
+    //       );
     console.log("this.logger");
     console.log(this.loggedUser);
     this.flipper();
