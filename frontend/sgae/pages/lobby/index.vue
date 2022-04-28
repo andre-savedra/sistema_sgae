@@ -64,6 +64,7 @@ export default {
         .get("https://backend.sgae501.com.br/usuarios/2")
         .then((usuarios) => {
           // const usuariosJson = usuarios.json();
+          alert("resposta")
           console.log("usuarios.data");
           console.log(usuarios);
           
@@ -72,7 +73,8 @@ export default {
         })
         .catch((error) => {
           console.log("error");
-          console.log(error);  
+          console.log(error);
+          alert(error);
           reject(error);        
         })
       })
