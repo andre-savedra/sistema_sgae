@@ -32,6 +32,7 @@ export default {
       flip: false,
       storaged: false,
       counter: 0,
+      loggedUser: null
     };
   },
   methods: {
@@ -59,11 +60,23 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
     // console.log("lobby page...");
+
+    const server = process.env.BASE_URL + "/";
+    const usuarios = await fetch(server + "usuarios/" + (this.$auth.$storage.getUniversal("user")).id, {
+      headers: {
+        Authorization: this.$auth.$storage.getUniversal("_token.local"),
+      },
+    });
+    const conv = await usuarios.json();
+    this.loggedUser = conv.data;
+    this.$auth.$storage.setUniversal("actualUserStoraged", this.loggedUser);
+    
+   
     this.flipper();
   },
-  async asyncData({ $auth }) {
+  // async asyncData({ $auth }) {
     // console.log($auth);
 
     // const valueStoraged = await $auth.$storage.getUniversal(
@@ -108,23 +121,26 @@ export default {
     //   };
     // }
 
-    const server = process.env.BASE_URL + "/";
-    const usuarios = await fetch(server + "usuarios/" + ($auth.$storage.getUniversal("user")).id, {
-      headers: {
-        Authorization: $auth.$storage.getUniversal("_token.local"),
-      },
-    });
-    const conv = await usuarios.json();
-    let loggedUser = conv.data;
-    $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+
+    //andre
+
+    // const server = process.env.BASE_URL + "/";
+    // const usuarios = await fetch(server + "usuarios/" + ($auth.$storage.getUniversal("user")).id, {
+    //   headers: {
+    //     Authorization: $auth.$storage.getUniversal("_token.local"),
+    //   },
+    // });
+    // const conv = await usuarios.json();
+    // let loggedUser = conv.data;
+    // $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
     
-    return{
-      loggedUser,
-    };
+    // return{
+    //   loggedUser,
+    // };
 
 
 
-  },
+  // },
 };
 </script>
 
