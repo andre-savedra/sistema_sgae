@@ -69,8 +69,8 @@ export default {
           console.log("usuarios.data");
           console.log(usuarios);
           
-          alert("nome:" + usuarios.data[0].type);
-          resolve(usuarios);
+          alert("nome:" + usuarios.data.data.nome);
+          resolve(usuarios.data.data);
         })
         .catch((error) => {
           console.log("error");
