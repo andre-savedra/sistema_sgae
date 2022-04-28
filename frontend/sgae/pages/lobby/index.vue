@@ -59,18 +59,22 @@ export default {
       }
     },
     test() {
-      // .get("http://mes.fms40.com.br/load_all_order_type")
       return new Promise((resolve, reject)=>{
-        this.$axios
-        .get("https://backend.sgae501.com.br/usuarios/2")
+        // this.$axios
+        // .get("https://backend.sgae501.com.br/usuarios/2")
+        fetch("https://backend.sgae501.com.br/usuarios/2", {
+          headers: {
+            Authorization: this.$auth.$storage.getUniversal("_token.local"),
+          },
+        })
         .then((usuarios) => {
-          // const usuariosJson = usuarios.json();
+          const usuariosJson = usuarios.json();
           alert("resposta")
           console.log("usuarios.data");
-          console.log(usuarios);
+          console.log(usuariosJson);
           
-          alert("nome:" + usuarios.data.data.nome);
-          resolve(usuarios.data.data);
+          alert("nome:" + usuariosJson.nome);
+          resolve(usuariosJson);
         })
         .catch((error) => {
           console.log("error");
