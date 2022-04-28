@@ -63,16 +63,17 @@ export default {
     // console.log("lobby page...");
 
     const server = process.env.BASE_URL + "/";
-    fetch(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id, {
-      headers: {
-        Authorization: this.$auth.$storage.getUniversal("_token.local"),
-      },
-    })
+    // fetch(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id, {
+    //   headers: {
+    //     Authorization: this.$auth.$storage.getUniversal("_token.local"),
+    //   },
+    // })
+    this.$axios.get(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id)
       .then((usuarios) => {
-        const usuariosJson = usuarios.json();
-        // console.log("usuariosJson");
-        // console.log(usuariosJson);
-        return usuariosJson;
+        // const usuariosJson = usuarios.json();
+        console.log("usuariosJson");
+        console.log(usuarios);
+        return usuarios;
       })
       .then((usuariosJson) => {
         console.log("usuariosJson.data");
