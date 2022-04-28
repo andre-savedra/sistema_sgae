@@ -32,7 +32,7 @@ export default {
       flip: false,
       storaged: false,
       counter: 0,
-      loggedUser: null,
+      // loggedUser: null,
     };
   },
   methods: {
@@ -58,38 +58,39 @@ export default {
         this.$router.push("/tarefas");
       }
     },
-    test() {
-      return new Promise((resolve, reject)=>{
-        // this.$axios
-        // .get("https://backend.sgae501.com.br/usuarios/2")
-        fetch("https://backend.sgae501.com.br/ambientes", {
-          headers: {
-            // Authorization: this.$auth.$storage.getUniversal("_token.local"),
-            Authorization: 'Token 6386db97cafdf17280cd5c3e12d71f98560efe66',
-          },
-        })
-        .then(async (usuarios) => {
-          console.log("usuarios");
-          console.log(usuarios);
-          const usuariosJson = await usuarios.json();
-          return usuariosJson;
-        })
-        .then(async (usuariosJson) => {
-          alert("resposta")
-          console.log("usuarios.data");
-          console.log(usuariosJson.data);
+      // this.$axios
+      // .get("https://backend.sgae501.com.br/usuarios/2")
+      // Authorization: 'Token 6386db97cafdf17280cd5c3e12d71f98560efe66',
+    // test() {
+    //   return new Promise((resolve, reject)=>{
+    //     fetch("https://backend.sgae501.com.br/ambientes", {
+    //       headers: {
+    //         Authorization: this.$auth.$storage.getUniversal("_token.local"),
+    //       },
+    //     })
+    //     .then(async (usuarios) => {
+    //       console.log("usuarios");
+    //       console.log(usuarios);
+    //       const usuariosJson = await usuarios.json();
+    //       return usuariosJson;
+    //     })
+    //     .then(async (usuariosJson) => {
+    //       alert("resposta")
+    //       console.log("usuarios.data");
+    //       console.log(usuariosJson.data);
           
-          alert("nome:" + usuariosJson.data[0].nome);
-          resolve(usuariosJson.data);
-        })
-        .catch((error) => {
-          console.log("error");
-          console.log(error);
-          alert(error);
-          reject(error);        
-        })
-      })
-    },
+    //       alert("nome:" + usuariosJson.data[0].nome);
+    //       resolve(usuariosJson.data);
+    //     })
+    //     .catch((error) => {
+    //       console.log("error");
+    //       console.log(error);
+    //       alert(error);
+    //       reject(error);        
+    //     })
+    //   })
+    // },
+
     // test() {
     //   return new Promise((resolve, reject)=>{
     //     const server = process.env.BASE_URL + "/";
@@ -111,7 +112,7 @@ export default {
     //   })
     // },
   },
-  async mounted() {
+  mounted() {
     // console.log("lobby page...");
 
     // fetch(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id, {
@@ -120,17 +121,17 @@ export default {
     //   },
     // })
 
-    this.loggedUser = await this.test();
-    this.$auth.$storage.setUniversal(
-            "actualUserStoraged",
-            this.loggedUser
-          );
-    alert("mounted após await");
-    console.log("this.logger");
-    console.log(this.loggedUser);
+    // this.loggedUser = await this.test();
+    // this.$auth.$storage.setUniversal(
+    //         "actualUserStoraged",
+    //         this.loggedUser
+    //       );
+    // alert("mounted após await");
+    // console.log("this.logger");
+    // console.log(this.loggedUser);
     this.flipper();
   },
-  // async asyncData({ $auth }) {
+  async asyncData({ $auth }) {
   // console.log($auth);
 
   // const valueStoraged = await $auth.$storage.getUniversal(
@@ -177,21 +178,21 @@ export default {
 
   //andre
 
-  // const server = process.env.BASE_URL + "/";
-  // const usuarios = await fetch(server + "usuarios/" + ($auth.$storage.getUniversal("user")).id, {
-  //   headers: {
-  //     Authorization: $auth.$storage.getUniversal("_token.local"),
-  //   },
-  // });
-  // const conv = await usuarios.json();
-  // let loggedUser = conv.data;
-  // $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+  const server = process.env.BASE_URL + "/";
+  const usuarios = await fetch(server + "usuarios/" + ($auth.$storage.getUniversal("user")).id, {
+    headers: {
+      Authorization: $auth.$storage.getUniversal("_token.local"),
+    },
+  });
+  const conv = await usuarios.json();
+  let loggedUser = conv.data;
+  $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
 
-  // return{
-  //   loggedUser,
-  // };
+  return{
+    loggedUser,
+  };
 
-  // },
+  },
 };
 </script>
 
