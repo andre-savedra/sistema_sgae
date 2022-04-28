@@ -73,7 +73,7 @@ export default {
         // const usuariosJson = usuarios.json();
         console.log("usuariosJson");
         console.log(usuarios);
-        return usuarios;
+        return usuarios.data;
       })
       .then((usuariosJson) => {
         console.log("usuariosJson.data");
