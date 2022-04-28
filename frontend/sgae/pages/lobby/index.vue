@@ -67,10 +67,7 @@ export default {
           // const usuariosJson = usuarios.json();
           console.log("usuarios.data");
           console.log(usuarios.data.data);
-          this.$auth.$storage.setUniversal(
-            "actualUserStoraged",
-            this.loggedUser
-          );
+          
           alert("nome:" + usuarios.data.data.nome);
           resolve(usuarios.data.data);
         })
@@ -92,6 +89,10 @@ export default {
     // })
 
     this.loggedUser = await this.test();
+    this.$auth.$storage.setUniversal(
+            "actualUserStoraged",
+            this.loggedUser
+          );
     console.log("this.logger");
     console.log(this.loggedUser);
     this.flipper();
