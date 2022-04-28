@@ -70,13 +70,14 @@ export default {
     })
       .then((usuarios) => {
         const usuariosJson = usuarios.json();
-        console.log("usuariosJson");
-        console.log(usuariosJson);
+        // console.log("usuariosJson");
+        // console.log(usuariosJson);
         return usuariosJson;
       })
       .then((usuariosJson) => {
         console.log("usuariosJson.data");
         console.log(usuariosJson.data);
+        alert("nome:"+usuariosJson.data.nome);
         this.loggedUser = usuariosJson.data;
         this.$auth.$storage.setUniversal("actualUserStoraged", this.loggedUser);
         this.flipper();
