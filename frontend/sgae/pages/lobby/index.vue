@@ -5,12 +5,12 @@
         <img v-if="flip" class="back" src="@/assets/media/sgae.png" />
         <img v-else class="front" src="@/assets/media/sgae.png" />
       </div>
-      <!-- <h1 v-if="loggedUser.nome">
+      <h1 v-if="loggedUser.nome">
         &#10024; {{ loggedUser.nome.split(" ")[0] }}, preparando seu ambiente!
         &#10024;
       </h1>
-      <h1 v-else>&#10024; Preparando seu ambiente! &#10024;</h1> -->
-      <h1>&#10024; Preparando seu ambiente! &#10024;</h1>
+      <h1 v-else>&#10024; Preparando seu ambiente! &#10024;</h1>
+      <!-- <h1>&#10024; Preparando seu ambiente! &#10024;</h1> -->
     </section>
     <footer class="p-d-flex p-flex-column p-jc-center p-ai-end">
       <h3>Sistema de Gestão de Ambiente de Ensino</h3>
