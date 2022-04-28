@@ -118,10 +118,11 @@ export default {
     // })
 
     this.loggedUser = await this.test();
-    // this.$auth.$storage.setUniversal(
-    //         "actualUserStoraged",
-    //         this.loggedUser
-    //       );
+    this.$auth.$storage.setUniversal(
+            "actualUserStoraged",
+            this.loggedUser
+          );
+    alert("mounted após await");
     console.log("this.logger");
     console.log(this.loggedUser);
     this.flipper();
