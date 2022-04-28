@@ -117,10 +117,25 @@ DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {    
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.environ['DB_ENGINE'],
+        # 'ENGINE': env('DB_ENGINE'), #aws remove 
+        'NAME': os.environ['DB_NAME'], 
+        # 'NAME': env('DB_NAME'), #aws remove 
+        'USER': os.environ['DB_USER'], 
+        # 'USER': env('DB_USER'), #aws remove 
+        'PASSWORD': os.environ['DB_PSWD'], 
+        # 'PASSWORD': env('DB_PSWD'), #aws remove 
+        'HOST': os.environ['DB_HOST'], 
+        # 'HOST': env('DB_HOST'), #aws remove 
+        'PORT': os.environ['DB_PORT'], 
+        # 'PORT': env('DB_PORT'), #aws remove 
     }
+
 }
 
 
