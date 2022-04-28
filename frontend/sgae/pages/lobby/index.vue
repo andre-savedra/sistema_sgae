@@ -61,7 +61,7 @@ export default {
     test() {
       return new Promise((resolve, reject)=>{
         this.$axios
-        .get("https://backend.sgae501.com.br/usuarios/" +  this.$auth.$storage.getUniversal("user").id)
+        .get("https://backend.sgae501.com.br/usuarios/2")
         .then((usuarios) => {
           // const usuariosJson = usuarios.json();
           console.log("usuarios.data");
