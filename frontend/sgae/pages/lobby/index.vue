@@ -61,13 +61,13 @@ export default {
     test() {
       return new Promise((resolve, reject)=>{
         this.$axios
-        .get("https://swapi.dev/api/" + "people/3/")
+        .get("https://backend.sgae501.com.br/usuarios/" +  this.$auth.$storage.getUniversal("user").id)
         .then((usuarios) => {
           // const usuariosJson = usuarios.json();
           console.log("usuarios.data");
           console.log(usuarios);
           
-          alert("nome:" + usuarios.data.name);
+          alert("nome:" + usuarios.data.data.nome);
           resolve(usuarios);
         })
         .catch((error) => {
