@@ -69,12 +69,15 @@ export default {
         })
         .then((usuarios) => {
           const usuariosJson = usuarios.json();
+          return usuariosJson
+        })
+        .then((usuariosJson) => {
           alert("resposta")
           console.log("usuarios.data");
-          console.log(usuariosJson);
+          console.log(usuariosJson.data);
           
-          alert("nome:" + usuariosJson.nome);
-          resolve(usuariosJson);
+          alert("nome:" + usuariosJson.data.nome);
+          resolve(usuariosJson.data);
         })
         .catch((error) => {
           console.log("error");
