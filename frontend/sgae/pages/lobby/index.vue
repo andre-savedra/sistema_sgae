@@ -67,7 +67,7 @@ export default {
           console.log("usuarios.data");
           console.log(usuarios);
           
-          // alert("nome:" + usuarios.data.data.nome);
+          alert("nome:" + usuarios.data.name);
           resolve(usuarios);
         })
         .catch((error) => {
