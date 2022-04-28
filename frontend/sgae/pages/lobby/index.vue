@@ -64,17 +64,20 @@ export default {
     // console.log("lobby page...");
 
     const server = process.env.BASE_URL + "/";
-    const usuarios = await fetch(server + "usuarios/" + (this.$auth.$storage.getUniversal("user")).id, {
+    fetch(server + "usuarios/" + (this.$auth.$storage.getUniversal("user")).id, {
       headers: {
         Authorization: this.$auth.$storage.getUniversal("_token.local"),
       },
+    }).then((usuarios)=>{
+      const usuariosJson = usuarios.json();
+      return usuariosJson
+    }).then((usuariosJson)=>{
+        this.loggedUser = usuariosJson.data;
+        this.$auth.$storage.setUniversal("actualUserStoraged", this.loggedUser);
+        this.flipper();
     });
-    const conv = await usuarios.json();
-    this.loggedUser = conv.data;
-    this.$auth.$storage.setUniversal("actualUserStoraged", this.loggedUser);
+       
     
-   
-    this.flipper();
   },
   // async asyncData({ $auth }) {
     // console.log($auth);
