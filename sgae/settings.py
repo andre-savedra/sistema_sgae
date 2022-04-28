@@ -31,8 +31,9 @@ SECRET_KEY = os.environ['SECRET_KEY'] #aws include
 DEBUG = True
 
 # ALLOWED_HOSTS = ["projeto-sgae-dev.us-east-1.elasticbeanstalk.com"]
-ALLOWED_HOSTS = ['env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com', 
-                 'backend.sgae501.com.br', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['env-sgae4.eba-npvnqzqf.us-east-1.elasticbeanstalk.com', 
+#                  'backend.sgae501.com.br', '127.0.0.1', 'localhost']
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
