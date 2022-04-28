@@ -68,8 +68,8 @@ export default {
           },
         })
         .then((usuarios) => {
-          const usuariosJson = usuarios.json();
-          return usuariosJson
+          // const usuariosJson = usuarios.json();
+          return usuarios.json();
         })
         .then((usuariosJson) => {
           alert("resposta")
