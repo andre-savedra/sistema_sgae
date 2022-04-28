@@ -32,16 +32,15 @@ export default {
       flip: false,
       storaged: false,
       counter: 0,
-      loggedUser: null
+      loggedUser: null,
     };
   },
   methods: {
     flipper: function () {
       if (this.loggedUser !== null && this.loggedUser !== undefined) {
         this.counter++;
-      }
-      else{
-        alert("logged nulo")
+      } else {
+        alert("logged nulo");
       }
 
       // console.log("flipper");
@@ -64,84 +63,85 @@ export default {
     // console.log("lobby page...");
 
     const server = process.env.BASE_URL + "/";
-    fetch(server + "usuarios/" + (this.$auth.$storage.getUniversal("user")).id, {
+    fetch(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id, {
       headers: {
         Authorization: this.$auth.$storage.getUniversal("_token.local"),
       },
-    }).then((usuarios)=>{
-      const usuariosJson = usuarios.json();
-      return usuariosJson
-    }).then((usuariosJson)=>{
+    })
+      .then((usuarios) => {
+        const usuariosJson = usuarios.json();
+        console.log("usuariosJson");
+        console.log(usuariosJson);
+        return usuariosJson;
+      })
+      .then((usuariosJson) => {
+        console.log("usuariosJson.data");
+        console.log(usuariosJson.data);
         this.loggedUser = usuariosJson.data;
         this.$auth.$storage.setUniversal("actualUserStoraged", this.loggedUser);
         this.flipper();
-    });
-       
-    
+      });
   },
   // async asyncData({ $auth }) {
-    // console.log($auth);
+  // console.log($auth);
 
-    // const valueStoraged = await $auth.$storage.getUniversal(
-    //   "actualUserStoraged"
-    // );
-    // if (valueStoraged) {
-    //   console.log("Storaged already defined");
-    //   console.log(valueStoraged);
-    // }
+  // const valueStoraged = await $auth.$storage.getUniversal(
+  //   "actualUserStoraged"
+  // );
+  // if (valueStoraged) {
+  //   console.log("Storaged already defined");
+  //   console.log(valueStoraged);
+  // }
 
-    // const server = (await process.env.BASE_URL) + "/";
+  // const server = (await process.env.BASE_URL) + "/";
 
-    // let users = await $auth.$storage.getUniversal("user");
+  // let users = await $auth.$storage.getUniversal("user");
 
-    // if (users) {
-    //   alert("encontrou cookie users:\n" + JSON.stringify(users));
-    // } else {
-    //   alert("não encontrou cookie user");
-    //   users = await $axios.get(server + "api/v1/users/me/");
-    //   users = users.data;
-    //   console.log("users requisitado:");
-    //   console.log(users);
-    // }
+  // if (users) {
+  //   alert("encontrou cookie users:\n" + JSON.stringify(users));
+  // } else {
+  //   alert("não encontrou cookie user");
+  //   users = await $axios.get(server + "api/v1/users/me/");
+  //   users = users.data;
+  //   console.log("users requisitado:");
+  //   console.log(users);
+  // }
 
-    // let loggedUser = null;
-    // let usuarios = null;
+  // let loggedUser = null;
+  // let usuarios = null;
 
-    // if (users) {
-    //   alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
+  // if (users) {
+  //   alert("token: \n" + $auth.$storage.getUniversal("_token.local"));
 
-    //   usuarios = await fetch(server + "usuarios/" + users.id, {
-    //     headers: {
-    //       Authorization: $auth.$storage.getUniversal("_token.local"),
-    //     },
-    //   });
-    //   loggedUser = await usuarios.json();
-    //   loggedUser = await loggedUser.data;
-    //   await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-    //   console.log("finalizar");
-    //   return {
-    //     loggedUser,
-    //   };
-    // }
+  //   usuarios = await fetch(server + "usuarios/" + users.id, {
+  //     headers: {
+  //       Authorization: $auth.$storage.getUniversal("_token.local"),
+  //     },
+  //   });
+  //   loggedUser = await usuarios.json();
+  //   loggedUser = await loggedUser.data;
+  //   await $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
+  //   console.log("finalizar");
+  //   return {
+  //     loggedUser,
+  //   };
+  // }
 
+  //andre
 
-    //andre
+  // const server = process.env.BASE_URL + "/";
+  // const usuarios = await fetch(server + "usuarios/" + ($auth.$storage.getUniversal("user")).id, {
+  //   headers: {
+  //     Authorization: $auth.$storage.getUniversal("_token.local"),
+  //   },
+  // });
+  // const conv = await usuarios.json();
+  // let loggedUser = conv.data;
+  // $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
 
-    // const server = process.env.BASE_URL + "/";
-    // const usuarios = await fetch(server + "usuarios/" + ($auth.$storage.getUniversal("user")).id, {
-    //   headers: {
-    //     Authorization: $auth.$storage.getUniversal("_token.local"),
-    //   },
-    // });
-    // const conv = await usuarios.json();
-    // let loggedUser = conv.data;
-    // $auth.$storage.setUniversal("actualUserStoraged", loggedUser);
-    
-    // return{
-    //   loggedUser,
-    // };
-
-
+  // return{
+  //   loggedUser,
+  // };
 
   // },
 };
