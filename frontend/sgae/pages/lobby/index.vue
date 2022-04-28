@@ -58,31 +58,43 @@ export default {
         this.$router.push("/tarefas");
       }
     },
+    test() {
+      return new Promise((resolve, reject)=>{
+        const server = process.env.BASE_URL + "/";
+        this.$axios
+        .get(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id)
+        .then((usuarios) => {
+          // const usuariosJson = usuarios.json();
+          console.log("usuarios.data");
+          console.log(usuarios.data.data);
+          this.$auth.$storage.setUniversal(
+            "actualUserStoraged",
+            this.loggedUser
+          );
+          alert("nome:" + usuarios.data.data.nome);
+          resolve(usuarios.data.data);
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);  
+          reject(error);        
+        })
+      })
+    },
   },
   async mounted() {
     // console.log("lobby page...");
 
-    const server = process.env.BASE_URL + "/";
     // fetch(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id, {
     //   headers: {
     //     Authorization: this.$auth.$storage.getUniversal("_token.local"),
     //   },
     // })
-    this.$axios.get(server + "usuarios/" + this.$auth.$storage.getUniversal("user").id)
-      .then((usuarios) => {
-        // const usuariosJson = usuarios.json();
-        console.log("usuariosJson");
-        console.log(usuarios);
-        return usuarios.data;
-      })
-      .then((usuariosJson) => {
-        console.log("usuariosJson.data");
-        console.log(usuariosJson.data);
-        alert("nome:"+usuariosJson.data.nome);
-        this.loggedUser = usuariosJson.data;
-        this.$auth.$storage.setUniversal("actualUserStoraged", this.loggedUser);
-        this.flipper();
-      });
+
+    this.loggedUser = await this.test();
+    console.log("this.logger");
+    console.log(this.loggedUser);
+    this.flipper();
   },
   // async asyncData({ $auth }) {
   // console.log($auth);
