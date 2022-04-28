@@ -67,11 +67,11 @@ export default {
             Authorization: this.$auth.$storage.getUniversal("_token.local"),
           },
         })
-        .then((usuarios) => {
-          // const usuariosJson = usuarios.json();
-          return usuarios.json();
+        .then(async (usuarios) => {
+          const usuariosJson = await usuarios.json();
+          return usuariosJson;
         })
-        .then((usuariosJson) => {
+        .then(async (usuariosJson) => {
           alert("resposta")
           console.log("usuarios.data");
           console.log(usuariosJson.data);
