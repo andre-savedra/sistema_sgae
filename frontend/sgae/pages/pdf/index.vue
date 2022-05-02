@@ -335,8 +335,7 @@ export default {
         const base = this.$store.state.BASE_URL_IMG;
 
         task.photos.map((actualPhoto) => {
-          docDefinition.images[`photo${actualPhoto.id}`] =
-            base + actualPhoto.image;
+          docDefinition.images[`photo${actualPhoto.id}`] = actualPhoto.image;
         });
 
         objectPrint = [
@@ -623,12 +622,19 @@ export default {
           }
         }
 
+         console.log("objectImgsPrint")
+      console.log(objectImgsPrint);
+
         docDefinition.content = [
           ...docDefinition.content,
           ...objectPrint,
           ...objectImgsPrint,
         ];
       });
+
+     
+      // console.log("doc")
+      // console.log(docDefinition);
 
       pdfMake.createPdf(docDefinition).open();
       // this.selectedTasksIds.length = 0;

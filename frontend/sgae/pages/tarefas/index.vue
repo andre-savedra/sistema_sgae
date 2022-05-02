@@ -1,7 +1,7 @@
 <template>
-  <div class="allTasks p-d-flex p-flex-column p-jc-start p-ai-center">
+   <div class="allTasks p-d-flex p-flex-column p-jc-start p-ai-center">
     <h1 id="titleTasks">Tarefas cadastradas</h1>
-    <DataView
+     <DataView
       :value="tasks"
       :layout="layout"
       :paginator="true"
@@ -50,19 +50,7 @@
               </div>
             </div>
 
-            <!-- <div class="oneElement p-d-flex p-flex-row p-jc-start p-ai-center">
-              <label for="filters">Digite o filtro:</label>
-              <AutoComplete
-                :multiple="false"
-                v-model="selectedFilter"
-                :suggestions="filteredSuggestions"
-                @complete="searchEnviroment($event)"
-                field="name"
-                id="filters"
-                placeholder="Digite o filtro"
-                class="filteredField"
-              />
-            </div> -->
+           
           </div>
           <div class="col-6 viewSwitch">
             <DataViewLayoutOptions v-model="layout" />
@@ -73,7 +61,7 @@
         </div>
       </template>
 
-      <template #list="slotProps">
+       <template #list="slotProps">
         <div
           :class="
             'listTaskDataView ' +
@@ -223,8 +211,8 @@
               slotProps.data.idTarefaFK.nome !== null &&
               slotProps.data.idTarefaFK.nome !== undefined
             "
-          ></div>
-        </div>
+          ></div> 
+        </div> 
       </template>
     </DataView>
     <!--
