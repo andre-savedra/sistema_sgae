@@ -145,7 +145,7 @@
               >
                 <template #empty>
                   <p>
-                    Arraste as imagens desejadas aqui ou clique em 'Adicionar
+                    Arraste as imagens desejadas aqui ou clique em permanently deleteAdicionar
                     fotos'
                   </p>
                 </template>

@@ -200,7 +200,7 @@ export async function setContext (app, context) {
       payload: context.payload,
       error: context.error,
       base: app.router.options.base,
-      env: {"BASE_URL":"http://localhost:8003","NUXT_ENV_ACCESSKEY_ID":"AKIA3BTOWQCMSJWX5KGT","NUXT_ENV_BUCKET_NAME":"sgae-storage","NUXT_ENV_DIR_NAME_TASK":"tarefas","NUXT_ENV_DIR_NAME_USERS":"usuarios","NUXT_ENV_REGION":"us-east-1","NUXT_ENV_SECRET_ACESSKEY_ID":"NMgOtOFg60UX7bEObNrfjxMs9QqAa3febDgeiinB"}
+      env: {"BASE_URL":"http://localhost:8003","NUXT_ENV_ACCESSKEY_ID":"AKIA3BTOWQCMV46ZGZXV","NUXT_ENV_BUCKET_NAME":"sgae-storage","NUXT_ENV_DIR_NAME_TASK":"tarefas","NUXT_ENV_DIR_NAME_USERS":"usuarios","NUXT_ENV_REGION":"us-east-1","NUXT_ENV_SECRET_ACESSKEY_ID":"7Z+A0YOT314mQpGlmcnrPelrsz9E0ttuRvTCkcJg"}
     }
     // Only set once
 

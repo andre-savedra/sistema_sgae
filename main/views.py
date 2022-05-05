@@ -163,6 +163,11 @@ class RequestActivateUser(APIView):
 
     def get(self, request, uid, token, format = None):
         userId = decode_uid(uid)
+        print("RECEBIDO UID:")
+        print(uid)
+        print("decode uid:")
+        print(userId)
+        
         if userId:
             usuario = Usuarios.objects.get(idUserFK=userId)
             usuario.token = token
@@ -511,6 +516,9 @@ class UsuariosAPIView(APIView):
                                 print(url)
                                 print("payload")
                                 print(payload)
+                                print("response")
+                                print(response)
+                                print(response.text)
 
                                 if response.status_code == 204:
                                     message = "approved"
