@@ -572,7 +572,7 @@ export default {
             .then((awsResponse) => {
               console.log("save aws file " + index);
               console.log(awsResponse);
-              alert("salvou na aws:" + awsResponse.location)
+              // alert("salvou na aws:" + awsResponse.location)
               photoLocations.push(awsResponse)
             })
             .catch((err) => {
