@@ -358,6 +358,7 @@ export default {
     },
 
     postPhoto: async function (event) {
+      console.log("ANTES DA FOTO!")
       console.log(
         "compressedFile instanceof Blob",
         event.files[0] instanceof Blob
