@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-# import environ #aws remove
-# env = environ.Env() #aws remove
-# environ.Env.read_env() #aws remove
+import environ #aws remove
+env = environ.Env() #aws remove
+environ.Env.read_env() #aws remove
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY =env('SECRET_KEY') #aws remove
-SECRET_KEY = os.environ['SECRET_KEY'] #aws include
+SECRET_KEY =env('SECRET_KEY') #aws remove
+# SECRET_KEY = os.environ['SECRET_KEY'] #aws include
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -101,17 +101,17 @@ SITE_NAME = "SGAE-Sistema de Gerenciamento de Ambientes de Ensino - Senai Robert
 
 #send djoser com aws
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.environ['EMAIL_HOST']  #aws include
-# EMAIL_HOST = env('EMAIL_HOST') #aws remove
-EMAIL_PORT = os.environ['EMAIL_PORT'] #aws include
-# EMAIL_PORT = env('EMAIL_PORT') #aws remove
+# EMAIL_HOST = os.environ['EMAIL_HOST']  #aws include
+EMAIL_HOST = env('EMAIL_HOST') #aws remove
+# EMAIL_PORT = os.environ['EMAIL_PORT'] #aws include
+EMAIL_PORT = env('EMAIL_PORT') #aws remove
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER'] #aws include
-# EMAIL_HOST_USER = env('EMAIL_HOST_USER') #aws remove
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD'] #aws include
-# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD') #aws remove
-DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL'] #aws include
-# DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL') #aws remove
+# EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER'] #aws include
+EMAIL_HOST_USER = env('EMAIL_HOST_USER') #aws remove
+# EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD'] #aws include
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD') #aws remove
+# DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL'] #aws include
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL') #aws remove
 
 
 # Database
@@ -123,18 +123,18 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
     'default': {
-        'ENGINE': os.environ['DB_ENGINE'], #aws include
-        # 'ENGINE': env('DB_ENGINE'), #aws remove 
-        'NAME': os.environ['DB_NAME'], #aws include
-        # 'NAME': env('DB_NAME'), #aws remove 
-        'USER': os.environ['DB_USER'], #aws include
-        # 'USER': env('DB_USER'), #aws remove 
-        'PASSWORD': os.environ['DB_PSWD'], #aws include
-        # 'PASSWORD': env('DB_PSWD'), #aws remove 
-        'HOST': os.environ['DB_HOST'], #aws include
-        # 'HOST': env('DB_HOST'), #aws remove 
-        'PORT': os.environ['DB_PORT'], #aws include
-        # 'PORT': env('DB_PORT'), #aws remove 
+        # 'ENGINE': os.environ['DB_ENGINE'], #aws include
+        'ENGINE': env('DB_ENGINE'), #aws remove 
+        # 'NAME': os.environ['DB_NAME'], #aws include
+        'NAME': env('DB_NAME'), #aws remove 
+        # 'USER': os.environ['DB_USER'], #aws include
+        'USER': env('DB_USER'), #aws remove 
+        # 'PASSWORD': os.environ['DB_PSWD'], #aws include
+        'PASSWORD': env('DB_PSWD'), #aws remove 
+        # 'HOST': os.environ['DB_HOST'], #aws include
+        'HOST': env('DB_HOST'), #aws remove 
+        # 'PORT': os.environ['DB_PORT'], #aws include
+        'PORT': env('DB_PORT'), #aws remove 
     }
 
 }
