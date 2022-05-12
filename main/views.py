@@ -56,7 +56,7 @@ def managePermissions(username, activity):
 
 class EmailSenderAPIView(APIView):
 
- permission_classes = (IsAuthenticated,)
+#  permission_classes = (IsAuthenticated,)
 
  def get(self, request, type):
     sendTo = []
@@ -200,7 +200,7 @@ class CargosAPIView(APIView):
     """
     API Cargos
     """
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    # permission_classes = (IsAuthenticatedOrReadOnly,)
     
     def get(self, request, pk=''):       
         if 'nivel' in request.GET:            
@@ -261,7 +261,7 @@ class AmbientesAPIView(APIView):
     """
     API Ambientes
     """
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -310,7 +310,7 @@ class StatusAPIView(APIView):
     """
     API Status
     """
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if pk == '':
@@ -390,7 +390,7 @@ class UsuariosAPIView(APIView):
     API Usuarios
     """
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         
@@ -560,7 +560,7 @@ class TarefasAPIView(APIView):
     """
     API tarefas
     """
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     
     def get(self, request, pk=''):
         
@@ -867,7 +867,7 @@ class TarefasStatusAPIView(APIView):
     """
     API tarefasStatus
     """
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         
@@ -967,7 +967,7 @@ class FotosAPIView(APIView):
     API Fotos
     """
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=''):
         if 'tarefa' in request.GET:
