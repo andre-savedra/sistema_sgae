@@ -99,7 +99,7 @@
                 :chooseLabel="btnUploadLabel"
                 mode="basic"
                 accept="image/jpeg,image/png"
-                :maxFileSize="10000000"
+                :maxFileSize="3000000"
                 @upload="postPhoto"
                 @before-upload="
                   () => {
@@ -371,6 +371,7 @@ export default {
       const fileZiseMb = event.files[0].size / 1024 / 1024;
 
       if (fileZiseMb > 4.5) {
+        
         const options = {
           maxSizeMB: 4,
           maxWidthOrHeight: 1920,
