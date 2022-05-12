@@ -618,7 +618,8 @@ export default {
         switch (this.newTaskStatusName) {
           case "Em andamento":
             const anda = await Promise.all([this.putTask()]);
-            this.emailPayload = [structuredClone(this.newTaskStatus)];
+            this.emailPayload = [this.newTaskStatus];
+            // this.emailPayload = [structuredClone(this.newTaskStatus)];
             this.viewMode = "overview";
             this.cleanNewStatus();
             this.getTaskUser(this.taskID);
@@ -631,13 +632,15 @@ export default {
               this.putTask(),
               this.virtualClickUpload("Carregar"),
             ]);
-            this.emailPayload = [structuredClone(this.newTaskStatus)];
+            this.emailPayload = [this.newTaskStatus];
+            // this.emailPayload = [structuredClone(this.newTaskStatus)];
             this.postMail(this.emailPayload);
             break;
 
           case "Encerrada":
             const enc = await Promise.all([this.putTask(true)]);
-            this.emailPayload = [structuredClone(this.newTaskStatus)];
+            this.emailPayload = [this.newTaskStatus];
+            // this.emailPayload = [structuredClone(this.newTaskStatus)];
             this.viewMode = "overview";
             this.cleanNewStatus();
             this.getTaskUser(this.taskID);
@@ -832,7 +835,7 @@ export default {
 
           //request ok
           if (response.data !== null && response.data !== undefined) {
-            this.taskStatus = structuredClone(response.data);
+            this.taskStatus = response.data;//structuredClone(response.data);
 
             this.taskStatus.map((status, index) => {
               this.taskStatusArray[index].data = status.data;
@@ -898,7 +901,7 @@ export default {
           //request ok
           if (response.data !== null && response.data !== undefined) {
             this.task = null;
-            this.task = structuredClone(response.data);
+            this.task = response.data;//structuredClone(response.data);
             console.log(this.task);
 
             console.log("finalizado gettaskuser");

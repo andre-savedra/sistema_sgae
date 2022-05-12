@@ -303,7 +303,7 @@ export default {
   created() {
     if (this.actualUser === null || this.actualUser === undefined)
       this.$router.push("/lobby");
-    else this.newDataUser = structuredClone(this.actualUser);
+    else this.newDataUser = this.actualUser; //structuredClone(this.actualUser);
   },
 };
 </script>

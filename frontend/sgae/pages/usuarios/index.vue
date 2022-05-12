@@ -132,7 +132,7 @@ export default {
 
           //request ok
           if (response.data !== null && response.data !== undefined) {
-            this.activationUsers = structuredClone(response.data);
+            this.activationUsers = response.data;//structuredClone(response.data);
 
             console.log("finalizado get activation users");
             console.log(this.activationUsers);

@@ -306,7 +306,7 @@ export default {
 
               //first time
               if (this.tasks === null) {
-                this.tasks = structuredClone(response.data);
+                this.tasks = response.data;//structuredClone(response.data);
                 this.taskPage = 1;
 
                 const timeChangeLayout = setTimeout(() => {
@@ -317,7 +317,8 @@ export default {
               else {
                 //check if it is not loaded
                 response.data.map((task) => {
-                  this.tasks.push(structuredClone(task));
+                  // this.tasks.push(structuredClone(task));
+                  this.tasks.push(task);
                 });
                 this.taskPage = page;
               }

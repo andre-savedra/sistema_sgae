@@ -667,12 +667,12 @@ export default {
 
               //request ok
               if (response.data !== null && response.data !== undefined) {
-                this.tasksPrint.push(structuredClone(response));
+                this.tasksPrint.push(response);//structuredClone(response)
 
                 response.photos.forEach((photo) => {
                   if (photo.idStatusFK !== 3)
-                    photosArray[0].push(structuredClone(photo));
-                  else photosArray[1].push(structuredClone(photo));
+                    photosArray[0].push(photo);//structuredClone(photo)
+                  else photosArray[1].push(photo);//structuredClone(photo)
 
                   // console.log("imprimindo as fotos individuais...");
                   // console.log(photo);
@@ -699,7 +699,7 @@ export default {
         .then((response) => {
           //request ok
           if (response.data !== null && response.data !== undefined) {
-            this.allTasksIds = structuredClone(response.data);
+            this.allTasksIds = response.data;//structuredClone(response.data);
 
             console.log("this.allTasksIds");
             console.log(this.allTasksIds);

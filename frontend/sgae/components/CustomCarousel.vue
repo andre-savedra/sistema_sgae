@@ -87,7 +87,8 @@ export default {
     console.log("PHOTOS PROPS");
     console.log(this.photos);
     if (this.photos.length > 0) {
-      this.photosCopy = structuredClone(this.photos);
+      this.photosCopy = this.photos;
+      // this.photosCopy = structuredClone(this.photos);
       this.photosCopy.shift();
       console.log("PHOTOS CAROUSEL RECEBIDAS");
       console.log(this.photosCopy);
