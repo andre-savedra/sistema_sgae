@@ -145,8 +145,8 @@
               >
                 <template #empty>
                   <p>
-                    Arraste as imagens desejadas aqui ou clique em permanently deleteAdicionar
-                    fotos'
+                    Arraste as imagens desejadas aqui ou clique em permanently
+                    deleteAdicionar fotos'
                   </p>
                 </template>
               </FileUpload>
@@ -172,6 +172,7 @@
 <script>
 import AsyncUserStoraged from "@/assets/scripts/asyncUserStoraged";
 import AwsS3Task from "@/assets/scripts/awsS3Task.js";
+import imageCompression from "browser-image-compression";
 
 export default {
   extends: AsyncUserStoraged,
@@ -555,10 +556,50 @@ export default {
       this.filesToBeUploaded = event.files;
       let photoLocations = [];
       let hasError = false;
-
+      //start to save photo effectivily:
       this.uploadPhotoStarted = true;
       await Promise.all(
         this.filesToBeUploaded.map(async (file, index) => {
+
+          let fileToUpload = file;                    
+          console.log(
+            "compressedFile instanceof Blob",
+            fileToUpload instanceof Blob
+          );
+          console.log(
+            `compressedFile size ${fileToUpload.size / 1024 / 1024} MB`
+          );
+
+          //CHECK IF FILE NEEDS TO BE COMPRESSED
+          const fileZiseMb = fileToUpload.size / 1024 / 1024;
+
+          if (fileZiseMb > 4.5) {
+            const options = {
+              maxSizeMB: 4,
+              maxWidthOrHeight: 1920,
+              useWebWorker: true,
+            };
+
+            try {
+              const compressedFile = await imageCompression(
+                fileToUpload,
+                options
+              );
+
+              console.log(
+                "compressedFile instanceof Blob",
+                compressedFile instanceof Blob
+              );
+              console.log(
+                `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
+              );
+
+              fileToUpload = compressedFile;
+            } catch (error) {
+              console.log(error);
+            }
+          } 
+          //save photo script:
           const photoName =
             this.taskID.toString() +
             "-" +
@@ -568,12 +609,12 @@ export default {
 
           //aws S3: SAVE PHOTO
           //"idTarefa-idStatus-indexPhoto"
-          await this.S3Client.uploadFile(file, photoName)
+          await this.S3Client.uploadFile(fileToUpload, photoName)
             .then((awsResponse) => {
               console.log("save aws file " + index);
               console.log(awsResponse);
               // alert("salvou na aws:" + awsResponse.location)
-              photoLocations.push(awsResponse)
+              photoLocations.push(awsResponse);
             })
             .catch((err) => {
               console.error(err);
@@ -582,19 +623,15 @@ export default {
         })
       );
 
-      if(photoLocations.length > 0 && hasError === false){
-        this.postPhoto(photoLocations);        
-      }   
-      else
-        alert("erro  ao salvar na aws s3")
-      
-
+      if (photoLocations.length > 0 && hasError === false) {
+        this.postPhoto(photoLocations);
+      } else alert("erro  ao salvar na aws s3");
     },
     postPhoto: async function (photoLocations) {
       // console.log(event);
       const taskID = this.taskID;
       const initialStatus = this.initialStatus;
-      
+
       await photoLocations.forEach((photoLocation) => {
         let formData = new FormData();
         formData.append("nome", photoLocation.key);
