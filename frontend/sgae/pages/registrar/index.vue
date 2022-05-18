@@ -99,7 +99,7 @@
                 :chooseLabel="btnUploadLabel"
                 mode="basic"
                 accept="image/jpeg,image/png"
-                :maxFileSize="3000000"
+                :maxFileSize="10000000"
                 @upload="postPhoto"
                 @before-upload="
                   () => {
