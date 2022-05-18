@@ -339,7 +339,7 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
+          console.log('response', response);
           if (response.msg !== undefined) {
             alert(response.msg);
           }
