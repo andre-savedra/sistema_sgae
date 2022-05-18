@@ -94,7 +94,8 @@
 
             <div class="inputComboRegister">
               <label class="lblRegister" for="photo">FOTO</label>
-              <FileUpload
+              <input type="file" @change="postPhoto($event.target)">
+              <!-- <FileUpload
                 :auto="true"
                 :chooseLabel="btnUploadLabel"
                 mode="basic"
@@ -110,7 +111,7 @@
                 id="avatarUpload"
                 invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
                 invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"
-              />
+              /> -->
             </div>
 
             <div class="inputComboRegister compPasswordRegister">
