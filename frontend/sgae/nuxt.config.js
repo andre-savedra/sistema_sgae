@@ -68,7 +68,8 @@ export default {
       "Carousel",
       "ImagePreview",
       "Timeline",
-      "Dialog"
+      "Dialog",
+      "Toast"
     ],
     locale: {
       firstDayOfWeek: 0,

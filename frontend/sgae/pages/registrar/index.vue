@@ -1,5 +1,8 @@
 <template>
   <main class="Registro p-d-flex p-flex-row p-jc-center p-ai-center">
+     <Toast position="top-right"
+      :breakpoints="toastBreakpoints"
+      />
     <section
       class="
         logo_register_panel
@@ -19,6 +22,8 @@
       <div class="stars1"></div>
       <div class="stars2"></div>
       <div class="stars3"></div>
+
+     
 
       <div
         class="
@@ -94,24 +99,16 @@
 
             <div class="inputComboRegister">
               <label class="lblRegister" for="photo">FOTO</label>
-              <input type="file" @change="postPhoto($event.target)">
-              <!-- <FileUpload
-                :auto="true"
-                :chooseLabel="btnUploadLabel"
-                mode="basic"
-                accept="image/jpeg,image/png"
-                :maxFileSize="10000000"
-                @upload="postPhoto"
-                @before-upload="
-                  () => {
-                    btnUploadLabel = 'Carregando...';
-                  }
-                "
-                class="customAvatarUpload"
-                id="avatarUpload"
-                invalidFileTypeMessage="Formato da imagem inválido, formato deve ser JPG ou PNG!!!"
-                invalidFileSizeMessage="Tamanho da imagem excedido, limite é 10MB!"
-              /> -->
+              <br/>              
+              <label class="customFileUploadLabel" for="customFileUpload">{{customFileMessage}}</label>
+                              
+              <input
+                id="customFileUpload"
+                type="file"
+                @change="postPhoto($event.target)"
+                accept=".png, .svg, .jpg, .jpeg"
+              />
+              
             </div>
 
             <div class="inputComboRegister compPasswordRegister">
@@ -174,8 +171,9 @@ export default {
   name: "register",
   data() {
     return {
-      btnInitialLabel: "Sua foto aqui",
-      btnUploadLabel: "Sua foto aqui",
+      filesAccepted: ["image/jpg", "image/jpeg", "image/png"],
+      customFileMessage: "Sua foto aqui",
+      btnInitialLabel: "Sua foto aqui",      
       btnDisabled: false,
       passwordConfirm: null,
       phoneFormated: null,
@@ -198,6 +196,12 @@ export default {
       jobs: [],
       userPhoto: null,
       S3Client: null,
+      toastBreakpoints: {'1800px': {width: '25%', height: '100px'}, 
+                     '1200px': {width: '35%', height: '100px'}, 
+                     '800px': {width: '45%', height: '100px'}, 
+                     '580px': {width: '70%', height: '100px'},
+                     '300px': {width: '90%', height: '100px'},
+                     '10px': {width: '100%', height: '100px'}}
     };
   },
   methods: {
@@ -216,7 +220,7 @@ export default {
         })
         .catch((err) => {
           console.error(err);
-          this.btnUploadLabel = this.btnInitialLabel;
+          this.customFileMessage = this.btnInitialLabel;
           this.userPhoto = null;
           this.btnDisabled = false;
         });
@@ -247,10 +251,13 @@ export default {
               .replaceAll("-", "");
             console.log(response);
 
-            this.savePhotoAWS(response.id);
+            if(this.userPhoto === null)
+              this.postUsuario(null);
+            else
+              this.savePhotoAWS(response.id);
           } else {
             console.log("Error:");
-            this.btnUploadLabel = this.btnInitialLabel;
+            this.customFileMessage = this.btnInitialLabel;
             this.userPhoto = null;
             this.btnDisabled = false;
           }
@@ -281,9 +288,10 @@ export default {
             }
           }
 
-          alert(errorMessage);
+          // alert(errorMessage);
+          this.$toast.add({severity:'error', summary: errorMessage, life: 3500});
           this.btnDisabled = false;
-          this.btnUploadLabel = this.btnInitialLabel;
+          this.customFileMessage = this.btnInitialLabel;
           this.userPhoto = null;
         });
     },
@@ -298,38 +306,8 @@ export default {
 
       if (imageLocation !== null && imageLocation !== undefined) {
         formData.append("image", imageLocation);
-        // alert("tem foto na localização: " + imageLocation);
-      } else {
-        // alert("não tem foto");
-      }
-
-      // alert(
-      //   "formData: \n" +
-      //     "nome:" +
-      //     this.userSec[0].nome +
-      //     "\n" +
-      //     "idUserFK:" +
-      //     this.userSec[0].idUserFK +
-      //     "\n" +
-      //     "email:" +
-      //     this.userSec[0].email +
-      //     "\n" +
-      //     "fone:" +
-      //     this.userSec[0].fone +
-      //     "\n" +
-      //     "ativo:" +
-      //     "false" +
-      //     "\n" +
-      //     "idNivelAcessoFK:" +
-      //     this.userSec[0].idNivelAcessoFK +
-      //     "\n" +
-      //     "image:" +
-      //     this.userPhoto[0].name +
-      //     "\n" +
-      //     "image:" +
-      //     this.userPhoto[0].size +
-      //     "\n"
-      // );
+      } 
+     
       console.log("formData");
       console.log(formData);
 
@@ -340,39 +318,62 @@ export default {
           },
         })
         .then((response) => {
-          console.log('response', response);
+          console.log("response", response);
           if (response.msg !== undefined) {
-            alert(response.msg);
+            // alert(response.msg);
+            this.$toast.add({severity:'success', summary: response.msg, life: 3500});
           }
           this.btnDisabled = false;
-          this.btnUploadLabel = this.btnInitialLabel;
-          this.userPhoto = null;
-          this.$router.push("/");
+          this.customFileMessage = this.btnInitialLabel;
+          this.userPhoto = null;          
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 3600)
         })
         .catch((response) => {
-          alert("Problema ao tentar registrar usuário");
+          // alert("Problema ao tentar registrar usuário");
+          this.$toast.add({severity:'error', summary: "Problema ao tentar registrar usuário", life: 3500});
           this.btnDisabled = false;
-          this.btnUploadLabel = this.btnInitialLabel;
+          this.customFileMessage = this.btnInitialLabel;
           this.userPhoto = null;
           console.log(response);
         });
     },
 
     postPhoto: async function (event) {
-      console.log("ANTES DA FOTO!")
+      const fileEvent = event.files[0];
+      console.log("postPhoto Event", fileEvent);
+
+      //CHECK FILE TYPE:
+      let typeOk = false;
+      this.filesAccepted.map((fileType)=>{
+        if(fileEvent.type.includes(fileType)){
+          typeOk = true;
+        }
+      });
+
+      if(typeOk === false){
+        console.log("TIPO NÃO SUPORTADO!");
+        this.$toast.add({severity:'error', summary: 'Formato Inválido!', life: 3500});
+        return false;
+      }
+
+      //FILE IS LOADING....
+      this.customFileMessage = "Carregando...";
+
+      console.log("ANTES DA FOTO!");
       console.log(
         "compressedFile instanceof Blob",
-        event.files[0] instanceof Blob
+        fileEvent instanceof Blob
       );
       console.log(
-        `compressedFile size ${event.files[0].size / 1024 / 1024} MB`
+        `compressedFile size ${fileEvent.size / 1024 / 1024} MB`
       );
 
       //CHECK IF FILE NEEDS TO BE COMPRESSED
-      const fileZiseMb = event.files[0].size / 1024 / 1024;
+      const fileZiseMb = fileEvent.size / 1024 / 1024;
 
       if (fileZiseMb > 4.5) {
-        
         const options = {
           maxSizeMB: 4,
           maxWidthOrHeight: 1920,
@@ -381,7 +382,7 @@ export default {
 
         try {
           const compressedFile = await imageCompression(
-            event.files[0],
+            fileEvent,
             options
           );
 
@@ -394,37 +395,39 @@ export default {
           );
 
           this.userPhoto = compressedFile;
-
         } catch (error) {
           console.log(error);
+          this.$toast.add({severity:'error', summary: 'Erro ao Compactar Img!', life: 3500});
+          this.customFileMessage = this.btnInitialLabel;
         }
+      } else {
+        //FILE DOESN'T NEED TO BE COMPRESSED
+        this.userPhoto = fileEvent;
       }
-      else{ //FILE DOESN'T NEED TO BE COMPRESSED
-        this.userPhoto = event.files[0];
-      }
+
+      this.$toast.add({severity:'success', summary: 'Imagem Carregada!', life: 3500});
 
       //CHECK FILENAME
       const maxChars = 20;
       if (this.userPhoto.name) {
         if (this.userPhoto.name.length > maxChars)
-          this.btnUploadLabel =
+          this.customFileMessage =
             "..." +
-            this.userPhoto.name.slice(
-              this.userPhoto.name.length - maxChars
-            );
-        else this.btnUploadLabel = this.userPhoto.name;
+            this.userPhoto.name.slice(this.userPhoto.name.length - maxChars);
+        else this.customFileMessage = this.userPhoto.name;
       }
     },
     sendRegister: async function () {
       console.log("tentando registrar....");
-      console.log(this.userAuth);
+      // console.log(this.userAuth);
 
       //User register:
       if (this.userAuth.password === this.passwordConfirm) {
         this.btnDisabled = true;
         this.postUser();
       } else {
-        alert("Campos Senha e Confirmação de Senha não estão iguais");
+        // alert("Campos Senha e Confirmação de Senha não estão iguais");
+        this.$toast.add({severity:'error', summary: "Campos Senha e Confirmação de Senha não estão iguais", life: 3500});
         this.btnDisabled = false;
       }
     },
@@ -599,6 +602,28 @@ img {
   position: relative;
   width: 100%;
   line-height: 34px;
+}
+
+.inputComboRegister {
+  width: 100%;
+  min-width: 100%;
+}
+
+#customFileUpload {
+  display: none;
+}
+
+.customFileUploadLabel {
+  display: inline-block;
+  width: 100%;
+  background-color: #dc3d3d;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  &:hover {
+    background-color: #f59993;
+  }
 }
 
 .lblRegister #lblsenhaRegister {
