@@ -913,6 +913,7 @@ export default {
         });
     },
     getTaskPhotos: function (task) {
+      console.log("REQUISITANDO A TASK FOTO: ", task)
       this.$axios
         .$get(this.$store.state.BASE_URL + ("fotos/?tarefa=" + task))
         .then((response) => {

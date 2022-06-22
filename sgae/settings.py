@@ -118,24 +118,24 @@ DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL') #aws remove
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {    
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
     'default': {
-        # 'ENGINE': os.environ['DB_ENGINE'], #aws include
-        'ENGINE': env('DB_ENGINE'), #aws remove 
-        # 'NAME': os.environ['DB_NAME'], #aws include
-        'NAME': env('DB_NAME'), #aws remove 
-        # 'USER': os.environ['DB_USER'], #aws include
-        'USER': env('DB_USER'), #aws remove 
-        # 'PASSWORD': os.environ['DB_PSWD'], #aws include
-        'PASSWORD': env('DB_PSWD'), #aws remove 
-        # 'HOST': os.environ['DB_HOST'], #aws include
-        'HOST': env('DB_HOST'), #aws remove 
-        # 'PORT': os.environ['DB_PORT'], #aws include
-        'PORT': env('DB_PORT'), #aws remove 
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+    # 'default': {
+    #     # 'ENGINE': os.environ['DB_ENGINE'], #aws include
+    #     'ENGINE': env('DB_ENGINE'), #aws remove 
+    #     # 'NAME': os.environ['DB_NAME'], #aws include
+    #     'NAME': env('DB_NAME'), #aws remove 
+    #     # 'USER': os.environ['DB_USER'], #aws include
+    #     'USER': env('DB_USER'), #aws remove 
+    #     # 'PASSWORD': os.environ['DB_PSWD'], #aws include
+    #     'PASSWORD': env('DB_PSWD'), #aws remove 
+    #     # 'HOST': os.environ['DB_HOST'], #aws include
+    #     'HOST': env('DB_HOST'), #aws remove 
+    #     # 'PORT': os.environ['DB_PORT'], #aws include
+    #     'PORT': env('DB_PORT'), #aws remove 
+    # }
 
 }
 
